@@ -10,7 +10,7 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <title>Ntnu master by apartridge</title>
+    <title>Opposite Renderer</title>
   </head>
 
   <body>
@@ -18,54 +18,70 @@
       <div class="inner">
 
         <header>
-          <h1>Ntnu master</h1>
-          <h2>Master's Thesis</h2>
+          <h1>Opposite Renderer</h1>
+          <h2>GPU Photon Mapper</h2>
         </header>
 
         <section id="downloads" class="clearfix">
-          <a href="https://github.com/apartridge/ntnu_master/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/apartridge/ntnu_master/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+         <!-- <a href="https://github.com/apartridge/ntnu_master/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a> -->
+         <!-- <a href="https://github.com/apartridge/ntnu_master/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a> -->
           <a href="https://github.com/apartridge/ntnu_master" id="view-on-github" class="button"><span>View on GitHub</span></a>
         </section>
 
         <hr>
 
         <section id="main_content">
-          <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+          
+		  <h2>
+<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Opposite Renderer</h2>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>
+This project is a part of Stian Pedersen's master's thesis project at NTNU. This demo renderer contains a GPU implementation of the Progressive Photon Mapping algorithm. It has a GUI and can load scenes from the well known Collada (.dae) scene format. It has a client-server architecture allowing multi-GPU (distributed) rendering with any number of GPUs. It has been tested with up to six GPUs via Gigabit ethernet with very good speedup.
+<div style='text-align:center'><a href='images/oppositeRendererScreenshot.png' title='Click for high resolution'><img alt='' src='images/thumbs/oppositeRendererScreenshot.png' /></a></div>
+</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<h2>Master's Thesis</h2>
+<p>An introduction to ray-tracing, photon mapping, participating media, as well as details on implementation and results are available in the full thesis.</p>
+<p style='text-align:center'>
+<a href='master/masteroppgave.pdf' style='font-weight:bold; font-size:100%'>Download thesis (.pdf)</a>
+</p>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<h2>Download binary</h2>
+<p>A precompiled version for Windows 7 64-bit is available for testing.
+A Nvidia CUDA capable card is required. If you click on the images below, you will find more .DAE scenes you
+can test the implementation on.
+Source code will be available later under an open source license. Feel free to use this for anything if you want.</p>
+<p><code>Disclaimer: This is only a prototype implementation, not for any production use. Use at your own risk.</code></p>
+<p style='text-align:center'>
+<a href='binary/OppositeRendererPreview.zip' style='font-weight:bold; font-size:110%'>DOWNLOAD (Win7 x64) 15MB</a>
+</p>
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<h2>Libraries</h2>
+<p>Some libaries were used for this project: <a href='http://qt-project.org/'>Qt</a>, 
+<a href='http://www.nvidia.com/object/cuda_home_new.html'>Nvidia CUDA</a>,
+<a href='http://www.nvidia.com/object/optix.html'>Nvidia OptiX</a>,
+<a href='http://assimp.sourceforge.net/'>Open Asset Import Library</a>,
+<a href='http://tgalib.sourceforge.net/'>libtga</a>.
+</p>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<h2>Rendered images</h2>
+<p>These images was rendered as a part of the thesis. Click on them to find more details about render time and see full resolution image.</p>
+<h3>Cornell Box</h3>
+<a href='images/cornell.html'><img alt='' src='images/thumbs/cornell.png' /></a>
+<h3>Conference Room</h3>
+<a href='images/conference.html'><img alt='' src='images/thumbs/conference.png' /></a>
+<h3>Crytek Sponza</h3>
+<a href='images/sponza.html'><img alt='' src='images/thumbs/sponza.png' /></a>
+<h3>Foggy Box (participating medium)</h3>
+<a href='images/foggybox.html'><img alt='' src='images/thumbs/foggybox.png' /></a>
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
         </section>
 
         <footer>
-          Ntnu master is maintained by <a href="https://github.com/apartridge">apartridge</a><br>
           This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
         </footer>
 

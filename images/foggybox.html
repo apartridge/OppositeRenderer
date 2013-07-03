@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css"/>
+  <link rel="stylesheet" type="text/css" href="../stylesheets/largeimages.css"/>
+  <title>Foggy Box</title>
+  </head>
+  <body>
+  <h2>Foggy Box</h2>
+<p>
+Image rendered using <em>Opposite Renderer</em>. Has a diffuse homogeneous participating medium covering the entire scene. Uses the beam radiance estimate [Jarosz, Zwicker, Wann Jensen] to calculate volumetric radiance.
+Large image: 208 100 iterations of progressive 
+photon mapping, using 3 Nvidia GTX 480 for almost 19 hours. 1024*1024 emitted photons per iteration. Small, left to right: 10, 50, 200, 1000, 3000 and 208 100 iterations. 
+3000 iterations in about 6m on 6 GTX 480.</p>
+
+<p><a href='../scene_models/FoggyBox.zip'>Download this scene (as a zipped .DAE)</a> 
+<a href='../scene_models/FoggyBox_Blend.zip'>(as a zipped .Blend)</a>. The source must be recompiled with support for participating media to re-render this image.</p>
+
+<p><a href='../index.html'>Back to project</a></p>
+
+  <p><img src='foggybox.png' alt='' /></p>
+  
+  <p style='margin-top:80px'>Top: Only volume photons considered (12000 iterations). Notice volume caustic under glass sphere. Bottom: only surface photons considered.</p>
+
+ <p><img src='foggybox2.png' alt='' /></p>
+  
+  
+<p><a href='../index.html'>Back to project</a></p>
+
+  </body>
+</html>
