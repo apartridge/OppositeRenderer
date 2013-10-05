@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="gui\AboutWindow.cpp" />
+    <ClCompile Include="gui\RenderWidget.cpp" />
+    <ClCompile Include="gui\ComputeDeviceInformationWidget.cpp" />
+    <ClCompile Include="gui\ComputeDeviceInformationWidgetTabPage.cpp" />
+    <ClCompile Include="gui\MainWindowBase.cpp" />
+    <ClCompile Include="gui\docks\RenderInformationDock.cpp" />
+    <ClCompile Include="gui\docks\moc_RenderInformationDock.cpp" />
+    <ClCompile Include="gui\moc_AboutWindow.cpp" />
+    <ClCompile Include="gui\moc_RenderWidget.cpp" />
+    <ClCompile Include="gui\moc_ComputeDeviceInformationWidget.cpp" />
+    <ClCompile Include="gui\moc_ComputeDeviceInformationWidgetTabPage.cpp" />
+    <ClCompile Include="gui\moc_MainWindowBase.cpp" />
+    <ClCompile Include="gui\docks\OutputDock.cpp" />
+    <ClCompile Include="gui\docks\moc_OutputDock.cpp" />
+    <ClCompile Include="gui\docks\moc_PPMDock.cpp" />
+    <ClCompile Include="gui\docks\PPMDock.cpp" />
+    <ClCompile Include="gui\docks\CameraDock.cpp" />
+    <ClCompile Include="gui\docks\moc_CameraDock.cpp" />
+    <ClCompile Include="gui\docks\moc_SceneDock.cpp" />
+    <ClCompile Include="gui\docks\SceneDock.cpp" />
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="models\moc_OutputSettingsModel.cpp" />
+    <ClCompile Include="models\moc_PPMSettingsModel.cpp" />
+    <ClCompile Include="models\moc_RenderStatisticsModel.cpp" />
+    <ClCompile Include="models\OutputSettingsModel.cpp" />
+    <ClCompile Include="models\PPMSettingsModel.cpp" />
+    <ClCompile Include="models\RenderStatisticsModel.cpp" />
+    <ClCompile Include="moc_Application.cpp" />
+    <ClCompile Include="moc_RenderManager.cpp" />
+    <ClCompile Include="scene\SceneFactory.cpp" />
+    <ClCompile Include="scene\SceneManager.cpp" />
+    <ClCompile Include="scene\moc_SceneManager.cpp" />
+    <ClCompile Include="gui\main.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="gui\ui\ui_AboutWindow.h" />
+    <ClInclude Include="gui\ui\ui_RenderTypePPMInfo.h" />
+    <ClInclude Include="gui\ui\ui_ComputeDeviceInformationWidget.h" />
+    <ClInclude Include="gui\ui\ui_ComputeDeviceInformationWidgetTabPage.h" />
+    <ClInclude Include="gui\ui\ui_MainWindowBase.h" />
+    <ClInclude Include="gui\docks\RenderInformationDock.hxx" />
+    <ClInclude Include="gui\ComputeDeviceInformationWidget.hxx" />
+    <ClInclude Include="gui\ComputeDeviceInformationWidgetTabPage.hxx" />
+    <ClInclude Include="gui\MainWindowBase.hxx" />
+    <ClInclude Include="gui\RenderWidget.hxx" />
+    <ClInclude Include="gui\AboutWindow.hxx" />
+    <ClInclude Include="gui_export_api.h" />
+    <ClInclude Include="gui\docks\OutputDock.hxx" />
+    <ClInclude Include="gui\docks\ui\ui_OutputDock.h" />
+    <ClInclude Include="gui\docks\ui\ui_RenderInformationDock.h" />
+    <ClInclude Include="gui\docks\ui\ui_PPMDock.h" />
+    <ClInclude Include="gui\docks\PPMDock.hxx" />
+    <ClInclude Include="gui\docks\CameraDock.hxx" />
+    <ClInclude Include="gui\docks\SceneDock.hxx" />
+    <ClInclude Include="Application.hxx" />
+    <ClInclude Include="RunningStatus.h" />
+    <ClInclude Include="models\OutputSettingsModel.hxx" />
+    <ClInclude Include="models\PPMSettingsModel.hxx" />
+    <ClInclude Include="models\RenderStatisticsModel.hxx" />
+    <ClInclude Include="scene\SceneManager.hxx" />
+    <ClInclude Include="scene\SceneFactory.h" />
+    <ClInclude Include="RendererStatus.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gui\ui\AboutWindow.ui" />
+    <None Include="gui\ui\RenderTypePPMInfo.ui" />
+    <None Include="gui\ui\ComputeDeviceInformationWidget.ui" />
+    <None Include="gui\ui\ComputeDeviceInformationWidgetTabPage.ui" />
+    <None Include="gui\ui\MainWindowBase.ui" />
+    <None Include="gui\docks\ui\RenderInformationDock.ui" />
+    <None Include="gui\docks\ui\OutputDock.ui" />
+    <None Include="gui\docks\ui\PPMDock.ui" />
+    <None Include="gui\docks\ui\CameraDock.ui" />
+    <None Include="gui\docks\ui\SceneDock.ui" />
+  </ItemGroup>
+</Project>

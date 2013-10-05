@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{FB73D5CD-9955-42F7-BD92-91FDC008C71C}</ProjectGuid>
+    <RootNamespace>OptiXTemp</RootNamespace>
+    <ProjectName>Application</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 5.0.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(USERPROFILE)/VisualStudioBuilds/$(SolutionName)//$(Configuration)/</OutDir>
+    <IncludePath>$(MSBuildProjectDirectory);$(IncludePath);$(CUDA_INC_PATH);C:/Program Files/NVIDIA Corporation/OptiX SDK 3.0.0/include;C:\Program Files\NVIDIA Corporation\NvToolsExt\include;C:/Program Files/NVIDIA Corporation/OptiX SDK 3.0.0/include/optixu;$(SolutionDir)/RenderEngine/;$(SolutionDir)/include/;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;%(AdditionalIncludeDirectories)</IncludePath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\lib;C:\Program Files\NVIDIA GPU Computing Toolkit\nvToolsExt\lib\x64</LibraryPath>
+    <IntDir>$(USERPROFILE)/VisualStudioBuilds/$(SolutionName)//$(Configuration)/intermediate\$(MSBuildProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Full</Optimization>
+      <PreprocessorDefinitions>_DLL;RENDERER_GUI_DLL;WIN32;_WINDOWS;_DEBUG;_USE_MATH_DEFINES;NOMINMAX;GLUT_FOUND;GLUT_NO_LIB_PRAGMA;sutil_EXPORTS;RELEASE_PUBLIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>NotSet</SubSystem>
+      <AdditionalDependencies>glew32.lib;QtOpenGLd4.lib;QtCored4.lib;QtGuid4.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;C:\Program Files\NVIDIA Corporation\OptiX SDK 3.0.0\lib64\optix.1.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\lib\x64\cuda.lib;C:\Program Files\NVIDIA Corporation\OptiX SDK 3.0.0\lib64\optixu.1.lib;glu32.lib;opengl32.lib;winmm.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <TargetMachine>MachineX64</TargetMachine>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+      <NoEntryPoint>false</NoEntryPoint>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
+      <Message>Performing Custom Build Step</Message>
+    </CustomBuildStep>
+    <CudaCompile>
+      <TargetMachinePlatform>64</TargetMachinePlatform>
+      <CodeGeneration>compute_20,sm_20</CodeGeneration>
+      <HostDebugInfo>true</HostDebugInfo>
+      <GPUDebugInfo>false</GPUDebugInfo>
+      <NvccCompilation>ptx</NvccCompilation>
+      <CompileOut>$(OutDir)%(Filename)%(Extension).ptx</CompileOut>
+      <FastMath>true</FastMath>
+      <KeepDir>$(IntDir)</KeepDir>
+    </CudaCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Application.hxx" />
+    <ClInclude Include="gui\docks\CameraDock.hxx" />
+    <ClInclude Include="gui\docks\OutputDock.hxx" />
+    <ClInclude Include="gui\docks\PPMDock.hxx" />
+    <ClInclude Include="gui\docks\SceneDock.hxx" />
+    <ClInclude Include="gui\docks\ui\ui_OutputDock.h" />
+    <ClInclude Include="gui\docks\ui\ui_PPMDock.h" />
+    <ClInclude Include="gui\docks\ui\ui_RenderInformationDock.h" />
+    <ClInclude Include="gui_export_api.h" />
+    <ClInclude Include="gui\AboutWindow.hxx" />
+    <ClInclude Include="gui\docks\RenderInformationDock.hxx" />
+    <ClInclude Include="gui\ComputeDeviceInformationWidget.hxx" />
+    <ClInclude Include="gui\ComputeDeviceInformationWidgetTabPage.hxx" />
+    <ClInclude Include="gui\MainWindowBase.hxx" />
+    <ClInclude Include="gui\RenderWidget.hxx" />
+    <ClInclude Include="gui\ui\ui_AboutWindow.h" />
+    <ClInclude Include="gui\ui\ui_ComputeDeviceInformationWidget.h" />
+    <ClInclude Include="gui\ui\ui_ComputeDeviceInformationWidgetTabPage.h" />
+    <ClInclude Include="gui\ui\ui_MainWindowBase.h" />
+    <ClInclude Include="gui\ui\ui_RenderTypePPMInfo.h" />
+    <ClInclude Include="models\OutputSettingsModel.hxx" />
+    <ClInclude Include="models\PPMSettingsModel.hxx" />
+    <ClInclude Include="models\RenderStatisticsModel.hxx" />
+    <ClInclude Include="RendererStatus.h" />
+    <ClInclude Include="RunningStatus.h" />
+    <ClInclude Include="scene\SceneFactory.h" />
+    <ClInclude Include="scene\SceneManager.hxx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="gui\AboutWindow.cpp" />
+    <ClCompile Include="gui\ComputeDeviceInformationWidget.cpp" />
+    <ClCompile Include="gui\ComputeDeviceInformationWidgetTabPage.cpp" />
+    <ClCompile Include="gui\docks\CameraDock.cpp" />
+    <ClCompile Include="gui\docks\moc_CameraDock.cpp" />
+    <ClCompile Include="gui\docks\moc_OutputDock.cpp" />
+    <ClCompile Include="gui\docks\moc_PPMDock.cpp" />
+    <ClCompile Include="gui\docks\moc_RenderInformationDock.cpp" />
+    <ClCompile Include="gui\docks\moc_SceneDock.cpp" />
+    <ClCompile Include="gui\docks\OutputDock.cpp" />
+    <ClCompile Include="gui\docks\PPMDock.cpp" />
+    <ClCompile Include="gui\docks\RenderInformationDock.cpp" />
+    <ClCompile Include="gui\docks\SceneDock.cpp" />
+    <ClCompile Include="gui\main.cpp" />
+    <ClCompile Include="gui\MainWindowBase.cpp" />
+    <ClCompile Include="gui\moc_AboutWindow.cpp" />
+    <ClCompile Include="gui\moc_ComputeDeviceInformationWidget.cpp" />
+    <ClCompile Include="gui\moc_ComputeDeviceInformationWidgetTabPage.cpp" />
+    <ClCompile Include="gui\moc_MainWindowBase.cpp" />
+    <ClCompile Include="gui\moc_RenderWidget.cpp" />
+    <ClCompile Include="gui\RenderWidget.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="moc_Application.cpp" />
+    <ClCompile Include="moc_RenderManager.cpp" />
+    <ClCompile Include="models\moc_OutputSettingsModel.cpp" />
+    <ClCompile Include="models\moc_PPMSettingsModel.cpp" />
+    <ClCompile Include="models\moc_RenderStatisticsModel.cpp" />
+    <ClCompile Include="models\OutputSettingsModel.cpp" />
+    <ClCompile Include="models\PPMSettingsModel.cpp" />
+    <ClCompile Include="models\RenderStatisticsModel.cpp" />
+    <ClCompile Include="scene\moc_SceneManager.cpp" />
+    <ClCompile Include="scene\SceneFactory.cpp" />
+    <ClCompile Include="scene\SceneManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gui\docks\ui\CameraDock.ui" />
+    <None Include="gui\docks\ui\OutputDock.ui" />
+    <None Include="gui\docks\ui\PPMDock.ui" />
+    <None Include="gui\docks\ui\RenderInformationDock.ui" />
+    <None Include="gui\docks\ui\SceneDock.ui" />
+    <None Include="gui\ui\AboutWindow.ui" />
+    <None Include="gui\ui\ComputeDeviceInformationWidget.ui" />
+    <None Include="gui\ui\ComputeDeviceInformationWidgetTabPage.ui" />
+    <None Include="gui\ui\MainWindowBase.ui" />
+    <None Include="gui\ui\RenderTypePPMInfo.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RenderEngine\RenderEngine.vcxproj">
+      <Project>{26470e25-7dbb-4133-a0ae-0009c41fea2b}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 5.0.targets" />
+    <Import Project="..\RenderEngine\BuildRuleQt.targets" />
+  </ImportGroup>
+</Project>

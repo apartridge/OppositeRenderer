@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="material\Glass.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
+    <ClCompile Include="material\Material.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
+    <ClCompile Include="material\Diffuse.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
+    <ClCompile Include="material\ParticipatingMedium.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeDevice.cpp" />
+    <ClCompile Include="util\Mouse.cpp">
+      <Filter>sutil</Filter>
+    </ClCompile>
+    <ClCompile Include="util\sutil.c" />
+    <ClCompile Include="ComputeDeviceRepository.cpp" />
+    <ClCompile Include="material\DiffuseEmitter.cpp" />
+    <ClCompile Include="scene\Cornell.cpp" />
+    <ClCompile Include="scene\IScene.cpp" />
+    <ClCompile Include="scene\Scene.cpp" />
+    <ClCompile Include="clientserver\RenderResultPacket.cpp" />
+    <ClCompile Include="clientserver\RenderServerRenderRequest.cpp" />
+    <ClCompile Include="util\BenchmarkTimer.cpp" />
+    <ClCompile Include="renderer\OptixRenderer.cpp" />
+    <ClCompile Include="renderer\OptixRenderer_CPUKdTree.cpp" />
+    <ClCompile Include="clientserver\RenderServerRenderRequestDetails.cpp" />
+    <ClCompile Include="material\Mirror.cpp" />
+    <ClCompile Include="renderer\Camera.cpp" />
+    <ClCompile Include="renderer\Light.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="material\Texture.cpp" />
+    <ClCompile Include="util\imageformats\libtga\tga.c" />
+    <ClCompile Include="util\imageformats\libtga\tgaread.c" />
+    <ClCompile Include="util\imageformats\libtga\tgawrite.c" />
+    <ClCompile Include="util\Image.cpp" />
+    <ClCompile Include="geometry_instance\GeometryInstance.cpp">
+      <Filter>geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="geometry_instance\SphereInstance.cpp">
+      <Filter>geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="geometry_instance\Transform.cpp">
+      <Filter>geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Sphere.cpp" />
+    <ClCompile Include="math\Vector3.cpp" />
+    <ClCompile Include="math\AAB.cpp" />
+    <ClCompile Include="geometry_instance\AABInstance.cpp">
+      <Filter>geometry</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="select.h" />
+    <ClInclude Include="material\Glass.h">
+      <Filter>material</Filter>
+    </ClInclude>
+    <ClInclude Include="material\Material.h">
+      <Filter>material</Filter>
+    </ClInclude>
+    <ClInclude Include="material\Diffuse.h">
+      <Filter>material</Filter>
+    </ClInclude>
+    <ClInclude Include="material\ParticipatingMedium.h">
+      <Filter>material</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h" />
+    <ClInclude Include="ComputeDevice.h" />
+    <ClInclude Include="util\Mouse.h">
+      <Filter>sutil</Filter>
+    </ClInclude>
+    <ClInclude Include="util\sutil.h" />
+    <ClInclude Include="sutil\ImageDisplay.h" />
+    <ClInclude Include="sutil\ImageLoader.h" />
+    <ClInclude Include="sutil\ModelLoader.h" />
+    <ClInclude Include="sutil\ObjLoader.h" />
+    <ClInclude Include="sutil\RayGenCameraData.h" />
+    <ClInclude Include="sutil\SunSky.h" />
+    <ClInclude Include="ComputeDeviceRepository.h" />
+    <ClInclude Include="material\DiffuseEmitter.h" />
+    <ClInclude Include="scene\Cornell.h" />
+    <ClInclude Include="render_engine_export_api.h" />
+    <ClInclude Include="scene\IScene.h" />
+    <ClInclude Include="scene\Scene.h" />
+    <ClInclude Include="clientserver\RenderResultPacket.h" />
+    <ClInclude Include="clientserver\RenderServerRenderRequest.h" />
+    <ClInclude Include="util\BenchmarkTimer.h" />
+    <ClInclude Include="renderer\ppm\Photon.h" />
+    <ClInclude Include="renderer\ppm\PhotonPRD.h" />
+    <ClInclude Include="renderer\Hitpoint.h" />
+    <ClInclude Include="renderer\OptixRenderer.h" />
+    <ClInclude Include="renderer\RadiancePRD.h" />
+    <ClInclude Include="renderer\RayType.h" />
+    <ClInclude Include="renderer\RenderMethod.h" />
+    <ClInclude Include="renderer\ShadowPRD.h" />
+    <ClInclude Include="clientserver\RenderServerRenderRequestDetails.h" />
+    <ClInclude Include="material\mirror.h" />
+    <ClInclude Include="renderer\Camera.h" />
+    <ClInclude Include="renderer\Light.h" />
+    <ClInclude Include="renderer\RandomState.h" />
+    <ClInclude Include="renderer\OptixEntryPoint.h" />
+    <ClInclude Include="renderer\ppm\VolumetricRadiancePRD.h" />
+    <ClInclude Include="material\Texture.h" />
+    <ClInclude Include="util\imageformats\libtga\tga.h" />
+    <ClInclude Include="util\imageformats\libtga\tgaconfig.h" />
+    <ClInclude Include="util\Image.h" />
+    <ClInclude Include="geometry_instance\GeometryInstance.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry_instance\SphereInstance.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry_instance\Transform.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Sphere.h" />
+    <ClInclude Include="math\AAB.h" />
+    <ClInclude Include="geometry_instance\AABInstance.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Vector3.h" />
+    <ClInclude Include="renderer\ppm\PhotonGrid.h" />
+    <ClInclude Include="renderer\helpers\store_photon.h" />
+    <ClInclude Include="renderer\helpers\samplers.h" />
+    <ClInclude Include="renderer\helpers\helpers.h" />
+    <ClInclude Include="renderer\helpers\camera.h" />
+    <ClInclude Include="renderer\helpers\random.h" />
+    <ClInclude Include="renderer\helpers\optix.h" />
+    <ClInclude Include="renderer\helpers\light.h" />
+    <ClInclude Include="renderer\helpers\nsight.h" />
+    <ClInclude Include="renderer\TransmissionPRD.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="sutil">
+      <UniqueIdentifier>{7673db97-e80d-47f3-948d-a39d6c2679b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sutil\rply-1.01">
+      <UniqueIdentifier>{3009e982-d29e-4b98-953b-6e832fa6e260}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sutil\GL">
+      <UniqueIdentifier>{7950ac3a-9505-4127-b8d4-aff0d53b9997}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sutil\thrust">
+      <UniqueIdentifier>{7c48a3b4-60c3-4e2a-a823-cb3e653bcb47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="geometry">
+      <UniqueIdentifier>{03497bfc-c80a-442b-a416-b5073319bbc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="material">
+      <UniqueIdentifier>{8fad7784-d65c-4407-b1d7-c4867e9a1f68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scene">
+      <UniqueIdentifier>{04069672-3cee-4e3c-acb8-d7e838afb628}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TrainOfThought.txt" />
+    <None Include="BuildRuleQt.targets" />
+    <None Include="LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="parallelogram.cu" />
+    <CudaCompile Include="material\Glass.cu">
+      <Filter>material</Filter>
+    </CudaCompile>
+    <CudaCompile Include="material\Diffuse.cu">
+      <Filter>material</Filter>
+    </CudaCompile>
+    <CudaCompile Include="material\ParticipatingMedium.cu">
+      <Filter>material</Filter>
+    </CudaCompile>
+    <CudaCompile Include="material\DiffuseEmitter.cu" />
+    <CudaCompile Include="renderer\ppm\DirectRadianceEstimation.cu" />
+    <CudaCompile Include="renderer\ppm\IndirectRadianceEstimation.cu" />
+    <CudaCompile Include="renderer\ppm\Output.cu" />
+    <CudaCompile Include="renderer\ppm\PhotonGenerator.cu" />
+    <CudaCompile Include="renderer\ppm\RayGeneratorPPM.cu" />
+    <CudaCompile Include="renderer\pt\RayGeneratorPT.cu" />
+    <CudaCompile Include="renderer\OptixRenderer_SpatialHash.cu" />
+    <CudaCompile Include="material\Mirror.cu" />
+    <CudaCompile Include="renderer\ppm\VolumetricPhotonInitialize.cu" />
+    <CudaCompile Include="renderer\ppm\VolumetricPhotonSphereRadiance.cu" />
+    <CudaCompile Include="renderer\ppm\VolumetricPhotonSphere.cu" />
+    <CudaCompile Include="material\Texture.cu" />
+    <CudaCompile Include="geometry_instance\Sphere.cu">
+      <Filter>geometry</Filter>
+    </CudaCompile>
+    <CudaCompile Include="geometry_instance\TriangleMesh.cu" />
+    <CudaCompile Include="geometry_instance\AAB.cu">
+      <Filter>geometry</Filter>
+    </CudaCompile>
+    <CudaCompile Include="renderer\ppm\UniformGridPhotonInitialize.cu" />
+  </ItemGroup>
+</Project>

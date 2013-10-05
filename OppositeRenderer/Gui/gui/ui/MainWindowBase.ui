@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindowBase</class>
+ <widget class="QMainWindow" name="MainWindowBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1600</width>
+    <height>1080</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Opposite Renderer</string>
+  </property>
+  <property name="dockOptions">
+   <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="margin">
+     <number>0</number>
+    </property>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="mainMenuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1600</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <widget class="QMenu" name="menuRenderer">
+    <property name="title">
+     <string>Renderer</string>
+    </property>
+    <widget class="QMenu" name="menuRender_method">
+     <property name="title">
+      <string>Render method</string>
+     </property>
+     <addaction name="actionProgressive_Photon_Mapping"/>
+     <addaction name="actionPath_Tracing"/>
+    </widget>
+    <addaction name="menuRender_method"/>
+    <addaction name="actionRenderStatusToggle"/>
+    <addaction name="actionRenderRestart"/>
+    <addaction name="separator"/>
+    <addaction name="actionSetCameraToDefault"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionOpen_scene"/>
+    <addaction name="actionOpenBuiltInScene"/>
+    <addaction name="actionReload_scene"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+    <addaction name="separator"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuRenderer"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBarObject">
+   <property name="styleSheet">
+    <string notr="true">QStatusBar
+{
+border-top: 1px solid rgb(166, 166, 166);
+padding-right:40px;
+}</string>
+   </property>
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <action name="actionAbout">
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+   <property name="statusTip">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>&amp;Exit</string>
+   </property>
+  </action>
+  <action name="actionRenderStatusToggle">
+   <property name="text">
+    <string>Pause render</string>
+   </property>
+  </action>
+  <action name="actionRenderRestart">
+   <property name="text">
+    <string>Restart render</string>
+   </property>
+  </action>
+  <action name="actionSetCameraToDefault">
+   <property name="text">
+    <string>Default camera</string>
+   </property>
+  </action>
+  <action name="actionConfigure_GPU_devices">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionProgressive_Photon_Mapping">
+   <property name="text">
+    <string>Progressive Photon Mapping</string>
+   </property>
+  </action>
+  <action name="actionPath_Tracing">
+   <property name="text">
+    <string>Path Tracing</string>
+   </property>
+  </action>
+  <action name="actionPath_Tracing_With_Direct_Light_Sampling">
+   <property name="text">
+    <string>Path Tracing With Direct Light Sampling</string>
+   </property>
+  </action>
+  <action name="actionOpen_scene">
+   <property name="text">
+    <string>Open scene from file</string>
+   </property>
+  </action>
+  <action name="actionReload_scene">
+   <property name="text">
+    <string>Reload scene</string>
+   </property>
+  </action>
+  <action name="actionOpenBuiltInScene">
+   <property name="text">
+    <string>Open built-in scene by name</string>
+   </property>
+  </action>
+  <action name="actionSaveImagePPM">
+   <property name="text">
+    <string>Save image as .PPM</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actionAbout</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindowBase</receiver>
+   <slot>onActionAbout()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>510</x>
+     <y>407</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindowBase</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>510</x>
+     <y>407</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRenderStatusToggle</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindowBase</receiver>
+   <slot>onRenderStatusToggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>510</x>
+     <y>407</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSetCameraToDefault</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindowBase</receiver>
+   <slot>onSetCameraToDefault()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>510</x>
+     <y>407</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionPath_Tracing</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindowBase</receiver>
+   <slot>onChangeRenderMethodPT()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>509</x>
+     <y>405</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionProgressive_Photon_Mapping</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindowBase</receiver>
+   <slot>onChangeRenderMethodPPM()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>509</x>
+     <y>405</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionConfigure_GPU_devices</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindowBase</receiver>
+   <slot>onConfigureGPUDevices()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>509</x>
+     <y>405</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionOpen_scene</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindowBase</receiver>
+   <slot>onOpenSceneFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>509</x>
+     <y>405</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionReload_scene</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindowBase</receiver>
+   <slot>onReloadLastScene()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>799</x>
+     <y>539</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionOpenBuiltInScene</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindowBase</receiver>
+   <slot>onActionOpenBuiltInScene()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>799</x>
+     <y>539</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>onActionAbout()</slot>
+  <slot>onSetCameraToDefault()</slot>
+  <slot>onRenderStatusToggle()</slot>
+  <slot>onRestartRender()</slot>
+  <slot>onChangeRenderMethodPT()</slot>
+  <slot>onChangeRenderMethodPPM()</slot>
+  <slot>onConfigureGPUDevices()</slot>
+  <slot>onOpenSceneFile()</slot>
+  <slot>onReloadLastScene()</slot>
+  <slot>onActionOpenBuiltInScene()</slot>
+  <slot>onActionSaveImagePPM()</slot>
+ </slots>
+</ui>

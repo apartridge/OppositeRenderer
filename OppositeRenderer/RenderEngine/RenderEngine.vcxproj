@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{26470E25-7DBB-4133-A0AE-0009C41FEA2B}</ProjectGuid>
+    <RootNamespace>OptiXTemp</RootNamespace>
+    <ProjectName>RenderEngine</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 5.0.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(USERPROFILE)/VisualStudioBuilds/$(SolutionName)/$(Configuration)/</OutDir>
+    <IncludePath>$(MSBuildProjectDirectory);$(IncludePath);C:/Program Files/NVIDIA Corporation/OptiX SDK 3.0.0/include;C:/Program Files/NVIDIA Corporation/OptiX SDK 3.0.0/include/optixu;$(CUDA_INC_PATH);C:\Program Files\NVIDIA GPU Computing Toolkit\nvToolsExt\include;$(MSBuildProjectDirectory)\..\include;sutil/;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;%(AdditionalIncludeDirectories)</IncludePath>
+    <LibraryPath>$(LibraryPath);$(SolutionDir)\lib;C:\Program Files\NVIDIA GPU Computing Toolkit\nvToolsExt\lib\x64</LibraryPath>
+    <IntDir>$(USERPROFILE)/VisualStudioBuilds/$(SolutionName)/$(Configuration)/intermediate\$(MSBuildProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Full</Optimization>
+      <PreprocessorDefinitions>_DLL;RENDER_ENGINE_DLL;WIN32;_WINDOWS;_DEBUG;_USE_MATH_DEFINES;NOMINMAX;GLUT_FOUND;GLUT_NO_LIB_PRAGMA;sutil_EXPORTS;RELEASE_PUBLIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>NotSet</SubSystem>
+      <AdditionalDependencies>cudart.lib;QtCored4.lib;QtGuid4.lib;assimp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;C:\Program Files\NVIDIA Corporation\OptiX SDK 3.0.0\lib64\optix.1.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\lib\x64\cuda.lib;C:\Program Files\NVIDIA Corporation\OptiX SDK 3.0.0\lib64\optixu.1.lib;glu32.lib;opengl32.lib;winmm.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <TargetMachine>MachineX64</TargetMachine>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+      <NoEntryPoint>false</NoEntryPoint>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
+      <Message>Performing Custom Build Step</Message>
+    </CustomBuildStep>
+    <CudaCompile>
+      <TargetMachinePlatform>64</TargetMachinePlatform>
+      <CodeGeneration>compute_20,sm_20</CodeGeneration>
+      <HostDebugInfo>false</HostDebugInfo>
+      <GPUDebugInfo>false</GPUDebugInfo>
+      <NvccCompilation>ptx</NvccCompilation>
+      <CompileOut>$(OutDir)%(Filename)%(Extension).ptx</CompileOut>
+      <FastMath>true</FastMath>
+      <KeepDir>$(IntDir)</KeepDir>
+      <GenerateLineInfo>false</GenerateLineInfo>
+      <Optimization>InheritFromHost</Optimization>
+    </CudaCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="math\AAB.h" />
+    <ClInclude Include="math\Sphere.h" />
+    <ClInclude Include="math\Vector3.h" />
+    <ClInclude Include="renderer\helpers\camera.h" />
+    <ClInclude Include="renderer\helpers\samplers.h" />
+    <ClInclude Include="renderer\helpers\optix.h" />
+    <ClInclude Include="renderer\helpers\store_photon.h" />
+    <ClInclude Include="renderer\TransmissionPRD.h" />
+    <ClInclude Include="util\imageformats\libtga\tga.h" />
+    <ClInclude Include="util\imageformats\libtga\tgaconfig.h" />
+    <ClInclude Include="util\Image.h" />
+    <ClInclude Include="material\mirror.h" />
+    <ClInclude Include="material\Texture.h" />
+    <ClInclude Include="renderer\helpers\light.h" />
+    <ClInclude Include="clientserver\RenderServerRenderRequestDetails.h" />
+    <ClInclude Include="renderer\ppm\VolumetricRadiancePRD.h" />
+    <ClInclude Include="util\BenchmarkTimer.h" />
+    <ClInclude Include="clientserver\RenderResultPacket.h" />
+    <ClInclude Include="renderer\helpers\random.h" />
+    <ClInclude Include="render_engine_export_api.h" />
+    <ClInclude Include="ComputeDevice.h" />
+    <ClInclude Include="ComputeDeviceRepository.h" />
+    <ClInclude Include="geometry_instance\AABInstance.h" />
+    <ClInclude Include="geometry_instance\GeometryInstance.h" />
+    <ClInclude Include="geometry_instance\SphereInstance.h" />
+    <ClInclude Include="geometry_instance\Transform.h" />
+    <ClInclude Include="renderer\helpers\helpers.h" />
+    <ClInclude Include="material\DiffuseEmitter.h" />
+    <ClInclude Include="renderer\Hitpoint.h" />
+    <ClInclude Include="material\Diffuse.h" />
+    <ClInclude Include="material\Glass.h" />
+    <ClInclude Include="material\Material.h" />
+    <ClInclude Include="material\ParticipatingMedium.h" />
+    <ClInclude Include="clientserver\RenderServerRenderRequest.h" />
+    <ClInclude Include="scene\Cornell.h" />
+    <ClInclude Include="scene\Scene.h" />
+    <ClInclude Include="renderer\ppm\Photon.h" />
+    <ClInclude Include="renderer\ppm\PhotonPRD.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="renderer\Camera.h" />
+    <ClInclude Include="renderer\Light.h" />
+    <ClInclude Include="renderer\OptixEntryPoint.h" />
+    <ClInclude Include="renderer\OptixRenderer.h" />
+    <ClInclude Include="renderer\RandomState.h" />
+    <ClInclude Include="renderer\RadiancePRD.h" />
+    <ClInclude Include="renderer\RayType.h" />
+    <ClInclude Include="renderer\RenderMethod.h" />
+    <ClInclude Include="scene\IScene.h" />
+    <ClInclude Include="select.h" />
+    <ClInclude Include="renderer\ShadowPRD.h" />
+    <ClInclude Include="renderer\ppm\PhotonGrid.h" />
+    <ClInclude Include="sutil\ImageDisplay.h" />
+    <ClInclude Include="sutil\ImageLoader.h" />
+    <ClInclude Include="sutil\ModelLoader.h" />
+    <ClInclude Include="renderer\helpers\nsight.h" />
+    <ClInclude Include="sutil\ObjLoader.h" />
+    <ClInclude Include="sutil\RayGenCameraData.h" />
+    <ClInclude Include="sutil\SunSky.h" />
+    <ClInclude Include="util\Mouse.h" />
+    <ClInclude Include="util\sutil.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="clientserver\RenderServerRenderRequestDetails.cpp" />
+    <ClCompile Include="math\AAB.cpp" />
+    <ClCompile Include="math\Sphere.cpp" />
+    <ClCompile Include="util\imageformats\libtga\tga.c" />
+    <ClCompile Include="util\imageformats\libtga\tgaread.c" />
+    <ClCompile Include="util\imageformats\libtga\tgawrite.c" />
+    <ClCompile Include="util\Image.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="material\Mirror.cpp" />
+    <ClCompile Include="material\Texture.cpp" />
+    <ClCompile Include="util\BenchmarkTimer.cpp" />
+    <ClCompile Include="clientserver\RenderResultPacket.cpp" />
+    <ClCompile Include="ComputeDevice.cpp" />
+    <ClCompile Include="ComputeDeviceRepository.cpp" />
+    <ClCompile Include="geometry_instance\AABInstance.cpp" />
+    <ClCompile Include="geometry_instance\GeometryInstance.cpp" />
+    <ClCompile Include="geometry_instance\SphereInstance.cpp" />
+    <ClCompile Include="geometry_instance\Transform.cpp" />
+    <ClCompile Include="renderer\Light.cpp" />
+    <ClCompile Include="material\Diffuse.cpp" />
+    <ClCompile Include="material\DiffuseEmitter.cpp" />
+    <ClCompile Include="material\Glass.cpp" />
+    <ClCompile Include="material\Material.cpp" />
+    <ClCompile Include="material\ParticipatingMedium.cpp" />
+    <ClCompile Include="renderer\Camera.cpp" />
+    <ClCompile Include="renderer\OptixRenderer_CPUKdTree.cpp" />
+    <ClCompile Include="clientserver\RenderServerRenderRequest.cpp" />
+    <ClCompile Include="scene\Cornell.cpp" />
+    <ClCompile Include="scene\Scene.cpp" />
+    <ClCompile Include="renderer\OptixRenderer.cpp" />
+    <ClCompile Include="scene\IScene.cpp" />
+    <ClCompile Include="util\Mouse.cpp" />
+    <ClCompile Include="util\sutil.c" />
+    <ClCompile Include="math\Vector3.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BuildRuleQt.targets">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="LICENSE.txt" />
+    <None Include="TrainOfThought.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="geometry_instance\AAB.cu" />
+    <CudaCompile Include="geometry_instance\Sphere.cu" />
+    <CudaCompile Include="geometry_instance\TriangleMesh.cu" />
+    <CudaCompile Include="material\DiffuseEmitter.cu" />
+    <CudaCompile Include="material\Mirror.cu" />
+    <CudaCompile Include="material\Texture.cu" />
+    <CudaCompile Include="renderer\ppm\IndirectRadianceEstimation.cu" />
+    <CudaCompile Include="material\Diffuse.cu" />
+    <CudaCompile Include="material\Glass.cu" />
+    <CudaCompile Include="material\ParticipatingMedium.cu" />
+    <CudaCompile Include="parallelogram.cu" />
+    <CudaCompile Include="renderer\ppm\DirectRadianceEstimation.cu" />
+    <CudaCompile Include="renderer\ppm\Output.cu" />
+    <CudaCompile Include="renderer\ppm\PhotonGenerator.cu" />
+    <CudaCompile Include="renderer\ppm\UniformGridPhotonInitialize.cu" />
+    <CudaCompile Include="renderer\ppm\VolumetricPhotonInitialize.cu" />
+    <CudaCompile Include="renderer\ppm\VolumetricPhotonSphere.cu" />
+    <CudaCompile Include="renderer\ppm\VolumetricPhotonSphereRadiance.cu" />
+    <CudaCompile Include="renderer\pt\RayGeneratorPT.cu" />
+    <CudaCompile Include="renderer\OptixRenderer_SpatialHash.cu">
+      <NvccCompilation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">compile</NvccCompilation>
+    </CudaCompile>
+    <CudaCompile Include="renderer\ppm\RayGeneratorPPM.cu" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 5.0.targets" />
+    <Import Project="BuildRuleQt.targets" />
+  </ImportGroup>
+</Project>

@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{244F1889-074A-437D-AEE8-33F458DA85A1}</ProjectGuid>
+    <RootNamespace>Server</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(USERPROFILE)/VisualStudioBuilds/$(SolutionName)/$(Configuration)/</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IntDir>$(USERPROFILE)/VisualStudioBuilds/$(SolutionName)/$(Configuration)/intermediate/$(MSBuildProjectName)\</IntDir>
+    <IncludePath>$(MSBuildProjectDirectory);$(IncludePath);C:/Program Files/NVIDIA Corporation/OptiX SDK 3.0.0/include;$(CUDA_INC_PATH);C:\Program Files\NVIDIA GPU Computing Toolkit\nvToolsExt\include;C:/Program Files/NVIDIA Corporation/OptiX SDK 3.0.0/include/optixu;$(SolutionDir)/Gui;$(SolutionDir)/RenderEngine/;$(SolutionDir)/include/;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;%(AdditionalIncludeDirectories)</IncludePath>
+    <LibraryPath>$(OutDir);$(LibraryPath);$(SolutionDir)\lib;C:\Program Files\NVIDIA GPU Computing Toolkit\nvToolsExt\lib\x64</LibraryPath>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_USE_MATH_DEFINES;NOMINMAX;GLUT_FOUND;GLUT_NO_LIB_PRAGMA;sutil_EXPORTS;RELEASE_PUBLIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <Optimization>Full</Optimization>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;QtNetworkd4.lib;cudart.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;C:\Program Files\NVIDIA Corporation\OptiX SDK 3.0.0\lib64\optix.1.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\lib\x64\cuda.lib;C:\Program Files\NVIDIA Corporation\OptiX SDK 3.0.0\lib64\optixu.1.lib;glu32.lib;opengl32.lib;winmm.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="gui\moc_ReadyForRenderingWidget.cpp" />
+    <ClCompile Include="gui\moc_ServerWindow.cpp" />
+    <ClCompile Include="gui\moc_SetServerSettingsWidget.cpp" />
+    <ClCompile Include="gui\moc_WaitingForConnectionWidget.cpp" />
+    <ClCompile Include="gui\ReadyForRenderingWidget.cpp" />
+    <ClCompile Include="gui\ServerWindow.cpp" />
+    <ClCompile Include="gui\SetServerSettingsWidget.cpp" />
+    <ClCompile Include="gui\WaitingForConnectionWidget.cpp" />
+    <ClCompile Include="server\moc_RenderServerRenderer.cpp" />
+    <ClCompile Include="server\RenderServerRenderer.cpp" />
+    <ClCompile Include="server\moc_RenderServer.cpp" />
+    <ClCompile Include="server\RenderServerState.cpp" />
+    <ClCompile Include="ServerState.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="server\RenderServer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gui\ReadyForRenderingWidget.hxx" />
+    <None Include="gui\ui\ServerWindow.ui">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="gui\ui\SetServerSettingsWidget.ui" />
+    <None Include="gui\ui\WaitingForConnectionWidget.ui" />
+    <None Include="Server.vcxproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="gui\ServerWindow.hxx" />
+    <ClInclude Include="gui\SetServerSettingsWidget.hxx" />
+    <ClInclude Include="gui\ui\ui_ServerWindow.h" />
+    <ClInclude Include="gui\ui\ui_SetServerSettingsWidget.h" />
+    <ClInclude Include="gui\WaitingForConnectionWidget.hxx" />
+    <ClInclude Include="server\RenderServerRenderer.hxx" />
+    <ClInclude Include="server\RenderServerState.h" />
+    <ClInclude Include="server\RenderServer.hxx" />
+    <ClInclude Include="ServerState.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Gui\Gui.vcxproj">
+      <Project>{fb73d5cd-9955-42f7-bd92-91fdc008c71c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\RenderEngine\RenderEngine.vcxproj">
+      <Project>{26470e25-7dbb-4133-a0ae-0009c41fea2b}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\RenderEngine\BuildRuleQt.targets" />
+  </ImportGroup>
+</Project>
