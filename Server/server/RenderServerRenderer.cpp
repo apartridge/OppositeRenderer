@@ -1,27 +1,27 @@
-/* 
+/*
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #include "RenderServerRenderer.hxx"
-#include "scene/Cornell.h"
-#include "clientserver/RenderServerRenderRequest.h"
-#include "clientserver/RenderResultPacket.h"
-#include <QTime>
-#include <QMetaType>
 #include "RenderServer.hxx"
-#include <QCoreApplication>
-#include <QThread>
+#include "clientserver/RenderResultPacket.h"
+#include "clientserver/RenderServerRenderRequest.h"
+#include "scene/Cornell.h"
 #include <QByteArray>
+#include <QCoreApplication>
+#include <QMetaType>
+#include <QThread>
+#include <QTime>
 
-RenderServerRenderer::RenderServerRenderer(const RenderServer & renderServer) :
-    m_renderServer(renderServer),
-    m_renderer(OptixRenderer()),
-    m_computeDevice(NULL),
-    m_scene(NULL),
-    m_quit(false),
-    m_currentSequenceNumber(0)
+RenderServerRenderer::RenderServerRenderer(const RenderServer& renderServer)
+    : m_renderServer(renderServer)
+    , m_renderer(OptixRenderer())
+    , m_computeDevice(NULL)
+    , m_scene(NULL)
+    , m_quit(false)
+    , m_currentSequenceNumber(0)
 {
     qRegisterMetaType<RenderResultPacket>("RenderResultPacket");
     qRegisterMetaType<RenderServerRenderRequest>("RenderServerRenderRequest");
@@ -69,18 +69,18 @@ void RenderServerRenderer::initializeNewClient()
 
 void RenderServerRenderer::onNewRenderCommandInQueue()
 {
-    while(true)
+    while (true)
     {
         // Process queued up events/slots, in case we quit
         QCoreApplication::processEvents();
 
-        if(m_quit)
+        if (m_quit)
         {
             return;
         }
 
         // If queue is empty, we wait until we get a new request
-        if(m_queue.size() == 0)
+        if (m_queue.size() == 0)
         {
             m_waitCondition.wait(&m_waitConditionMutex);
             continue;
@@ -90,10 +90,10 @@ void RenderServerRenderer::onNewRenderCommandInQueue()
         RenderServerRenderRequest renderRequest = m_queue.dequeue();
         QString iterationNumbersInPacketString = "";
 
-        for(int i = 0; i < renderRequest.getNumIterations(); i++)
-        {            
+        for (int i = 0; i < renderRequest.getNumIterations(); i++)
+        {
             // If the packet we are working has become old during this rendering for-loop, then break out of this loop
-            if(m_currentSequenceNumber != renderRequest.getSequenceNumber())
+            if (m_currentSequenceNumber != renderRequest.getSequenceNumber())
             {
                 break;
             }
@@ -101,7 +101,7 @@ void RenderServerRenderer::onNewRenderCommandInQueue()
             else
             {
                 // This renderRequest has a new scene name, so we'll load the new scene
-                if(m_scene == NULL || m_scene->getSceneName() != renderRequest.getDetails().getSceneName())
+                if (m_scene == NULL || m_scene->getSceneName() != renderRequest.getDetails().getSceneName())
                 {
                     loadNewScene(renderRequest.getDetails().getSceneName());
                 }
@@ -109,38 +109,47 @@ void RenderServerRenderer::onNewRenderCommandInQueue()
                 // Render the frame with local iteration number going from 0 to renderRequestsCurrentPacket.size()
                 // We only need to create the output buffer for the last iteration of the packet
                 bool createOutputBuffer = i == renderRequest.getNumIterations() - 1;
-                renderFrame(renderRequest.getIterationNumbers().at(i), i, renderRequest.getPPMRadii().at(i), createOutputBuffer, renderRequest.getDetails());
+                renderFrame(
+                    renderRequest.getIterationNumbers().at(i),
+                    i,
+                    renderRequest.getPPMRadii().at(i),
+                    createOutputBuffer,
+                    renderRequest.getDetails());
                 iterationNumbersInPacketString += " " + QString::number(renderRequest.getIterationNumbers().at(i));
             }
         }
 
         // If the packet we have just rendered is old (m_currentSequenceNumber is newer)
-        // then we drop this packet. This can happen if we have started on a RenderServerRenderRequest but later found out about
-        // a new sequence, in which case we have break-ed out of the loop above.
+        // then we drop this packet. This can happen if we have started on a RenderServerRenderRequest but later found
+        // out about a new sequence, in which case we have break-ed out of the loop above.
 
-        if(renderRequest.getSequenceNumber() == m_currentSequenceNumber)
+        if (renderRequest.getSequenceNumber() == m_currentSequenceNumber)
         {
             RenderResultPacket result = createRenderResultPacket(renderRequest);
             QString logString = QString("TRANSFERRING packet (%1 iteration:%2) in sequence %3 to client.")
-                .arg(result.getNumIterationsInPacket())
-                .arg(iterationNumbersInPacketString)
-                .arg(result.getSequenceNumber());
+                                    .arg(result.getNumIterationsInPacket())
+                                    .arg(iterationNumbersInPacketString)
+                                    .arg(result.getSequenceNumber());
             emit newLogString(logString);
             emit newRenderResultPacket(result);
         }
         else
         {
             QString logString = QString("IGNORED package with %1 iterations since sequence %3 != %4.")
-                .arg(renderRequest.getNumIterations())
-                .arg(renderRequest.getSequenceNumber())
-                .arg(m_currentSequenceNumber);
+                                    .arg(renderRequest.getNumIterations())
+                                    .arg(renderRequest.getSequenceNumber())
+                                    .arg(m_currentSequenceNumber);
             emit newLogString(logString);
         }
     }
 }
 
-void RenderServerRenderer::renderFrame(unsigned long long iterationNumber, unsigned long long localIterationNumber, 
-    float PPMRadius, bool createOutputBuffer, const RenderServerRenderRequestDetails & details)
+void RenderServerRenderer::renderFrame(
+    unsigned long long iterationNumber,
+    unsigned long long localIterationNumber,
+    float PPMRadius,
+    bool createOutputBuffer,
+    const RenderServerRenderRequestDetails& details)
 {
     // We perform the rendering using m_renderer
 
@@ -152,33 +161,34 @@ void RenderServerRenderer::renderFrame(unsigned long long iterationNumber, unsig
     double frameRenderTime = frameTime.elapsedSeconds();
 
     QString logString = QString("RENDERED iteration # %1 in %6 s. (%3x%4 PPM-r: %5)")
-        .arg(iterationNumber)
-        .arg(details.getWidth())
-        .arg(details.getHeight())
-        .arg(PPMRadius)
-        .arg(frameRenderTime, 0, 'g', 2);
+                            .arg(iterationNumber)
+                            .arg(details.getWidth())
+                            .arg(details.getHeight())
+                            .arg(PPMRadius)
+                            .arg(frameRenderTime, 0, 'g', 2);
     emit newLogString(logString);
 }
 
-RenderResultPacket RenderServerRenderer::createRenderResultPacket(const RenderServerRenderRequest & request)
+RenderResultPacket RenderServerRenderer::createRenderResultPacket(const RenderServerRenderRequest& request)
 {
     QByteArray outputBuffer;
     int bufferSizeBytes = m_renderer.getScreenBufferSizeBytes();
     outputBuffer.resize(bufferSizeBytes);
     m_renderer.getOutputBuffer(outputBuffer.data());
-    RenderResultPacket result = RenderResultPacket(request.getSequenceNumber(), request.getIterationNumbers(), outputBuffer);
+    RenderResultPacket result
+        = RenderResultPacket(request.getSequenceNumber(), request.getIterationNumbers(), outputBuffer);
     return result;
 }
 
-const ComputeDevice & RenderServerRenderer::getComputeDevice() const
+const ComputeDevice& RenderServerRenderer::getComputeDevice() const
 {
     return *m_computeDevice;
 }
 
-void RenderServerRenderer::pushCommandToQueue( RenderServerRenderRequest renderRequest )
+void RenderServerRenderer::pushCommandToQueue(RenderServerRenderRequest renderRequest)
 {
     m_queueMutex.lock();
-    if(renderRequest.getSequenceNumber() > m_currentSequenceNumber)
+    if (renderRequest.getSequenceNumber() > m_currentSequenceNumber)
     {
         m_currentSequenceNumber = renderRequest.getSequenceNumber();
         m_renderTime.restart();
@@ -196,7 +206,7 @@ void RenderServerRenderer::onClientDisconnected()
     m_queueMutex.unlock();
 }
 
-void RenderServerRenderer::loadNewScene(const QByteArray & sceneNameB )
+void RenderServerRenderer::loadNewScene(const QByteArray& sceneNameB)
 {
     try
     {
@@ -212,15 +222,15 @@ void RenderServerRenderer::loadNewScene(const QByteArray & sceneNameB )
 
         emit newLogString(QString("INITIALIZED scene %1.").arg(QString(m_scene->getSceneName())));
     }
-    catch(const std::exception & E)
+    catch (const std::exception& E)
     {
         emit newLogString(QString("An error happened during loading of scene %1: \"%2\"")
-            .arg(QString(sceneNameB)).arg(QString(E.what())));
+                              .arg(QString(sceneNameB))
+                              .arg(QString(E.what())));
     }
-    catch(...)
+    catch (...)
     {
-        emit newLogString(QString("An unknown error happened during loading of scene: %s.")
-            .arg(QString(sceneNameB)));
+        emit newLogString(QString("An unknown error happened during loading of scene: %s.").arg(QString(sceneNameB)));
     }
 }
 
@@ -251,7 +261,7 @@ unsigned int RenderServerRenderer::getNumPendingRenderIterations()
 {
     m_queueMutex.lock();
     unsigned int iterations = 0;
-    for(int i = 0; i < m_queue.size(); i++)
+    for (int i = 0; i < m_queue.size(); i++)
     {
         iterations += m_queue.at(i).getNumIterations();
     }

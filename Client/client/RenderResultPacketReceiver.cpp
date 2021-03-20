@@ -2,24 +2,24 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #include "RenderResultPacketReceiver.hxx"
-#include "RenderServerConnection.hxx"
 #include "../DistributedApplication.hxx"
+#include "RenderServerConnection.hxx"
 #include "renderer/OptixRenderer.h"
 
 #include <QtAlgorithms>
 
-RenderResultPacketReceiver::RenderResultPacketReceiver(const DistributedApplication & application)
-    : m_application(application),
-      m_frontBuffer(NULL),
-      m_backBuffer(),
-      m_PPMNextExpectedIteration(0),
-      m_lastSequenceNumber(0),
-      m_peakBackBufferSizeBytes(0)
+RenderResultPacketReceiver::RenderResultPacketReceiver(const DistributedApplication& application)
+    : m_application(application)
+    , m_frontBuffer(NULL)
+    , m_backBuffer()
+    , m_PPMNextExpectedIteration(0)
+    , m_lastSequenceNumber(0)
+    , m_peakBackBufferSizeBytes(0)
 {
-    m_frontBuffer = new float[2000*2000*3];
+    m_frontBuffer = new float[2000 * 2000 * 3];
 }
 
 RenderResultPacketReceiver::~RenderResultPacketReceiver(void)
@@ -34,15 +34,15 @@ void RenderResultPacketReceiver::onRenderResultPacketReceived(RenderResultPacket
 {
     // Merge the results if the sequence number of RenderResultPacket matches the current sequence number
 
-    if(result->getSequenceNumber() == m_application.getSequenceNumber())
+    if (result->getSequenceNumber() == m_application.getSequenceNumber())
     {
-        if(result->getSequenceNumber() > m_lastSequenceNumber)
+        if (result->getSequenceNumber() > m_lastSequenceNumber)
         {
             resetInternals();
             m_lastSequenceNumber = result->getSequenceNumber();
         }
 
-        if(m_application.getRenderMethod() == RenderMethod::PROGRESSIVE_PHOTON_MAPPING)
+        if (m_application.getRenderMethod() == RenderMethod::PROGRESSIVE_PHOTON_MAPPING)
         {
 
             mergeRenderResultPacketPhotonMapping(result);
@@ -57,12 +57,10 @@ void RenderResultPacketReceiver::onRenderResultPacketReceived(RenderResultPacket
 
     // We take ownership of the result and make sure to delete it
     delete result;
-
 }
 
 void RenderResultPacketReceiver::onThreadStarted()
 {
-
 }
 
 void RenderResultPacketReceiver::mergeRenderResultPacketPhotonMapping(const RenderResultPacket* packet)
@@ -70,7 +68,7 @@ void RenderResultPacketReceiver::mergeRenderResultPacketPhotonMapping(const Rend
     QVector<unsigned long long> iterationsInPacket = packet->getIterationNumbersInPacket();
     emit packetReceived(packet->getSequenceNumber(), iterationsInPacket.size());
 
-    unsigned int numPixels = packet->getOutput().size()/sizeof(float);
+    unsigned int numPixels = packet->getOutput().size() / sizeof(float);
 
     m_backBufferMutex.lock();
 
@@ -80,11 +78,11 @@ void RenderResultPacketReceiver::mergeRenderResultPacketPhotonMapping(const Rend
     // Try to combine any two sequential back buffers
 
     QVector<RenderResultPacket>::iterator it;
-    while(true)
+    while (true)
     {
-        for(it = m_backBuffer.begin(); it < m_backBuffer.end()-1; it++)
+        for (it = m_backBuffer.begin(); it < m_backBuffer.end() - 1; it++)
         {
-            if(it->getLastIterationNumber() + 1 == (it+1)->getFirstIterationNumber())
+            if (it->getLastIterationNumber() + 1 == (it + 1)->getFirstIterationNumber())
             {
                 /*printf("%% Merge %d [", it->getFirstIterationNumber());
                 for(int i = 0; i < it->getNumIterationsInPacket(); i++)
@@ -100,18 +98,18 @@ void RenderResultPacketReceiver::mergeRenderResultPacketPhotonMapping(const Rend
                 }
                 printf("] in backbuffer\n");*/
 
-                it->merge(*(it+1));
-                m_backBuffer.erase(it+1);
+                it->merge(*(it + 1));
+                m_backBuffer.erase(it + 1);
                 break;
             }
         }
-        if(it == m_backBuffer.end()-1)
+        if (it == m_backBuffer.end() - 1)
         {
             break;
         }
     }
 
-    if(m_backBuffer.first().getFirstIterationNumber() == m_PPMNextExpectedIteration)
+    if (m_backBuffer.first().getFirstIterationNumber() == m_PPMNextExpectedIteration)
     {
         RenderResultPacket backBuffer = m_backBuffer.first();
         /*printf("Merge backbuffer ", m_backBuffer.size());
@@ -120,11 +118,15 @@ void RenderResultPacketReceiver::mergeRenderResultPacketPhotonMapping(const Rend
             printf("%d ", backBuffer.getIterationNumbersInPacket().at(i));
         }*/
 
-        mergeBufferRunningAverage((const float*)backBuffer.getOutput().constData(), backBuffer.getNumIterationsInPacket(),
-            m_frontBuffer, m_PPMNextExpectedIteration, numPixels );
-        m_PPMNextExpectedIteration = backBuffer.getLastIterationNumber()+1;
+        mergeBufferRunningAverage(
+            (const float*)backBuffer.getOutput().constData(),
+            backBuffer.getNumIterationsInPacket(),
+            m_frontBuffer,
+            m_PPMNextExpectedIteration,
+            numPixels);
+        m_PPMNextExpectedIteration = backBuffer.getLastIterationNumber() + 1;
         m_backBuffer.pop_front();
-        //printf(" into front. Next it: %d", m_PPMNextExpectedIteration);
+        // printf(" into front. Next it: %d", m_PPMNextExpectedIteration);
     }
 
     /*printf("\nBackbuffer size: %d, expecting %d\n", m_backBuffer.size(), m_PPMNextExpectedIteration);
@@ -140,23 +142,24 @@ void RenderResultPacketReceiver::mergeRenderResultPacketPhotonMapping(const Rend
 
     m_backBufferMutex.unlock();
 
-    if(getBackBufferSizeBytes() > m_peakBackBufferSizeBytes)
+    if (getBackBufferSizeBytes() > m_peakBackBufferSizeBytes)
     {
         m_peakBackBufferSizeBytes = getBackBufferSizeBytes();
     }
 
-    m_iterationNumber = m_PPMNextExpectedIteration > 0 ? m_PPMNextExpectedIteration-1 : 0;
+    m_iterationNumber = m_PPMNextExpectedIteration > 0 ? m_PPMNextExpectedIteration - 1 : 0;
 }
 
 // In path tracing, we simply control a running average of the frames we have received.
 // We do not really care about the order of which we receive RenderResultPackets
 
-void RenderResultPacketReceiver::mergeRenderResultPathTracing(const RenderResultPacket* result )
+void RenderResultPacketReceiver::mergeRenderResultPathTracing(const RenderResultPacket* result)
 {
-    const QByteArray & packetOutput = result->getOutput();
+    const QByteArray& packetOutput = result->getOutput();
     float* packetDataFloat = (float*)packetOutput.data();
-    unsigned int numElements = packetOutput.size()/sizeof(float);
-    mergeBufferRunningAverage(packetDataFloat, result->getNumIterationsInPacket(), m_frontBuffer, m_iterationNumber, numElements);
+    unsigned int numElements = packetOutput.size() / sizeof(float);
+    mergeBufferRunningAverage(
+        packetDataFloat, result->getNumIterationsInPacket(), m_frontBuffer, m_iterationNumber, numElements);
     m_iterationNumber += result->getNumIterationsInPacket();
 }
 
@@ -164,41 +167,50 @@ void RenderResultPacketReceiver::mergeRenderResultPathTracing(const RenderResult
 
 static __inline float average(const float oldf, const float newf, const float newDivSum)
 {
-    return oldf + (newf-oldf)*newDivSum;
+    return oldf + (newf - oldf) * newDivSum;
 }
 
-void RenderResultPacketReceiver::mergeBufferRunningAverage( const float* inputBuffer, unsigned int inputBufferNumIterations,
-                                                              float* outputBuffer, unsigned int outputBufferNumIterations,
-                                                              unsigned int numPixels )
+void RenderResultPacketReceiver::mergeBufferRunningAverage(
+    const float* inputBuffer,
+    unsigned int inputBufferNumIterations,
+    float* outputBuffer,
+    unsigned int outputBufferNumIterations,
+    unsigned int numPixels)
 {
-    //printf("\nMerge %d with %d\n", inputBufferNumIterations, outputBufferNumIterations);
-    if(outputBufferNumIterations == 0)
+    // printf("\nMerge %d with %d\n", inputBufferNumIterations, outputBufferNumIterations);
+    if (outputBufferNumIterations == 0)
     {
-        for(unsigned int i = 0; i < numPixels; i += 3)
+        for (unsigned int i = 0; i < numPixels; i += 3)
         {
-            outputBuffer[i]   = inputBuffer[i];
-            outputBuffer[i+1] = inputBuffer[i+1];
-            outputBuffer[i+2] = inputBuffer[i+2];
+            outputBuffer[i] = inputBuffer[i];
+            outputBuffer[i + 1] = inputBuffer[i + 1];
+            outputBuffer[i + 2] = inputBuffer[i + 2];
         }
     }
     else
     {
-        float newNumIterationsInOutBuffer = float(outputBufferNumIterations+inputBufferNumIterations);
+        float newNumIterationsInOutBuffer = float(outputBufferNumIterations + inputBufferNumIterations);
 
-        for(unsigned int i = 0; i < numPixels; i += 3)
+        for (unsigned int i = 0; i < numPixels; i += 3)
         {
-            outputBuffer[i] = average(outputBuffer[i], inputBuffer[i], inputBufferNumIterations/newNumIterationsInOutBuffer);
-            outputBuffer[i+1] = average(outputBuffer[i+1], inputBuffer[i+1], inputBufferNumIterations/newNumIterationsInOutBuffer);
-            outputBuffer[i+2] = average(outputBuffer[i+2], inputBuffer[i+2], inputBufferNumIterations/newNumIterationsInOutBuffer);
+            outputBuffer[i]
+                = average(outputBuffer[i], inputBuffer[i], inputBufferNumIterations / newNumIterationsInOutBuffer);
+            outputBuffer[i + 1] = average(
+                outputBuffer[i + 1], inputBuffer[i + 1], inputBufferNumIterations / newNumIterationsInOutBuffer);
+            outputBuffer[i + 2] = average(
+                outputBuffer[i + 2], inputBuffer[i + 2], inputBufferNumIterations / newNumIterationsInOutBuffer);
         }
     }
 }
 
 // Check if this SORTED input vector consists of sequential iterations, i.e. 0 1 2
 
-bool RenderResultPacketReceiver::iterationNumbersAreSequential(const QVector<unsigned long long> iterationsInPacketSorted )
+bool RenderResultPacketReceiver::iterationNumbersAreSequential(
+    const QVector<unsigned long long> iterationsInPacketSorted)
 {
-    return (iterationsInPacketSorted.first() + (unsigned long long)iterationsInPacketSorted.size() == iterationsInPacketSorted.last() + 1);
+    return (
+        iterationsInPacketSorted.first() + (unsigned long long)iterationsInPacketSorted.size()
+        == iterationsInPacketSorted.last() + 1);
 }
 
 unsigned long long RenderResultPacketReceiver::getIterationNumber() const
@@ -219,7 +231,7 @@ unsigned int RenderResultPacketReceiver::getBackBufferNumIterations()
 {
     m_backBufferMutex.lock();
     unsigned int numIterations = 0;
-    for(int i = 0; i < m_backBuffer.size(); i++)
+    for (int i = 0; i < m_backBuffer.size(); i++)
     {
         numIterations += m_backBuffer.at(i).getNumIterationsInPacket();
     }
@@ -231,7 +243,7 @@ unsigned int RenderResultPacketReceiver::getBackBufferSizeBytes()
 {
     unsigned int sizeBytes = 0;
     m_backBufferMutex.lock();
-    for(int i = 0; i < m_backBuffer.size(); i++)
+    for (int i = 0; i < m_backBuffer.size(); i++)
     {
         sizeBytes += m_backBuffer.at(i).getOutput().size() + sizeof(RenderResultPacket);
     }

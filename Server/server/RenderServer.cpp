@@ -2,33 +2,36 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #include "RenderServer.hxx"
 #include "ComputeDevice.h"
-#include <QTcpSocket>
 #include "clientserver/RenderServerRenderRequest.h"
+#include <QTcpSocket>
 #include <QThread>
 
 RenderServer::RenderServer()
-    : m_renderState(RenderServerState::NOT_VALID_RENDER_STATE),
-      m_clientSocket(NULL),
-      m_renderServerRenderer(*this),
-      m_clientSocketDataStream(NULL),
-      m_clientExpectingBytes(0)
+    : m_renderState(RenderServerState::NOT_VALID_RENDER_STATE)
+    , m_clientSocket(NULL)
+    , m_renderServerRenderer(*this)
+    , m_clientSocketDataStream(NULL)
+    , m_clientExpectingBytes(0)
 {
     m_renderServerRendererThread = new QThread();
     m_renderServerRenderer.moveToThread(m_renderServerRendererThread);
     m_renderServerRendererThread->start();
 
-    //connect(this, SIGNAL(aboutToQuit()), m_renderServerRendererThread, SLOT(quit()));
+    // connect(this, SIGNAL(aboutToQuit()), m_renderServerRendererThread, SLOT(quit()));
 
     connect(m_renderServerRendererThread, SIGNAL(started()), &m_renderServerRenderer, SLOT(onThreadStarted()));
-    connect(&m_renderServerRenderer, SIGNAL(newLogString(QString)),
-        this, SLOT(appendToLog(QString)), Qt::QueuedConnection);
-    connect(&m_renderServerRenderer, SIGNAL(newRenderResultPacket(RenderResultPacket)),
-            this, SLOT(onNewRenderResultPacket(RenderResultPacket)),
-            Qt::QueuedConnection);
+    connect(
+        &m_renderServerRenderer, SIGNAL(newLogString(QString)), this, SLOT(appendToLog(QString)), Qt::QueuedConnection);
+    connect(
+        &m_renderServerRenderer,
+        SIGNAL(newRenderResultPacket(RenderResultPacket)),
+        this,
+        SLOT(onNewRenderResultPacket(RenderResultPacket)),
+        Qt::QueuedConnection);
 }
 
 RenderServer::~RenderServer()
@@ -45,12 +48,12 @@ void RenderServer::wait()
     m_renderServerRendererThread->wait();
 }
 
-void RenderServer::initializeDevice(const ComputeDevice & computeDevice)
+void RenderServer::initializeDevice(const ComputeDevice& computeDevice)
 {
     m_renderServerRenderer.initialize(&computeDevice);
 }
 
-void RenderServer::initializeClient(QTcpSocket & clientSocket)
+void RenderServer::initializeClient(QTcpSocket& clientSocket)
 {
     m_clientSocket = &clientSocket;
     // Delete old client data stream so that we can initialize multiple times
@@ -73,16 +76,16 @@ void RenderServer::setRenderState(RenderServerState::E renderState)
 
 void RenderServer::onDataFromClient()
 {
-    if(m_renderState == RenderServerState::WAITING_FOR_INTRODUCTION_REQUEST)
+    if (m_renderState == RenderServerState::WAITING_FOR_INTRODUCTION_REQUEST)
     {
         QByteArray arr = m_clientSocket->readAll();
         const char* dataPtr = arr.constData();
-        if(strncmp(dataPtr, "GET SERVER DETAILS", 18) == 0)
+        if (strncmp(dataPtr, "GET SERVER DETAILS", 18) == 0)
         {
             QString computeDeviceName = QString("%1 (#%2, CC %3)")
-                .arg(m_renderServerRenderer.getComputeDevice().getName())
-                .arg(m_renderServerRenderer.getComputeDevice().getDeviceId())
-                .arg(m_renderServerRenderer.getComputeDevice().getComputeCapability());
+                                            .arg(m_renderServerRenderer.getComputeDevice().getName())
+                                            .arg(m_renderServerRenderer.getComputeDevice().getDeviceId())
+                                            .arg(m_renderServerRenderer.getComputeDevice().getComputeCapability());
             *m_clientSocketDataStream << computeDeviceName;
             m_clientSocket->waitForBytesWritten();
             setRenderState(RenderServerState::RENDERING);
@@ -90,23 +93,23 @@ void RenderServer::onDataFromClient()
         }
         setRenderState(RenderServerState::ERROR_UNKNOWN);
     }
-    else if(m_renderState == RenderServerState::RENDERING)
+    else if (m_renderState == RenderServerState::RENDERING)
     {
-        while(m_clientSocket->bytesAvailable() > 0)
+        while (m_clientSocket->bytesAvailable() > 0)
         {
             quint64 bytesAvailable = m_clientSocket->bytesAvailable();
-            if(m_clientExpectingBytes == 0)
+            if (m_clientExpectingBytes == 0)
             {
                 *m_clientSocketDataStream >> m_clientExpectingBytes;
             }
 
-            if(bytesAvailable >= m_clientExpectingBytes)
+            if (bytesAvailable >= m_clientExpectingBytes)
             {
                 m_clientExpectingBytes = 0;
                 RenderServerRenderRequest renderRequest = getRenderServerRenderRequestFromClient();
                 m_renderServerRenderer.pushCommandToQueue(renderRequest);
 
-                //emit newRenderCommand(renderRequest);
+                // emit newRenderCommand(renderRequest);
             }
         }
     }
@@ -114,7 +117,7 @@ void RenderServer::onDataFromClient()
 
 RenderServerRenderRequest RenderServer::getRenderServerRenderRequestFromClient()
 {
-    //m_pendingRenderCommands++;
+    // m_pendingRenderCommands++;
 
     RenderServerRenderRequest renderRequest;
     QDataStream datastream(m_clientSocket);
@@ -142,7 +145,8 @@ void RenderServer::onNewRenderResultPacket(RenderResultPacket result)
     result.setRenderTimeSeconds(getRenderTimeSeconds());
     result.setTotalTimeSeconds(getTotalTimeSeconds());
 
-    //printf("Sending result it %d size %d to client. Pending: %d\n", result.getIterationNumber(), result.getDirectRadiance().size(), m_pendingRenderCommands);
+    // printf("Sending result it %d size %d to client. Pending: %d\n", result.getIterationNumber(),
+    // result.getDirectRadiance().size(), m_pendingRenderCommands);
 
     *m_clientSocketDataStream << result;
     m_clientSocket->flush();

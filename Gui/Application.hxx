@@ -2,19 +2,19 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #pragma once
 
+#include "RendererStatus.h"
 #include "RunningStatus.h"
-#include "renderer/RenderMethod.h"
-#include "renderer/Camera.h"
 #include "gui_export_api.h"
 #include "models/OutputSettingsModel.hxx"
 #include "models/PPMSettingsModel.hxx"
 #include "models/RenderStatisticsModel.hxx"
+#include "renderer/Camera.h"
+#include "renderer/RenderMethod.h"
 #include "scene/SceneManager.hxx"
-#include "RendererStatus.h"
 
 #include <QObject>
 
@@ -32,22 +32,22 @@ in its own thread.
 class GUI_EXPORT_API_QT Application : public QObject
 {
     Q_OBJECT;
+
 public:
+    Application(QApplication& qApplication);
+    ~Application() {};
 
-    Application(QApplication & qApplication);
-    ~Application(){};
-
-    OutputSettingsModel & getOutputSettingsModel();
-    unsigned int getWidth() const ;
-    unsigned int getHeight() const ;
-    PPMSettingsModel & getPPMSettingsModel();
-    Camera & getCamera();
-    RenderStatisticsModel & getRenderStatisticsModel();
-    const RenderStatisticsModel & getRenderStatisticsModel() const;
+    OutputSettingsModel& getOutputSettingsModel();
+    unsigned int getWidth() const;
+    unsigned int getHeight() const;
+    PPMSettingsModel& getPPMSettingsModel();
+    Camera& getCamera();
+    RenderStatisticsModel& getRenderStatisticsModel();
+    const RenderStatisticsModel& getRenderStatisticsModel() const;
     void setCameraToSceneDefault();
-    SceneManager & getSceneManager();
-    const SceneManager & getSceneManager() const;
-    void setRenderMethod( RenderMethod::E method );
+    SceneManager& getSceneManager();
+    const SceneManager& getSceneManager() const;
+    void setRenderMethod(RenderMethod::E method);
     RenderMethod::E getRenderMethod() const;
     RunningStatus::E getRunningStatus() const;
     void setRunningStatus(RunningStatus::E val);

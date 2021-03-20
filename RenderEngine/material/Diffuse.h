@@ -5,8 +5,8 @@
  */
 
 #pragma once
-#include "Material.h"
 #include "../math/Vector3.h"
+#include "Material.h"
 
 class Diffuse : public Material
 {
@@ -14,8 +14,9 @@ private:
     Vector3 Kd;
     static bool m_optixMaterialIsCreated;
     static optix::Material m_optixMaterial;
+
 public:
-    Diffuse(const Vector3 & Kd);
-    virtual optix::Material getOptixMaterial(optix::Context & context);
-    virtual void registerGeometryInstanceValues(optix::GeometryInstance & instance);
+    Diffuse(const Vector3& Kd);
+    virtual optix::Material getOptixMaterial(optix::Context& context);
+    virtual void registerGeometryInstanceValues(optix::GeometryInstance& instance);
 };

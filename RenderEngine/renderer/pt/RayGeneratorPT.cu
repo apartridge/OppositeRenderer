@@ -2,20 +2,20 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
-#include <optix.h>
-#include <optixu/optixu_math_namespace.h>
-#include "config.h"
-#include "../RadiancePRD.h"
+#include "../Camera.h"
 #include "../Hitpoint.h"
+#include "../Light.h"
+#include "../RadiancePRD.h"
 #include "../RayType.h"
 #include "../ShadowPRD.h"
-#include "../Light.h"
-#include "../Camera.h"
-#include "../helpers/random.h"
-#include "../helpers/light.h"
 #include "../helpers/camera.h"
+#include "../helpers/light.h"
+#include "../helpers/random.h"
+#include "config.h"
+#include <optix.h>
+#include <optixu/optixu_math_namespace.h>
 
 using namespace optix;
 
@@ -28,13 +28,14 @@ rtDeclareVariable(uint2, launchIndex, rtLaunchIndex, );
 rtDeclareVariable(uint, localIterationNumber, , );
 rtDeclareVariable(RadiancePRD, radiancePrd, rtPayload, );
 rtDeclareVariable(optix::Ray, ray, rtCurrentRay, );
-rtDeclareVariable(int, ptDirectLightSampling, ,);
+rtDeclareVariable(int, ptDirectLightSampling, , );
 
-static __device__ __inline float3 averageInNewRadiance(const float3 newRadiance, const float3 oldRadiance, const float localIterationNumber)
+static __device__ __inline float3
+averageInNewRadiance(const float3 newRadiance, const float3 oldRadiance, const float localIterationNumber)
 {
-    if(localIterationNumber >= 1)
+    if (localIterationNumber >= 1)
     {
-        return oldRadiance + (newRadiance-oldRadiance)/(localIterationNumber+1);
+        return oldRadiance + (newRadiance - oldRadiance) / (localIterationNumber + 1);
     }
     else
     {
@@ -45,17 +46,17 @@ static __device__ __inline float3 averageInNewRadiance(const float3 newRadiance,
 RT_PROGRAM void generateRay()
 {
     RadiancePRD radiancePrd;
-    radiancePrd.attenuation = make_float3( 1.0f );
+    radiancePrd.attenuation = make_float3(1.0f);
     radiancePrd.radiance = make_float3(0.f);
     radiancePrd.depth = 0u;
     radiancePrd.randomState = randomStates[launchIndex];
 
-    float2 screen = make_float2( outputBuffer.size() );
+    float2 screen = make_float2(outputBuffer.size());
     float2 sample = getRandomUniformFloat2(&radiancePrd.randomState);
-    float2 d = ( make_float2(launchIndex) + sample ) / screen * 2.0f - 1.0f;
+    float2 d = (make_float2(launchIndex) + sample) / screen * 2.0f - 1.0f;
 
     float3 rayOrigin = camera.eye;
-    float3 rayDirection = normalize(d.x*camera.camera_u + d.y*camera.camera_v + camera.lookdir);
+    float3 rayDirection = normalize(d.x * camera.camera_u + d.y * camera.camera_v + camera.lookdir);
 
     modifyRayForDepthOfField(camera, rayOrigin, rayDirection, radiancePrd.randomState);
 
@@ -66,35 +67,38 @@ RT_PROGRAM void generateRay()
     int numShadowSamples = ptDirectLightSampling ? 1 : 0;
     int numPaths = ptDirectLightSampling ? 5 : 10;
 
-    for(int i = 0; i < numPaths; i++) // Paths
+    for (int i = 0; i < numPaths; i++) // Paths
     {
         radiancePrd.flags = PRD_PATH_TRACING;
         rtTrace(sceneRootObject, ray, radiancePrd);
 
-        if(radiancePrd.flags & PRD_HIT_EMITTER)
+        if (radiancePrd.flags & PRD_HIT_EMITTER)
         {
-            if(radiancePrd.flags & PRD_HIT_SPECULAR || i == 0)
+            if (radiancePrd.flags & PRD_HIT_SPECULAR || i == 0)
             {
                 finalRadiance = radiancePrd.radiance;
             }
             break;
         }
-        else if(radiancePrd.flags & PRD_HIT_NON_SPECULAR)
+        else if (radiancePrd.flags & PRD_HIT_NON_SPECULAR)
         {
             int numLights = lights.size();
             float3 accumLightRadiancePreBrdf = make_float3(0);
 
-            for(int shadowSample = 0; shadowSample < numShadowSamples; shadowSample++)
+            for (int shadowSample = 0; shadowSample < numShadowSamples; shadowSample++)
             {
-                int randomLightIndex = int(getRandomUniformFloat(&randomStates[launchIndex])*numLights);
-                Light & light = lights[randomLightIndex];
+                int randomLightIndex = int(getRandomUniformFloat(&randomStates[launchIndex]) * numLights);
+                Light& light = lights[randomLightIndex];
                 float scale = numLights;
 
-                float3 lightContrib = scale*getLightContribution(light, radiancePrd.position, radiancePrd.normal, sceneRootObject, radiancePrd.randomState);
+                float3 lightContrib
+                    = scale
+                    * getLightContribution(
+                          light, radiancePrd.position, radiancePrd.normal, sceneRootObject, radiancePrd.randomState);
                 accumLightRadiancePreBrdf += lightContrib;
             }
 
-            float3 directRadiance = radiancePrd.attenuation*accumLightRadiancePreBrdf/numShadowSamples;
+            float3 directRadiance = radiancePrd.attenuation * accumLightRadiancePreBrdf / numShadowSamples;
             finalRadiance += directRadiance;
 
             ray.origin = radiancePrd.position;
@@ -105,11 +109,11 @@ RT_PROGRAM void generateRay()
             break;
         }
 
-        if(i >= PATH_TRACING_RR_START_DEPTH) // Russian Roulette sampling
+        if (i >= PATH_TRACING_RR_START_DEPTH) // Russian Roulette sampling
         {
             float sample = getRandomUniformFloat(&randomStates[launchIndex]);
             float probabilityContinue = fmaxf(radiancePrd.attenuation);
-            if(sample > probabilityContinue)
+            if (sample > probabilityContinue)
             {
                 break;
             }
@@ -129,8 +133,8 @@ RT_PROGRAM void generateRay()
 RT_PROGRAM void exception()
 {
     printf("Exception Radiance PT!\n");
-    //radiancePrd.flags = PRD_ERROR;
-    //radiancePrd.attenuation = make_float3(0,0,1);
+    // radiancePrd.flags = PRD_ERROR;
+    // radiancePrd.attenuation = make_float3(0,0,1);
 }
 
 //
@@ -140,5 +144,5 @@ RT_PROGRAM void exception()
 RT_PROGRAM void miss()
 {
     radiancePrd.flags = PRD_MISS;
-    radiancePrd.attenuation = make_float3(0,0,0);
+    radiancePrd.attenuation = make_float3(0, 0, 0);
 }

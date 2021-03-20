@@ -14,14 +14,16 @@
 bool Texture::m_optixMaterialIsCreated = false;
 optix::Material Texture::m_optixMaterial;
 
-Texture::Texture(const QString & textureAbsoluteFilePath)
-    : m_diffuseImage(NULL), m_normalMapImage(NULL)
+Texture::Texture(const QString& textureAbsoluteFilePath)
+    : m_diffuseImage(NULL)
+    , m_normalMapImage(NULL)
 {
     loadDiffuseImage(textureAbsoluteFilePath);
 }
 
-Texture::Texture(const QString & textureAbsoluteFilePath, const QString & normalMapAbosoluteFilePath)
-    : m_diffuseImage(NULL), m_normalMapImage(NULL)
+Texture::Texture(const QString& textureAbsoluteFilePath, const QString& normalMapAbosoluteFilePath)
+    : m_diffuseImage(NULL)
+    , m_normalMapImage(NULL)
 {
     loadDiffuseImage(textureAbsoluteFilePath);
     loadNormalMapImage(normalMapAbosoluteFilePath);
@@ -33,40 +35,43 @@ Texture::~Texture()
     delete m_normalMapImage;
 }
 
-void Texture::loadDiffuseImage( const QString & textureAbsoluteFilePath )
+void Texture::loadDiffuseImage(const QString& textureAbsoluteFilePath)
 {
     try
     {
         m_diffuseImage = new Image(textureAbsoluteFilePath);
     }
-    catch(const std::exception & e)
+    catch (const std::exception& e)
     {
-        QString exceptionStr = QString("An error occurred loading of texture: %2").arg(textureAbsoluteFilePath).arg(e.what());
+        QString exceptionStr
+            = QString("An error occurred loading of texture: %2").arg(textureAbsoluteFilePath).arg(e.what());
         throw std::runtime_error(exceptionStr.toStdString());
     }
 }
 
-void Texture::loadNormalMapImage( const QString & normalMapAbsoluteFilePath )
+void Texture::loadNormalMapImage(const QString& normalMapAbsoluteFilePath)
 {
     try
     {
         m_normalMapImage = new Image(normalMapAbsoluteFilePath);
         printf("Loaded normals: %s\n", normalMapAbsoluteFilePath.toStdString().c_str());
     }
-    catch(const std::exception & e)
+    catch (const std::exception& e)
     {
         QString exceptionStr = QString("An error occurred loading of texture's normal map: %1").arg(e.what());
         throw std::runtime_error(exceptionStr.toStdString());
     }
 }
 
-optix::Material Texture::getOptixMaterial(optix::Context & context)
+optix::Material Texture::getOptixMaterial(optix::Context& context)
 {
-    if(!m_optixMaterialIsCreated)
+    if (!m_optixMaterialIsCreated)
     {
         m_optixMaterial = context->createMaterial();
-        optix::Program radianceProgram = context->createProgramFromPTXFile(getPtxFile("material/Texture.ptx"), "closestHitRadiance");
-        optix::Program photonProgram = context->createProgramFromPTXFile(getPtxFile("material/Texture.ptx"), "closestHitPhoton");
+        optix::Program radianceProgram
+            = context->createProgramFromPTXFile(getPtxFile("material/Texture.ptx"), "closestHitRadiance");
+        optix::Program photonProgram
+            = context->createProgramFromPTXFile(getPtxFile("material/Texture.ptx"), "closestHitPhoton");
 
         m_optixMaterial->setClosestHitProgram(RayType::RADIANCE, radianceProgram);
         m_optixMaterial->setClosestHitProgram(RayType::RADIANCE_IN_PARTICIPATING_MEDIUM, radianceProgram);
@@ -83,7 +88,7 @@ optix::Material Texture::getOptixMaterial(optix::Context & context)
     m_diffuseSampler = createTextureSamplerFromBuffer(context, buffer);
 
     optix::Buffer normalsBuffer;
-    if(m_normalMapImage != NULL)
+    if (m_normalMapImage != NULL)
     {
         normalsBuffer = createBufferFromImage(context, *m_normalMapImage);
     }
@@ -96,14 +101,14 @@ optix::Material Texture::getOptixMaterial(optix::Context & context)
     return m_optixMaterial;
 }
 
-void Texture::registerGeometryInstanceValues(optix::GeometryInstance & instance )
+void Texture::registerGeometryInstanceValues(optix::GeometryInstance& instance)
 {
     instance["diffuseSampler"]->setTextureSampler(m_diffuseSampler);
     instance["hasNormals"]->setUint(m_normalMapImage != NULL);
     instance["normalMapSampler"]->setTextureSampler(m_normalMapSampler);
 }
 
-optix::TextureSampler Texture::createTextureSamplerFromBuffer( optix::Context & context, optix::Buffer buffer )
+optix::TextureSampler Texture::createTextureSamplerFromBuffer(optix::Context& context, optix::Buffer buffer)
 {
     optix::TextureSampler sampler = context->createTextureSampler();
     sampler->setWrapMode(0, RT_WRAP_REPEAT);
@@ -118,11 +123,12 @@ optix::TextureSampler Texture::createTextureSamplerFromBuffer( optix::Context & 
     return sampler;
 }
 
-optix::Buffer Texture::createBufferFromImage(optix::Context & context, const Image & image )
+optix::Buffer Texture::createBufferFromImage(optix::Context& context, const Image& image)
 {
-    optix::Buffer buffer = context->createBuffer(RT_BUFFER_INPUT, RT_FORMAT_UNSIGNED_BYTE4, image.getWidth(), image.getHeight());
+    optix::Buffer buffer
+        = context->createBuffer(RT_BUFFER_INPUT, RT_FORMAT_UNSIGNED_BYTE4, image.getWidth(), image.getHeight());
     optix::char4* buffer_Host = (optix::char4*)buffer->map();
-    memcpy(buffer_Host, image.constData(), image.getWidth()*image.getHeight()*4*sizeof(unsigned char));
+    memcpy(buffer_Host, image.constData(), image.getWidth() * image.getHeight() * 4 * sizeof(unsigned char));
     buffer->unmap();
     return buffer;
 }

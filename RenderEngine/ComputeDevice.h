@@ -1,8 +1,8 @@
-/* 
+/*
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #pragma once
 #include "render_engine_export_api.h"
@@ -13,7 +13,7 @@ class ComputeDevice
 {
 public:
     ComputeDevice();
-    static ComputeDevice fromCudaDeviceProperties(const cudaDeviceProp& devProp, int );
+    static ComputeDevice fromCudaDeviceProperties(const cudaDeviceProp& devProp, int);
     RENDER_ENGINE_EXPORT_API unsigned int getGlobalMemoryKB() const;
     RENDER_ENGINE_EXPORT_API unsigned int getConstantMemoryKB() const;
     RENDER_ENGINE_EXPORT_API unsigned int getMemoryClockFrequencyKHz() const;

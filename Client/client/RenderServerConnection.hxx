@@ -2,20 +2,20 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #pragma once
 
-#include "RenderServerState.h"
 #include "../DistributedApplication.hxx"
+#include "RenderServerState.h"
 #include "clientserver/RenderResultPacket.h"
 
-#include <QMutex>
 #include <QDataStream>
-#include <QTime>
 #include <QMap>
+#include <QMutex>
 #include <QString>
 #include <QTcpSocket>
+#include <QTime>
 
 #include <vector>
 
@@ -29,11 +29,11 @@ class RenderServerConnection : public QObject
 
 public:
     // Pass ownership of the socket
-    RenderServerConnection(DistributedApplication & renderManager, QTcpSocket* socket, QString computeDeviceName);
+    RenderServerConnection(DistributedApplication& renderManager, QTcpSocket* socket, QString computeDeviceName);
     ~RenderServerConnection();
     const QString getServerIp() const;
     const QString getServerPort() const;
-    const QString & getComputeDeviceName() const;
+    const QString& getComputeDeviceName() const;
     void setComputeDeviceName(QString name);
     const QString getConnectionState() const;
     unsigned long long getNumIterationsReceived() const;
@@ -48,9 +48,9 @@ public:
     float getAverageRequestResponseTime() const;
 
     // Send a command and pass ownership of the command object
-    void pushCommandAsync( ServerCommand* command );
+    void pushCommandAsync(ServerCommand* command);
     RenderServerState::E getRenderServerState() const;
-    void moveSocketToThread( QThread* thread );
+    void moveSocketToThread(QThread* thread);
 
 public slots:
     void onThreadStarted();
@@ -74,7 +74,7 @@ private slots:
 private:
     void addToAverageRequestResponseTime(float);
     QTime m_totalTime;
-    DistributedApplication & m_application;
+    DistributedApplication& m_application;
     RenderResultPacket* getArrivedRenderCommandResult();
     void setRenderServerState(RenderServerState::E);
     ServerCommand* m_currentCommand;
@@ -85,8 +85,8 @@ private:
     QString m_serverIp;
     QString m_serverPort;
     RenderServerState::E m_renderServerState;
-    RenderServerConnection(const RenderServerConnection &);
-    RenderServerConnection & operator=(const RenderServerConnection &);
+    RenderServerConnection(const RenderServerConnection&);
+    RenderServerConnection& operator=(const RenderServerConnection&);
     void handleCommandResponse();
     QByteArray receiveBuffer;
     quint64 m_expectingSizeOfRenderCommandResult;

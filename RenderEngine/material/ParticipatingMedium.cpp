@@ -12,17 +12,21 @@ bool ParticipatingMedium::m_optixMaterialIsCreated = false;
 optix::Material ParticipatingMedium::m_optixMaterial;
 
 ParticipatingMedium::ParticipatingMedium(float sigma_s, float sigma_a)
-    : m_sigma_a(sigma_a), m_sigma_s(sigma_s)
+    : m_sigma_a(sigma_a)
+    , m_sigma_s(sigma_s)
 {
 }
 
-optix::Material ParticipatingMedium::getOptixMaterial(optix::Context & context)
+optix::Material ParticipatingMedium::getOptixMaterial(optix::Context& context)
 {
-    if(!m_optixMaterialIsCreated)
+    if (!m_optixMaterialIsCreated)
     {
-        optix::Program radianceProgram = context->createProgramFromPTXFile(getPtxFile("material/ParticipatingMedium.ptx"), "closestHitRadiance");
-        optix::Program photonProgram = context->createProgramFromPTXFile(getPtxFile("material/ParticipatingMedium.ptx"), "closestHitPhoton");
-        //optix::Program transmissionProgram = context->createProgramFromPTXFile(getPtxFile("material/ParticipatingMedium.ptx"), "radianceTransmission");
+        optix::Program radianceProgram
+            = context->createProgramFromPTXFile(getPtxFile("material/ParticipatingMedium.ptx"), "closestHitRadiance");
+        optix::Program photonProgram
+            = context->createProgramFromPTXFile(getPtxFile("material/ParticipatingMedium.ptx"), "closestHitPhoton");
+        // optix::Program transmissionProgram =
+        // context->createProgramFromPTXFile(getPtxFile("material/ParticipatingMedium.ptx"), "radianceTransmission");
 
         m_optixMaterial = context->createMaterial();
         m_optixMaterial->setClosestHitProgram(RayType::RADIANCE, radianceProgram);
@@ -42,10 +46,9 @@ optix::Material ParticipatingMedium::getOptixMaterial(optix::Context & context)
 // Register any material-dependent values to be available in the optix program.
 */
 
-void ParticipatingMedium::registerGeometryInstanceValues(optix::GeometryInstance & instance )
+void ParticipatingMedium::registerGeometryInstanceValues(optix::GeometryInstance& instance)
 {
     instance["participatingMedium"]->setUint(1);
     instance["sigma_a"]->setFloat(m_sigma_a);
     instance["sigma_s"]->setFloat(m_sigma_s);
-
 }

@@ -2,18 +2,18 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #pragma once
 
 #include "Application.hxx"
-#include <QObject>
-#include <QTime>
 #include "RunningStatus.h"
+#include "client/RenderResultPacketReceiver.hxx"
 #include "client/RenderServerConnections.hxx"
 #include "clientserver/RenderServerRenderRequest.h"
-#include "client/RenderResultPacketReceiver.hxx"
 #include <QMutex>
+#include <QObject>
+#include <QTime>
 
 class QApplication;
 class RenderServerConnections;
@@ -22,10 +22,11 @@ class QTcpSocket;
 class DistributedApplication : public Application
 {
     Q_OBJECT;
+
 public:
-    DistributedApplication(QApplication & qApplication);
+    DistributedApplication(QApplication& qApplication);
     ~DistributedApplication(void);
-    const RenderServerConnections & getServerConnections() const;
+    const RenderServerConnections& getServerConnections() const;
     void wait();
     RenderServerRenderRequest getNextRenderServerRenderRequest(unsigned int numIterations);
     bool canIssueNewRenderRequests();
@@ -43,6 +44,7 @@ private slots:
     void onSequenceNumberIncremented();
     void onNewFrameReadyForDisplay(const float*, unsigned long long);
     void onPacketReceived(unsigned long long sequenceNumber, unsigned int numIterations);
+
 private:
     double m_PPMRadius;
     RenderServerConnections m_serverConnections;

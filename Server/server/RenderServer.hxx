@@ -2,7 +2,7 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 /*
 The renderserver responds to RenderServerRenderRequest from the client, and performs them.
@@ -11,13 +11,13 @@ This class deals with network communication between client and server.
 */
 
 #pragma once
-#include <QObject>
-#include <QString>
+#include "RenderServerRenderer.hxx"
 #include "RenderServerState.h"
 #include "clientserver/RenderResultPacket.h"
 #include "clientserver/RenderServerRenderRequest.h"
-#include "RenderServerRenderer.hxx"
 #include <QDataStream>
+#include <QObject>
+#include <QString>
 #include <QTime>
 
 class ComputeDevice;
@@ -28,11 +28,12 @@ class QTcpSocket;
 class RenderServer : public QObject
 {
     Q_OBJECT;
+
 public:
     RenderServer();
     ~RenderServer();
-    void initializeDevice(const ComputeDevice & computeDevice);
-    void initializeClient(QTcpSocket & clientSocket);
+    void initializeDevice(const ComputeDevice& computeDevice);
+    void initializeClient(QTcpSocket& clientSocket);
     unsigned int getNumPendingRenderIterations();
     double getRenderTimeSeconds();
     double getTotalTimeSeconds();
@@ -51,7 +52,7 @@ signals:
     void renderTimeUpdated();
 
 private:
-    RenderResultPacket getRenderFrameResult(const RenderServerRenderRequest & renderRequest);
+    RenderResultPacket getRenderFrameResult(const RenderServerRenderRequest& renderRequest);
     void setRenderState(RenderServerState::E renderState);
     RenderServerRenderRequest getRenderServerRenderRequestFromClient();
     RenderServerState::E m_renderState;

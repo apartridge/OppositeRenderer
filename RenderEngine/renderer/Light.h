@@ -2,7 +2,7 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #pragma once
 #include "../math/Vector3.h"
@@ -11,10 +11,15 @@
 class Light
 {
 public:
-    enum LightType {AREA, POINT, SPOT};
+    enum LightType
+    {
+        AREA,
+        POINT,
+        SPOT
+    };
 
 #ifndef __CUDACC__
-    RENDER_ENGINE_EXPORT_API Light(){};
+    RENDER_ENGINE_EXPORT_API Light() {};
     RENDER_ENGINE_EXPORT_API Light(Vector3 power, Vector3 position, Vector3 v1, Vector3 v2);
     RENDER_ENGINE_EXPORT_API Light(Vector3 power, Vector3 position);
     RENDER_ENGINE_EXPORT_API Light(Vector3 power, Vector3 position, Vector3 direction, float angle);

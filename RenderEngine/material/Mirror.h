@@ -5,15 +5,16 @@
  */
 
 #pragma once
-#include "Material.h"
 #include "../math/Vector3.h"
+#include "Material.h"
 
 class Mirror : public Material
 {
 public:
-    Mirror(const Vector3 & Kr);
-    virtual optix::Material getOptixMaterial(optix::Context & context);
-    virtual void registerGeometryInstanceValues(optix::GeometryInstance & instance);
+    Mirror(const Vector3& Kr);
+    virtual optix::Material getOptixMaterial(optix::Context& context);
+    virtual void registerGeometryInstanceValues(optix::GeometryInstance& instance);
+
 private:
     Vector3 Kr;
     static bool m_optixMaterialIsCreated;

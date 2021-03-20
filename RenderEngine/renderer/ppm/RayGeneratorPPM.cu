@@ -2,15 +2,15 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
-#include "config.h"
-#include "../RadiancePRD.h"
-#include "../Hitpoint.h"
-#include "../RayType.h"
 #include "../Camera.h"
-#include "../helpers/random.h"
+#include "../Hitpoint.h"
+#include "../RadiancePRD.h"
+#include "../RayType.h"
 #include "../helpers/camera.h"
+#include "../helpers/random.h"
+#include "config.h"
 
 #include <optix.h>
 #include <optixu/optixu_math_namespace.h>
@@ -31,7 +31,7 @@ rtDeclareVariable(optix::Ray, ray, rtCurrentRay, );
 RT_PROGRAM void generateRay()
 {
     RadiancePRD radiancePrd;
-    radiancePrd.attenuation = make_float3( 1.0f );
+    radiancePrd.attenuation = make_float3(1.0f);
     radiancePrd.radiance = make_float3(0.f);
     radiancePrd.depth = 0;
     radiancePrd.flags = 0;
@@ -42,9 +42,9 @@ RT_PROGRAM void generateRay()
 
     float2 screen = make_float2(raytracePassOutputBuffer.size());
     float2 sample = getRandomUniformFloat2(&radiancePrd.randomState);
-    float2 d = ( make_float2(launchIndex) + sample ) / screen * 2.0f - 1.0f;
+    float2 d = (make_float2(launchIndex) + sample) / screen * 2.0f - 1.0f;
     float3 rayOrigin = camera.eye;
-    float3 rayDirection = normalize(d.x*camera.camera_u + d.y*camera.camera_v + camera.lookdir);
+    float3 rayDirection = normalize(d.x * camera.camera_u + d.y * camera.camera_v + camera.lookdir);
 
     modifyRayForDepthOfField(camera, rayOrigin, rayDirection, radiancePrd.randomState);
 
@@ -52,7 +52,7 @@ RT_PROGRAM void generateRay()
     rtTrace(sceneRootObject, ray, radiancePrd);
 
     // Store as a PPM Hitpoint
-    Hitpoint & rec = raytracePassOutputBuffer[launchIndex];
+    Hitpoint& rec = raytracePassOutputBuffer[launchIndex];
     rec.position = radiancePrd.position;
     rec.normal = radiancePrd.normal;
     rec.attenuation = radiancePrd.attenuation;
@@ -72,7 +72,7 @@ RT_PROGRAM void miss()
 {
     radiancePrd.flags = PRD_MISS;
     radiancePrd.attenuation = make_float3(0.f);
-    radiancePrd.radiance = 0*make_float3(5.f);
+    radiancePrd.radiance = 0 * make_float3(5.f);
 }
 
 //
@@ -82,6 +82,6 @@ RT_PROGRAM void miss()
 RT_PROGRAM void exception()
 {
     printf("Exception Radiance!\n");
-    //radiancePrd.flags = PRD_ERROR;
-    //radiancePrd.attenuation = make_float3(0.f,0.f,1.f);
+    // radiancePrd.flags = PRD_ERROR;
+    // radiancePrd.attenuation = make_float3(0.f,0.f,1.f);
 }

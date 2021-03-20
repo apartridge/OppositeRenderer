@@ -1,11 +1,11 @@
 #include "AddNewServerConnectionDialog.hxx"
 #include "ui/ui_AddNewServerConnectionDialog.h"
-#include <QTimer>
 #include <QMessageBox>
+#include <QTimer>
 
-AddNewServerConnectionDialog::AddNewServerConnectionDialog(QWidget *parent, QThread* tcpSocketThread) :
-    QDialog(parent),
-    ui(new Ui::AddNewServerConnectionDialog)
+AddNewServerConnectionDialog::AddNewServerConnectionDialog(QWidget* parent, QThread* tcpSocketThread)
+    : QDialog(parent)
+    , ui(new Ui::AddNewServerConnectionDialog)
 {
     ui->setupUi(this);
     ui->errorLabel->setText("");
@@ -17,7 +17,7 @@ AddNewServerConnectionDialog::AddNewServerConnectionDialog(QWidget *parent, QThr
     connect(m_socket, SIGNAL(connected()), this, SLOT(onConnectedToHost()));
     connect(m_socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onHostConnectionError()));
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(onHostDataAvailable()));
-    
+
     m_timerWaitForGreeting = new QTimer();
     connect(m_timerWaitForGreeting, SIGNAL(timeout()), this, SLOT(onWaitForGreetingError()));
 
@@ -56,7 +56,7 @@ void AddNewServerConnectionDialog::onFormSubmit()
     bool portNumberConversionOk;
     quint16 portNumber = ui->portValue->text().toUShort(&portNumberConversionOk);
 
-    if(!portNumberConversionOk)
+    if (!portNumberConversionOk)
     {
         setError(QString("Invalid port number %1.").arg(portNumber));
         showFormInitialState();
@@ -64,7 +64,8 @@ void AddNewServerConnectionDialog::onFormSubmit()
     else
     {
         QHostAddress serverAddress(serverHostAddressString);
-        /*if(m_socket.state() == QAbstractSocket::ConnectingState || m_socket.state() == QAbstractSocket::HostLookupState 
+        /*if(m_socket.state() == QAbstractSocket::ConnectingState || m_socket.state() ==
+        QAbstractSocket::HostLookupState
                 || m_socket.state() == QAbstractSocket::ConnectedState)
         {
             m_socket.disconnect();
@@ -78,7 +79,8 @@ void AddNewServerConnectionDialog::onFormSubmit()
 void AddNewServerConnectionDialog::onHostConnectionError()
 {
     setError(QString("Could not connect to host %1 on port %2. Please check if the server is available.")
-                .arg(ui->ipValue->text()).arg(ui->portValue->text()));
+                 .arg(ui->ipValue->text())
+                 .arg(ui->portValue->text()));
     m_socket->disconnectFromHost();
     showFormInitialState();
 }
@@ -99,15 +101,15 @@ void AddNewServerConnectionDialog::onHostDataAvailable()
 
     char readFromSocket[8];
     QTcpSocket* socket = m_socket;
-    if(socket != NULL)
+    if (socket != NULL)
     {
         QDataStream stream(socket);
         QString greeting;
         stream >> greeting;
 
-        if(greeting.startsWith("RSHELLO"))
+        if (greeting.startsWith("RSHELLO"))
         {
-            //QString computeDeviceName = greeting.right(greeting.size()-8);
+            // QString computeDeviceName = greeting.right(greeting.size()-8);
             disconnect(m_socket); // Prevent any new signals to this socket
 
             // Pass ownership of socket and RenderServerConnection to the recipient of this signal
@@ -139,7 +141,7 @@ Disconnect the socket and wait until it is disconnected.
 void AddNewServerConnectionDialog::socketDisconnectAndWait()
 {
     m_socket->disconnectFromHost();
-    if(m_socket->state() != QAbstractSocket::UnconnectedState)
+    if (m_socket->state() != QAbstractSocket::UnconnectedState)
     {
         m_socket->waitForDisconnected();
     }

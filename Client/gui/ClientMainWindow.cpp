@@ -2,7 +2,7 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #include "ClientMainWindow.hxx"
 #include "../DistributedApplication.hxx"
@@ -12,9 +12,9 @@
 
 #include <QAction>
 
-ClientMainWindow::ClientMainWindow(DistributedApplication & application)
-    : m_application(application),
-      m_mainWindowBase(application)
+ClientMainWindow::ClientMainWindow(DistributedApplication& application)
+    : m_application(application)
+    , m_mainWindowBase(application)
 {
     QAction* aa = new QAction(this);
     aa->setObjectName(QString::fromUtf8("aa"));
@@ -40,8 +40,11 @@ ClientMainWindow::ClientMainWindow(DistributedApplication & application)
     m_mainWindowBase.addDockWidget(Qt::RightDockWidgetArea, dock2);
     connect(dock2, SIGNAL(actionConnectToNewRenderServer()), actionConnectToNewRenderServer, SIGNAL(triggered()));
 
-    connect(this, SIGNAL(hasNewServerConnectionSocket(QTcpSocket*)),
-        &m_application, SLOT(onNewServerConnectionSocket(QTcpSocket*)));
+    connect(
+        this,
+        SIGNAL(hasNewServerConnectionSocket(QTcpSocket*)),
+        &m_application,
+        SLOT(onNewServerConnectionSocket(QTcpSocket*)));
 
     onActionConnectToNewRenderServer();
 }
@@ -54,8 +57,12 @@ void ClientMainWindow::show()
 void ClientMainWindow::onActionConnectToNewRenderServer()
 {
     AddNewServerConnectionDialog* dialog = new AddNewServerConnectionDialog(&m_mainWindowBase, m_application.thread());
-    connect(dialog, SIGNAL(hasNewServerConnectionSocket(QTcpSocket*)),
-            this, SLOT(onNewServerConnectionSocket(QTcpSocket*)), Qt::DirectConnection);
+    connect(
+        dialog,
+        SIGNAL(hasNewServerConnectionSocket(QTcpSocket*)),
+        this,
+        SLOT(onNewServerConnectionSocket(QTcpSocket*)),
+        Qt::DirectConnection);
     dialog->open();
 }
 

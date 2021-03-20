@@ -2,17 +2,17 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #pragma once
 
-#include "IScene.h"
-#include "../renderer/Light.h"
-#include "../render_engine_export_api.h"
 #include "../math/AAB.h"
+#include "../render_engine_export_api.h"
+#include "../renderer/Light.h"
+#include "IScene.h"
 
-#include <QVector>
 #include <QByteArray>
+#include <QVector>
 
 struct aiScene;
 struct aiMesh;
@@ -24,7 +24,7 @@ class QFileInfo;
 
 namespace Assimp
 {
-    class Importer;
+class Importer;
 }
 
 class Scene : public IScene
@@ -33,20 +33,21 @@ public:
     Scene(void);
     RENDER_ENGINE_EXPORT_API virtual ~Scene(void);
     RENDER_ENGINE_EXPORT_API static IScene* createFromFile(const char* file);
-    virtual optix::Group getSceneRootGroup(optix::Context & context);
+    virtual optix::Group getSceneRootGroup(optix::Context& context);
     void loadDefaultSceneCamera();
-    virtual const QVector<Light> & getSceneLights() const;
+    virtual const QVector<Light>& getSceneLights() const;
     virtual Camera getDefaultCamera() const;
     virtual const char* getSceneName() const;
-    virtual AAB getSceneAABB() const ;
+    virtual AAB getSceneAABB() const;
     RENDER_ENGINE_EXPORT_API virtual unsigned int getNumTriangles() const;
 
 private:
-    optix::Geometry createGeometryFromMesh(aiMesh* mesh, optix::Context & context);
-    void loadMeshLightSource( aiMesh* mesh, DiffuseEmitter* diffuseEmitter );
-    optix::Group getGroupFromNode(optix::Context & context, aiNode* node, QVector<optix::Geometry> & geometries, QVector<Material*> & materials);
-    optix::GeometryInstance getGeometryInstance( optix::Context & context, optix::Geometry & geometry, Material* material );
-    bool colorHasAnyComponent(const aiColor3D & color);
+    optix::Geometry createGeometryFromMesh(aiMesh* mesh, optix::Context& context);
+    void loadMeshLightSource(aiMesh* mesh, DiffuseEmitter* diffuseEmitter);
+    optix::Group getGroupFromNode(
+        optix::Context& context, aiNode* node, QVector<optix::Geometry>& geometries, QVector<Material*>& materials);
+    optix::GeometryInstance getGeometryInstance(optix::Context& context, optix::Geometry& geometry, Material* material);
+    bool colorHasAnyComponent(const aiColor3D& color);
     void loadSceneMaterials();
     void loadLightSources();
     QVector<Material*> m_materials;
@@ -60,5 +61,4 @@ private:
     Camera m_defaultCamera;
     AAB m_sceneAABB;
     unsigned int m_numTriangles;
-
 };

@@ -2,7 +2,7 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 /*
  * This is the render server main entry. The render server accepts connections from clients
@@ -12,10 +12,10 @@
 #include "gui/ServerWindow.hxx"
 #include "server/RenderServer.hxx"
 
-#include <QObject>
 #include <QApplication>
+#include <QObject>
 
-int main( int argc, char** argv )
+int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
     app.setOrganizationName("Opposite Renderer");

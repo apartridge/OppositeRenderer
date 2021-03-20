@@ -2,11 +2,11 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #pragma once
-#include "MainWindowBase.hxx"
 #include "../client/RenderServerConnection.hxx"
+#include "MainWindowBase.hxx"
 
 #include <QObject>
 
@@ -17,7 +17,7 @@ class ClientMainWindow : public QObject
     Q_OBJECT;
 
 public:
-    ClientMainWindow(DistributedApplication & application);
+    ClientMainWindow(DistributedApplication& application);
     void show();
 
 signals:
@@ -29,5 +29,5 @@ private slots:
 
 private:
     MainWindowBase m_mainWindowBase;
-    DistributedApplication & m_application;
+    DistributedApplication& m_application;
 };

@@ -2,31 +2,30 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #include "CameraDock.hxx"
-#include "ui/ui_CameraDock.h"
-#include "renderer/Camera.h"
-#include "../models/PPMSettingsModel.hxx"
 #include "../models/OutputSettingsModel.hxx"
+#include "../models/PPMSettingsModel.hxx"
+#include "renderer/Camera.h"
+#include "ui/ui_CameraDock.h"
 
 #include <QMessageBox>
 
-CameraDock::CameraDock(QWidget *parent, Camera & camera, PPMSettingsModel & ppmModel, OutputSettingsModel & outputModel) :
-    QDockWidget(parent),
-    ui(new Ui::CameraDock),
-    m_camera(camera),
-    m_PPMModel(ppmModel),
-    m_outputModel(outputModel)
+CameraDock::CameraDock(QWidget* parent, Camera& camera, PPMSettingsModel& ppmModel, OutputSettingsModel& outputModel)
+    : QDockWidget(parent)
+    , ui(new Ui::CameraDock)
+    , m_camera(camera)
+    , m_PPMModel(ppmModel)
+    , m_outputModel(outputModel)
 {
     ui->setupUi(this);
-    this->setFeatures(QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable);
-    this->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
+    this->setFeatures(QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable);
+    this->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     connect(ui->updateSettingsButton, SIGNAL(pressed()), this, SLOT(onUpdate()));
     connect(ui->cornellButton, SIGNAL(pressed()), this, SLOT(onCornell()));
     connect(ui->sponzaButton, SIGNAL(pressed()), this, SLOT(onSponza()));
     connect(ui->conferenceButton, SIGNAL(pressed()), this, SLOT(onConference()));
-
 
     onCameraUpdated();
 }
@@ -52,11 +51,14 @@ void CameraDock::onUpdate()
     float cameraVfov = ui->cameraVfov->text().toFloat(&ok[10]);
     float cameraAperture = ui->cameraAperture->text().toFloat(&ok[11]);
 
-    for(int i = 0; i < sizeof(ok)/sizeof(bool); i++)
+    for (int i = 0; i < sizeof(ok) / sizeof(bool); i++)
     {
-        if(!ok[i])
+        if (!ok[i])
         {
-            QMessageBox::information(this, "Invalid Camera Settings", "Please make sure that the values you inserted are valid/decimal values.");
+            QMessageBox::information(
+                this,
+                "Invalid Camera Settings",
+                "Please make sure that the values you inserted are valid/decimal values.");
             return;
         }
     }
@@ -79,11 +81,11 @@ void CameraDock::onUpdate()
 
 static int precision(float x)
 {
-    if(fabs(x) < 1)
+    if (fabs(x) < 1)
     {
         return 4;
     }
-    else if(fabs(x) < 10)
+    else if (fabs(x) < 10)
     {
         return 3;
     }
@@ -101,15 +103,14 @@ void CameraDock::onCameraUpdated()
     ui->cameraLookatY->setText(QString::number(m_camera.lookat.y, 'f', precision(m_camera.lookat.y)));
     ui->cameraLookatZ->setText(QString::number(m_camera.lookat.z, 'f', precision(m_camera.lookat.z)));
 
-    ui->cameraUpX->setText(QString::number(m_camera.up.x, 'f',  precision(m_camera.up.x)));
-    ui->cameraUpY->setText(QString::number(m_camera.up.y, 'f',  precision(m_camera.up.y)));
-    ui->cameraUpZ->setText(QString::number(m_camera.up.z, 'f',  precision(m_camera.up.z)));
+    ui->cameraUpX->setText(QString::number(m_camera.up.x, 'f', precision(m_camera.up.x)));
+    ui->cameraUpY->setText(QString::number(m_camera.up.y, 'f', precision(m_camera.up.y)));
+    ui->cameraUpZ->setText(QString::number(m_camera.up.z, 'f', precision(m_camera.up.z)));
 
     ui->cameraHfov->setText(QString::number(m_camera.hfov, 'f', precision(m_camera.hfov)));
     ui->cameraVfov->setText(QString::number(m_camera.vfov, 'f', precision(m_camera.vfov)));
     ui->cameraAperture->setText(QString::number(m_camera.aperture, 'f', precision(m_camera.aperture)));
 }
-
 
 void CameraDock::onCornell()
 {

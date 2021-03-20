@@ -2,21 +2,21 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #include "Application.hxx"
 #include "RunningStatus.h"
-#include <QMetaType>
 #include <QApplication>
-#include <QThread>
-#include <QMessageBox>
 #include <QDebug>
+#include <QMessageBox>
+#include <QMetaType>
+#include <QThread>
 
-Application::Application(QApplication & qApplication) :
-    m_sequenceNumber(0),
-    m_runningStatus(RunningStatus::STOPPED),
-    m_renderMethod(RenderMethod::PROGRESSIVE_PHOTON_MAPPING),
-    m_rendererStatus(RendererStatus::NOT_INITIALIZED)
+Application::Application(QApplication& qApplication)
+    : m_sequenceNumber(0)
+    , m_runningStatus(RunningStatus::STOPPED)
+    , m_renderMethod(RenderMethod::PROGRESSIVE_PHOTON_MAPPING)
+    , m_rendererStatus(RendererStatus::NOT_INITIALIZED)
 {
     qRegisterMetaType<RunningStatus::E>("RunningStatus::E");
 
@@ -53,27 +53,27 @@ void Application::waitOnApplicationFinished()
     m_sceneManagerThread->wait();
 }
 
-OutputSettingsModel & Application::getOutputSettingsModel()
+OutputSettingsModel& Application::getOutputSettingsModel()
 {
     return m_outputSettingsModel;
 }
 
-PPMSettingsModel & Application::getPPMSettingsModel()
+PPMSettingsModel& Application::getPPMSettingsModel()
 {
     return m_PPMSettingsModel;
 }
 
-Camera & Application::getCamera()
+Camera& Application::getCamera()
 {
     return m_camera;
 }
 
-SceneManager & Application::getSceneManager()
+SceneManager& Application::getSceneManager()
 {
     return m_sceneManager;
 }
 
-const SceneManager & Application::getSceneManager() const
+const SceneManager& Application::getSceneManager() const
 {
     return m_sceneManager;
 }
@@ -128,11 +128,11 @@ void Application::onRenderRestart()
 
 void Application::onRenderStatusToggle()
 {
-    if(m_runningStatus == RunningStatus::STOPPED)
+    if (m_runningStatus == RunningStatus::STOPPED)
     {
         onRenderRestart();
     }
-    else if(m_runningStatus == RunningStatus::RUNNING)
+    else if (m_runningStatus == RunningStatus::RUNNING)
     {
         setRunningStatus(RunningStatus::PAUSE);
         pauseRenderTime();
@@ -162,21 +162,21 @@ void Application::onPPMSettingsUpdated()
     incrementSequenceNumber();
 }
 
-RenderStatisticsModel & Application::getRenderStatisticsModel()
+RenderStatisticsModel& Application::getRenderStatisticsModel()
 {
     return m_renderStatisticsModel;
 }
 
-const RenderStatisticsModel & Application::getRenderStatisticsModel() const
+const RenderStatisticsModel& Application::getRenderStatisticsModel() const
 {
     return m_renderStatisticsModel;
 }
 
 float Application::getRenderTimeSeconds() const
 {
-    if(m_runningStatus == RunningStatus::RUNNING)
+    if (m_runningStatus == RunningStatus::RUNNING)
     {
-        return m_renderElapsedSeconds + ((float)m_renderTime.elapsed()/1000);
+        return m_renderElapsedSeconds + ((float)m_renderTime.elapsed() / 1000);
     }
     return m_renderElapsedSeconds;
 }
@@ -189,7 +189,7 @@ void Application::resetRenderTime()
 
 void Application::pauseRenderTime()
 {
-    m_renderElapsedSeconds += m_renderTime.elapsed()/1000.0f;
+    m_renderElapsedSeconds += m_renderTime.elapsed() / 1000.0f;
 }
 
 void Application::resumeRenderTime()
@@ -216,7 +216,7 @@ void Application::onSceneLoadError(QString error)
     emit applicationError(error);
 }
 
-void Application::onNewFrameReadyForDisplay(const float*, unsigned long long )
+void Application::onNewFrameReadyForDisplay(const float*, unsigned long long)
 {
     m_renderStatisticsModel.incrementNumPreviewedIterations();
 }
@@ -226,11 +226,11 @@ RendererStatus::E Application::getRendererStatus() const
     return m_rendererStatus;
 }
 
-void Application::setRendererStatus( RendererStatus::E val )
+void Application::setRendererStatus(RendererStatus::E val)
 {
     bool shouldEmit = m_rendererStatus != val;
     m_rendererStatus = val;
-    if(shouldEmit)
+    if (shouldEmit)
     {
         emit rendererStatusChanged();
     }
@@ -241,11 +241,11 @@ RunningStatus::E Application::getRunningStatus() const
     return m_runningStatus;
 }
 
-void Application::setRunningStatus( RunningStatus::E val )
+void Application::setRunningStatus(RunningStatus::E val)
 {
     bool shouldEmit = m_runningStatus != val;
     m_runningStatus = val;
-    if(shouldEmit)
+    if (shouldEmit)
     {
         emit runningStatusChanged();
     }

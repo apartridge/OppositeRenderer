@@ -2,7 +2,7 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #pragma once
 #include <optixu/optixu_vector_types.h>
@@ -18,9 +18,8 @@ class Vector3
 public:
     _VECTOR3_DEVICE_CODE_ Vector3()
     {
-
     }
-    _VECTOR3_DEVICE_CODE_ Vector3(const optix::float3 & f3)
+    _VECTOR3_DEVICE_CODE_ Vector3(const optix::float3& f3)
     {
         __of3 = f3;
     }
@@ -37,28 +36,31 @@ public:
         this->z = z;
     }
 
-    _VECTOR3_DEVICE_CODE_ operator optix::float3 () const
+    _VECTOR3_DEVICE_CODE_ operator optix::float3() const
     {
         return __of3;
     }
 
 #ifndef __CUDACC__
-    Vector3 operator + (const Vector3 & other) const;
-    Vector3 operator - (const Vector3 & other) const;
-    Vector3 operator * (float) const;
+    Vector3 operator+(const Vector3& other) const;
+    Vector3 operator-(const Vector3& other) const;
+    Vector3 operator*(float) const;
     float length();
     float length2();
 #endif
 
     union
     {
-        struct {float x, y, z;};
+        struct
+        {
+            float x, y, z;
+        };
         optix::float3 __of3;
     };
-    static float dot(const Vector3 & a, const Vector3 & b);
+    static float dot(const Vector3& a, const Vector3& b);
 };
 
-__inline__ Vector3 operator += (Vector3 & a, float b)
+__inline__ Vector3 operator+=(Vector3& a, float b)
 {
     a.x += b;
     a.y += b;
@@ -66,7 +68,7 @@ __inline__ Vector3 operator += (Vector3 & a, float b)
     return a;
 }
 
-__inline__ Vector3 operator -= (Vector3 & a, float b)
+__inline__ Vector3 operator-=(Vector3& a, float b)
 {
     a += -b;
     return a;

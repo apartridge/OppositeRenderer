@@ -11,18 +11,20 @@
 bool Diffuse::m_optixMaterialIsCreated = false;
 optix::Material Diffuse::m_optixMaterial;
 
-Diffuse::Diffuse(const Vector3 & Kd)
+Diffuse::Diffuse(const Vector3& Kd)
 {
     this->Kd = Kd;
 }
 
-optix::Material Diffuse::getOptixMaterial(optix::Context & context)
+optix::Material Diffuse::getOptixMaterial(optix::Context& context)
 {
-    if(!m_optixMaterialIsCreated)
+    if (!m_optixMaterialIsCreated)
     {
         m_optixMaterial = context->createMaterial();
-        optix::Program radianceProgram = context->createProgramFromPTXFile(getPtxFile("material/Diffuse.ptx"), "closestHitRadiance");
-        optix::Program photonProgram = context->createProgramFromPTXFile(getPtxFile("material/Diffuse.ptx"), "closestHitPhoton");
+        optix::Program radianceProgram
+            = context->createProgramFromPTXFile(getPtxFile("material/Diffuse.ptx"), "closestHitRadiance");
+        optix::Program photonProgram
+            = context->createProgramFromPTXFile(getPtxFile("material/Diffuse.ptx"), "closestHitPhoton");
         m_optixMaterial->setClosestHitProgram(RayType::RADIANCE, radianceProgram);
         m_optixMaterial->setClosestHitProgram(RayType::RADIANCE_IN_PARTICIPATING_MEDIUM, radianceProgram);
         m_optixMaterial->setClosestHitProgram(RayType::PHOTON, photonProgram);
@@ -39,7 +41,7 @@ optix::Material Diffuse::getOptixMaterial(optix::Context & context)
 // Register any material-dependent values to be available in the optix program.
 */
 
-void Diffuse::registerGeometryInstanceValues(optix::GeometryInstance & instance )
+void Diffuse::registerGeometryInstanceValues(optix::GeometryInstance& instance)
 {
     instance["Kd"]->setFloat(this->Kd);
 }

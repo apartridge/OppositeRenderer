@@ -1,21 +1,21 @@
-/* 
+/*
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #include "AAB.h"
 
-AAB::AAB(const Vector3 & min, const Vector3 & max)
+AAB::AAB(const Vector3& min, const Vector3& max)
 {
     this->min = min;
     this->max = max;
 }
 
 AAB::AAB()
-    : min(Vector3()), max(Vector3())
+    : min(Vector3())
+    , max(Vector3())
 {
-
 }
 
 Vector3 AAB::getExtent() const
@@ -25,7 +25,7 @@ Vector3 AAB::getExtent() const
 
 Vector3 AAB::getCenter() const
 {
-    return (min+max)*0.5f;
+    return (min + max) * 0.5f;
 }
 
 Sphere AAB::getBoundingSphere() const

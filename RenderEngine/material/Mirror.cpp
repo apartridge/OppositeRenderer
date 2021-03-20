@@ -11,17 +11,19 @@
 bool Mirror::m_optixMaterialIsCreated = false;
 optix::Material Mirror::m_optixMaterial;
 
-Mirror::Mirror(const Vector3 & Kr)
+Mirror::Mirror(const Vector3& Kr)
 {
     this->Kr = Kr;
 }
 
-optix::Material Mirror::getOptixMaterial(optix::Context & context)
+optix::Material Mirror::getOptixMaterial(optix::Context& context)
 {
-    if(!m_optixMaterialIsCreated)
+    if (!m_optixMaterialIsCreated)
     {
-        optix::Program photonProgram = context->createProgramFromPTXFile( getPtxFile("material/Mirror.ptx"), "closestHitPhoton");
-        optix::Program radianceProgram = context->createProgramFromPTXFile( getPtxFile("material/Mirror.ptx"), "closestHitRadiance");
+        optix::Program photonProgram
+            = context->createProgramFromPTXFile(getPtxFile("material/Mirror.ptx"), "closestHitPhoton");
+        optix::Program radianceProgram
+            = context->createProgramFromPTXFile(getPtxFile("material/Mirror.ptx"), "closestHitRadiance");
         m_optixMaterial = context->createMaterial();
         m_optixMaterial->setClosestHitProgram(RayType::RADIANCE, radianceProgram);
         m_optixMaterial->setClosestHitProgram(RayType::RADIANCE_IN_PARTICIPATING_MEDIUM, radianceProgram);
@@ -33,7 +35,7 @@ optix::Material Mirror::getOptixMaterial(optix::Context & context)
     return m_optixMaterial;
 }
 
-void Mirror::registerGeometryInstanceValues(optix::GeometryInstance & instance )
+void Mirror::registerGeometryInstanceValues(optix::GeometryInstance& instance)
 {
     instance["Kr"]->setFloat(this->Kr);
 }

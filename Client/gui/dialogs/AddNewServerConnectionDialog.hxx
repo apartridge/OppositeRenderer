@@ -3,12 +3,12 @@
 #include "../../client/RenderServerConnection.hxx"
 
 #include <QDialog>
-#include <QTcpSocket>
 #include <QHostAddress>
+#include <QTcpSocket>
 
 namespace Ui
 {
-    class AddNewServerConnectionDialog;
+class AddNewServerConnectionDialog;
 }
 
 class QTimer;
@@ -18,7 +18,7 @@ class AddNewServerConnectionDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit AddNewServerConnectionDialog(QWidget *parent, QThread* tcpSocketThread);
+    explicit AddNewServerConnectionDialog(QWidget* parent, QThread* tcpSocketThread);
     ~AddNewServerConnectionDialog();
 
 signals:
@@ -35,7 +35,7 @@ private:
     void showFormInitialState();
     void setError(const QString&);
     void socketDisconnectAndWait();
-    Ui::AddNewServerConnectionDialog *ui;
+    Ui::AddNewServerConnectionDialog* ui;
     QTcpSocket* m_socket;
     QTimer* m_timerWaitForGreeting;
 };

@@ -2,34 +2,34 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #include "ComputeDevice.h"
 
-#include <cuda_runtime_api.h>
-#include <cstring>
 #include <cstdio>
+#include <cstring>
+#include <cuda_runtime_api.h>
 
 ComputeDevice::ComputeDevice()
 {
     m_enabled = true;
 }
 
-ComputeDevice ComputeDevice::fromCudaDeviceProperties(const cudaDeviceProp& devProp, int cudaDeviceId )
+ComputeDevice ComputeDevice::fromCudaDeviceProperties(const cudaDeviceProp& devProp, int cudaDeviceId)
 {
     ComputeDevice q;
-    q.m_globalMemoryKB = (unsigned int)devProp.totalGlobalMem/1024;
-    q.m_constantMemoryKB = (unsigned int)devProp.totalConstMem/1024;
+    q.m_globalMemoryKB = (unsigned int)devProp.totalGlobalMem / 1024;
+    q.m_constantMemoryKB = (unsigned int)devProp.totalConstMem / 1024;
     q.m_warpSize = devProp.warpSize;
     q.m_memoryClockFrequencyKHz = (unsigned int)devProp.memoryClockRate;
     q.m_clockFrequencyKHz = (unsigned int)devProp.clockRate;
     q.m_multiProcessorCount = (unsigned int)devProp.multiProcessorCount;
     q.m_maxThreadsPerMultiProcessor = (unsigned int)devProp.maxThreadsPerMultiProcessor;
     q.m_maxThreadsPerBlock = (unsigned int)devProp.maxThreadsPerBlock;
-    q.m_L2CacheMemoryKB = (unsigned int)devProp.l2CacheSize/1024;
-    q.m_sharedMemoryPerBlockKB = (unsigned int)devProp.sharedMemPerBlock/1024;
+    q.m_L2CacheMemoryKB = (unsigned int)devProp.l2CacheSize / 1024;
+    q.m_sharedMemoryPerBlockKB = (unsigned int)devProp.sharedMemPerBlock / 1024;
     q.m_registersPerBlock = (unsigned int)devProp.regsPerBlock;
-    q.m_registerMemoryPerBlockKB = (unsigned int)devProp.regsPerBlock*4/1024;
+    q.m_registerMemoryPerBlockKB = (unsigned int)devProp.regsPerBlock * 4 / 1024;
     strncpy(q.m_name, devProp.name, 95);
     sprintf(q.m_computeCapability, "%d.%d", devProp.major, devProp.minor);
     q.m_deviceId = cudaDeviceId;
@@ -40,8 +40,8 @@ ComputeDevice ComputeDevice::fromCudaDeviceProperties(const cudaDeviceProp& devP
     q.m_PCIDeviceId = devProp.pciDeviceID;
     q.m_PCIDomainId = devProp.pciDomainID;
     q.m_memoryBusWidth = devProp.memoryBusWidth;
-    q.m_TCCDriver = devProp.tccDriver==1;
-    q.m_unifiedAddressing = devProp.unifiedAddressing==1;
+    q.m_TCCDriver = devProp.tccDriver == 1;
+    q.m_unifiedAddressing = devProp.unifiedAddressing == 1;
     q.m_maxBlockDimensionX = devProp.maxThreadsDim[0];
     q.m_maxBlockDimensionY = devProp.maxThreadsDim[1];
     q.m_maxBlockDimensionZ = devProp.maxThreadsDim[2];
@@ -49,24 +49,24 @@ ComputeDevice ComputeDevice::fromCudaDeviceProperties(const cudaDeviceProp& devP
     return q;
 }
 
-unsigned int ComputeDevice::getGlobalMemoryKB()  const
+unsigned int ComputeDevice::getGlobalMemoryKB() const
 {
     return m_globalMemoryKB;
 }
 
-unsigned int ComputeDevice::getConstantMemoryKB()  const
+unsigned int ComputeDevice::getConstantMemoryKB() const
 {
     return m_constantMemoryKB;
 }
 
-unsigned int ComputeDevice::getWarpSize()  const
+unsigned int ComputeDevice::getWarpSize() const
 {
     return m_warpSize;
 }
 
 const char* ComputeDevice::getName() const
 {
-    return (const char*) this->m_name;
+    return (const char*)this->m_name;
 }
 
 bool ComputeDevice::isEnabled() const
@@ -154,7 +154,7 @@ unsigned int ComputeDevice::getMaxBlockDimensionZ() const
     return m_maxBlockDimensionZ;
 }
 
-void ComputeDevice::setEnabled( bool enabled )
+void ComputeDevice::setEnabled(bool enabled)
 {
     m_enabled = enabled;
 }

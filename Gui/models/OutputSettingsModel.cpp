@@ -1,36 +1,37 @@
-/* 
+/*
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #include "OutputSettingsModel.hxx"
 
 OutputSettingsModel::OutputSettingsModel(void)
-    : m_width(0), m_height(0), m_gamma(2.2)
+    : m_width(0)
+    , m_height(0)
+    , m_gamma(2.2)
 {
-
 }
-    
+
 OutputSettingsModel::~OutputSettingsModel(void)
 {
 }
 
-void OutputSettingsModel::setWidth( unsigned int width )
+void OutputSettingsModel::setWidth(unsigned int width)
 {
     bool shouldEmit = (m_width != width);
     m_width = width;
-    if(shouldEmit)
+    if (shouldEmit)
     {
         emit resolutionUpdated();
     }
 }
 
-void OutputSettingsModel::setHeight( unsigned int height )
+void OutputSettingsModel::setHeight(unsigned int height)
 {
     bool shouldEmit = (m_height != height);
     m_height = height;
-    if(shouldEmit)
+    if (shouldEmit)
     {
         emit resolutionUpdated();
     }
@@ -51,11 +52,11 @@ float OutputSettingsModel::getGamma() const
     return m_gamma;
 }
 
-void OutputSettingsModel::setGamma( float gamma )
+void OutputSettingsModel::setGamma(float gamma)
 {
     bool shouldEmit = (m_gamma != gamma);
     m_gamma = gamma;
-    if(shouldEmit)
+    if (shouldEmit)
     {
         emit gammaUpdated();
     }
@@ -63,5 +64,5 @@ void OutputSettingsModel::setGamma( float gamma )
 
 float OutputSettingsModel::getAspectRatio() const
 {
-    return float(m_width)/float(m_height);
+    return float(m_width) / float(m_height);
 }

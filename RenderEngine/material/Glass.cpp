@@ -11,31 +11,35 @@
 bool Glass::m_optixMaterialIsCreated = false;
 optix::Material Glass::m_optixMaterial;
 
-Glass::Glass( float indexOfRefraction, const Vector3 & Ks )
+Glass::Glass(float indexOfRefraction, const Vector3& Ks)
 {
     this->indexOfRefraction = indexOfRefraction;
     this->Ks = Ks;
 }
 
-optix::Material Glass::getOptixMaterial(optix::Context & context)
+optix::Material Glass::getOptixMaterial(optix::Context& context)
 {
-    if(!m_optixMaterialIsCreated)
+    if (!m_optixMaterialIsCreated)
     {
         m_optixMaterial = context->createMaterial();
-        optix::Program radianceClosestProgram = context->createProgramFromPTXFile( getPtxFile("material/Glass.ptx"), "closestHitRadiance");
-        optix::Program radianceAnyHitProgram = context->createProgramFromPTXFile( getPtxFile("material/Glass.ptx"), "anyHitRadiance");
-        optix::Program photonClosestProgram = context->createProgramFromPTXFile(  getPtxFile("material/Glass.ptx"), "closestHitPhoton");
-        optix::Program photonAnyHitProgram = context->createProgramFromPTXFile(  getPtxFile("material/Glass.ptx"), "anyHitPhoton");
+        optix::Program radianceClosestProgram
+            = context->createProgramFromPTXFile(getPtxFile("material/Glass.ptx"), "closestHitRadiance");
+        optix::Program radianceAnyHitProgram
+            = context->createProgramFromPTXFile(getPtxFile("material/Glass.ptx"), "anyHitRadiance");
+        optix::Program photonClosestProgram
+            = context->createProgramFromPTXFile(getPtxFile("material/Glass.ptx"), "closestHitPhoton");
+        optix::Program photonAnyHitProgram
+            = context->createProgramFromPTXFile(getPtxFile("material/Glass.ptx"), "anyHitPhoton");
 
         m_optixMaterial->setClosestHitProgram(RayType::RADIANCE, radianceClosestProgram);
-        //m_optixMaterial->setAnyHitProgram(RayType::RADIANCE, radianceAnyHitProgram );
+        // m_optixMaterial->setAnyHitProgram(RayType::RADIANCE, radianceAnyHitProgram );
         m_optixMaterial->setClosestHitProgram(RayType::RADIANCE_IN_PARTICIPATING_MEDIUM, radianceClosestProgram);
-        //m_optixMaterial->setAnyHitProgram(RayType::RADIANCE_IN_PARTICIPATING_MEDIUM, radianceAnyHitProgram);
+        // m_optixMaterial->setAnyHitProgram(RayType::RADIANCE_IN_PARTICIPATING_MEDIUM, radianceAnyHitProgram);
 
         m_optixMaterial->setClosestHitProgram(RayType::PHOTON, photonClosestProgram);
-        //m_optixMaterial->setAnyHitProgram(RayType::PHOTON, photonAnyHitProgram);
+        // m_optixMaterial->setAnyHitProgram(RayType::PHOTON, photonAnyHitProgram);
         m_optixMaterial->setClosestHitProgram(RayType::PHOTON_IN_PARTICIPATING_MEDIUM, photonClosestProgram);
-       // m_optixMaterial->setAnyHitProgram(RayType::PHOTON_IN_PARTICIPATING_MEDIUM, photonAnyHitProgram);
+        // m_optixMaterial->setAnyHitProgram(RayType::PHOTON_IN_PARTICIPATING_MEDIUM, photonAnyHitProgram);
 
         this->registerMaterialWithShadowProgram(context, m_optixMaterial);
         m_optixMaterialIsCreated = true;
@@ -47,9 +51,9 @@ optix::Material Glass::getOptixMaterial(optix::Context & context)
 /*
 // Register any material-dependent values to be available in the optix program.
 */
-void Glass::registerGeometryInstanceValues(optix::GeometryInstance & instance )
+void Glass::registerGeometryInstanceValues(optix::GeometryInstance& instance)
 {
     instance["indexOfRefraction"]->setFloat(this->indexOfRefraction);
-    instance["Kd"]->setFloat( 0, 0 , 0 );
+    instance["Kd"]->setFloat(0, 0, 0);
     instance["Ks"]->setFloat(this->Ks);
 }

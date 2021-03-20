@@ -2,41 +2,43 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
-#include "Application.hxx"
 #include "MainWindowBase.hxx"
-#include "renderer/OptixRenderer.h"
-#include "RenderWidget.hxx"
 #include "AboutWindow.hxx"
+#include "Application.hxx"
 #include "ComputeDeviceInformationWidget.hxx"
-#include "docks/RenderInformationDock.hxx"
+#include "ComputeDeviceRepository.h"
+#include "RenderWidget.hxx"
+#include "config.h"
+#include "docks/CameraDock.hxx"
 #include "docks/OutputDock.hxx"
 #include "docks/PPMDock.hxx"
-#include "docks/CameraDock.hxx"
+#include "docks/RenderInformationDock.hxx"
 #include "docks/SceneDock.hxx"
-#include "ComputeDeviceRepository.h"
+#include "renderer/OptixRenderer.h"
 #include "scene/SceneFactory.h"
-#include "config.h"
 
-#include <QString>
-#include <QMessageBox>
 #include <QFileDialog>
 #include <QInputDialog>
+#include <QMessageBox>
+#include <QString>
 
 MainWindowBase::MainWindowBase(Application& application)
-    : m_application(application),
-      m_camera(application.getCamera())
+    : m_application(application)
+    , m_camera(application.getCamera())
 {
     setupUi(this);
     actionReload_scene->setVisible(false);
-    //connect(&application.getOutputSettingsModel(), SIGNAL(resolutionUpdated()), this, SLOT(onOutputSettingsResolutionUpdated()));
-    //connect(&application.getPPMSettingsModel(), SIGNAL(updated()), this, SLOT(onPPMSettingsModelUpdated()));
+    // connect(&application.getOutputSettingsModel(), SIGNAL(resolutionUpdated()), this,
+    // SLOT(onOutputSettingsResolutionUpdated())); connect(&application.getPPMSettingsModel(), SIGNAL(updated()), this,
+    // SLOT(onPPMSettingsModelUpdated()));
 
     connect(&application, SIGNAL(applicationError(QString)), this, SLOT(onApplicationError(QString)));
 
     // Render Information Dock
-    RenderInformationDock* renderInformationDock = new RenderInformationDock(this, application.getRenderStatisticsModel(), application);
+    RenderInformationDock* renderInformationDock
+        = new RenderInformationDock(this, application.getRenderStatisticsModel(), application);
     this->addDockWidget(Qt::RightDockWidgetArea, renderInformationDock);
     connect(renderInformationDock, SIGNAL(renderStatusToggle()), this, SLOT(onRenderStatusToggle()));
     connect(renderInformationDock, SIGNAL(renderRestart()), this, SLOT(onRenderRestart()));
@@ -53,7 +55,8 @@ MainWindowBase::MainWindowBase(Application& application)
 
     // Camera Dock
 
-    CameraDock* cameraDock = new CameraDock(this, application.getCamera(), application.getPPMSettingsModel(), application.getOutputSettingsModel());
+    CameraDock* cameraDock = new CameraDock(
+        this, application.getCamera(), application.getPPMSettingsModel(), application.getOutputSettingsModel());
     this->addDockWidget(Qt::RightDockWidgetArea, cameraDock);
     connect(&application, SIGNAL(cameraUpdated()), cameraDock, SLOT(onCameraUpdated()));
     connect(cameraDock, SIGNAL(cameraUpdated()), &application, SLOT(onCameraUpdated()));
@@ -84,9 +87,12 @@ MainWindowBase::MainWindowBase(Application& application)
     gridLayout->addWidget(m_renderWidget, 0, 0, 1, 1);
 
     connect(m_renderWidget, SIGNAL(cameraUpdated()), &application, SLOT(onCameraUpdated()));
-    connect(&application, SIGNAL(newFrameReadyForDisplay(const float*, unsigned long long)),
-            m_renderWidget, SLOT(onNewFrameReadyForDisplay(const float*, unsigned long long)),
-            Qt::QueuedConnection);
+    connect(
+        &application,
+        SIGNAL(newFrameReadyForDisplay(const float*, unsigned long long)),
+        m_renderWidget,
+        SLOT(onNewFrameReadyForDisplay(const float*, unsigned long long)),
+        Qt::QueuedConnection);
 
     connect(&application, SIGNAL(runningStatusChanged()), this, SLOT(onRunningStatusChanged()));
     connect(&application, SIGNAL(renderMethodChanged()), this, SLOT(onRenderMethodChanged()));
@@ -97,14 +103,12 @@ MainWindowBase::MainWindowBase(Application& application)
     onRenderMethodChanged();
 }
 
-void MainWindowBase::closeEvent( QCloseEvent* event )
+void MainWindowBase::closeEvent(QCloseEvent* event)
 {
-
 }
 
 MainWindowBase::~MainWindowBase()
 {
-
 }
 
 void MainWindowBase::onActionAbout()
@@ -145,9 +149,9 @@ void MainWindowBase::onConfigureGPUDevices()
 
 void MainWindowBase::onOpenSceneFile()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
-                        "Open a scene", tr("Scene files (*.dae *.blend *.3ds);;Any(*.*)"));
-    if(fileName.length() > 0)
+    QString fileName = QFileDialog::getOpenFileName(
+        this, tr("Open File"), "Open a scene", tr("Scene files (*.dae *.blend *.3ds);;Any(*.*)"));
+    if (fileName.length() > 0)
     {
         m_lastOpenedSceneFile = QFileInfo(fileName);
         actionReload_scene->setText(QString("Reload last scene (%1)").arg(m_lastOpenedSceneFile.completeBaseName()));
@@ -158,11 +162,11 @@ void MainWindowBase::onOpenSceneFile()
 
 void MainWindowBase::onRunningStatusChanged()
 {
-    if(m_application.getRunningStatus() == RunningStatus::RUNNING)
+    if (m_application.getRunningStatus() == RunningStatus::RUNNING)
     {
         actionRenderStatusToggle->setText("Pause");
     }
-    else if(m_application.getRunningStatus() == RunningStatus::STOPPED)
+    else if (m_application.getRunningStatus() == RunningStatus::STOPPED)
     {
         actionRenderStatusToggle->setText("Start");
     }
@@ -171,22 +175,22 @@ void MainWindowBase::onRunningStatusChanged()
 void MainWindowBase::onRenderMethodChanged()
 {
     QString str;
-    if(m_application.getRenderMethod() == RenderMethod::PATH_TRACING)
+    if (m_application.getRenderMethod() == RenderMethod::PATH_TRACING)
     {
         str = "Path Tracing";
     }
     else
     {
         str = "Progressive Photon Mapping";
-        if(ACCELERATION_STRUCTURE == ACCELERATION_STRUCTURE_UNIFORM_GRID)
+        if (ACCELERATION_STRUCTURE == ACCELERATION_STRUCTURE_UNIFORM_GRID)
         {
             str += " (Sorted uniform grid)";
         }
-        else if(ACCELERATION_STRUCTURE == ACCELERATION_STRUCTURE_KD_TREE_CPU)
+        else if (ACCELERATION_STRUCTURE == ACCELERATION_STRUCTURE_KD_TREE_CPU)
         {
             str += " (CPU k-d tree)";
         }
-        else if(ACCELERATION_STRUCTURE == ACCELERATION_STRUCTURE_STOCHASTIC_HASH)
+        else if (ACCELERATION_STRUCTURE == ACCELERATION_STRUCTURE_STOCHASTIC_HASH)
         {
             str += " (Stochastic hash)";
         }
@@ -200,25 +204,26 @@ void MainWindowBase::onUpdateRunningStatusLabelTimer()
     m_statusbar_runningStatusLabel->setText(QString("Status: ") + getApplicationStatusString(m_application));
 }
 
-void MainWindowBase::loadSceneByName( QString & sceneName )
+void MainWindowBase::loadSceneByName(QString& sceneName)
 {
     try
     {
         m_application.getSceneManager().setScene(sceneName.toUtf8().constData());
     }
-    catch(const std::exception & E)
+    catch (const std::exception& E)
     {
         QMessageBox::warning(this, "Error loading scene file", QString(E.what()));
     }
-    catch(...)
+    catch (...)
     {
-        QMessageBox::warning(this, "Unknown error", "Unknown error happened when importing this scene. This is not a valid scene.");
+        QMessageBox::warning(
+            this, "Unknown error", "Unknown error happened when importing this scene. This is not a valid scene.");
     }
 }
 
 void MainWindowBase::onReloadLastScene()
 {
-    if(m_lastOpenedSceneFile.exists())
+    if (m_lastOpenedSceneFile.exists())
     {
         auto fileName = m_lastOpenedSceneFile.canonicalFilePath();
         loadSceneByName(fileName);
@@ -228,8 +233,13 @@ void MainWindowBase::onReloadLastScene()
 void MainWindowBase::onActionOpenBuiltInScene()
 {
     bool ok;
-    QString sceneName = QInputDialog::getText(this, tr("Please provide a built-in scene name"),
-                                           tr("Name (customscene/ class name):"), QLineEdit::Normal, "", &ok);
+    QString sceneName = QInputDialog::getText(
+        this,
+        tr("Please provide a built-in scene name"),
+        tr("Name (customscene/ class name):"),
+        QLineEdit::Normal,
+        "",
+        &ok);
 
     if (ok && !sceneName.isEmpty())
     {
@@ -242,45 +252,45 @@ void MainWindowBase::onRenderRestart()
     emit renderRestart();
 }
 
-void MainWindowBase::onApplicationError( QString appError )
+void MainWindowBase::onApplicationError(QString appError)
 {
     QMessageBox::warning(this, "An application error occurred", appError);
 }
 
-QString MainWindowBase::getApplicationStatusString(const Application & application, bool showSeconds)
+QString MainWindowBase::getApplicationStatusString(const Application& application, bool showSeconds)
 {
     QString status = "";
 
-    if(application.getSceneManager().getStatus() == SceneManagerStatus::IMPORTING)
+    if (application.getSceneManager().getStatus() == SceneManagerStatus::IMPORTING)
     {
         status += "Importing scene";
     }
-    else if(application.getRunningStatus() == RunningStatus::STOPPED)
+    else if (application.getRunningStatus() == RunningStatus::STOPPED)
     {
         status += "Stopped";
     }
-    else if(application.getRunningStatus() == RunningStatus::PAUSE)
+    else if (application.getRunningStatus() == RunningStatus::PAUSE)
     {
         status += "Pause";
     }
     else
     {
-        if(application.getRendererStatus() == RendererStatus::NOT_INITIALIZED)
+        if (application.getRendererStatus() == RendererStatus::NOT_INITIALIZED)
         {
             status += "Not initialized";
         }
-        else if(application.getRendererStatus() == RendererStatus::INITIALIZING_ENGINE)
+        else if (application.getRendererStatus() == RendererStatus::INITIALIZING_ENGINE)
         {
             status += "Initializing engine";
         }
-        else if(application.getRendererStatus() == RendererStatus::INITIALIZING_SCENE)
+        else if (application.getRendererStatus() == RendererStatus::INITIALIZING_SCENE)
         {
             status += "Initializing scene";
         }
-        else  if(application.getRendererStatus() == RendererStatus::RENDERING)
+        else if (application.getRendererStatus() == RendererStatus::RENDERING)
         {
             status += "Running";
-            if(showSeconds)
+            if (showSeconds)
             {
                 status += QString(" (%1 seconds)").arg(application.getRenderTimeSeconds(), 0, 'f', 1);
             }

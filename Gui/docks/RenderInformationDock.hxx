@@ -2,15 +2,16 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #ifndef RENDERINFORMATIONDOCK_H
 #define RENDERINFORMATIONDOCK_H
 
-#include <QDockWidget>
 #include "../RunningStatus.h"
+#include <QDockWidget>
 
-namespace Ui {
+namespace Ui
+{
 class RenderInformationDock;
 }
 
@@ -22,7 +23,8 @@ class RenderInformationDock : public QDockWidget
     Q_OBJECT
 
 public:
-    explicit RenderInformationDock(QWidget *parent, const RenderStatisticsModel & renderStatisticsModel, Application & application);
+    explicit RenderInformationDock(
+        QWidget* parent, const RenderStatisticsModel& renderStatisticsModel, Application& application);
     ~RenderInformationDock();
 
 signals:
@@ -35,9 +37,9 @@ private slots:
     void onUpdateRenderTime();
 
 private:
-    Ui::RenderInformationDock *ui;
-    Application & m_application;
-    const RenderStatisticsModel & m_renderStatisticsModel;
+    Ui::RenderInformationDock* ui;
+    Application& m_application;
+    const RenderStatisticsModel& m_renderStatisticsModel;
 };
 
 #endif // RENDERINFORMATIONDOCK_H

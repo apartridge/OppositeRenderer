@@ -2,15 +2,15 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include "../server/ServerState.h"
 #include "../server/RenderServerState.h"
+#include "../server/ServerState.h"
 #include "ComputeDeviceRepository.h"
+#include <QMainWindow>
 
 class QTcpSocket;
 class QTcpServer;
@@ -24,7 +24,7 @@ class RenderServer;
 
 namespace Ui
 {
-    class ServerWindow;
+class ServerWindow;
 }
 
 class ServerWindow : public QMainWindow
@@ -32,7 +32,7 @@ class ServerWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit ServerWindow(QWidget *parent, RenderServer & serverApplication);
+    explicit ServerWindow(QWidget* parent, RenderServer& serverApplication);
     ~ServerWindow();
 
 public slots:
@@ -44,7 +44,6 @@ public slots:
 signals:
     void newServerState(ServerState::E);
 
-
 private slots:
     void onClientConnectionDisconnected();
     void onStartServerFormSubmitted();
@@ -55,7 +54,7 @@ private slots:
 
 private:
     // UI
-    Ui::ServerWindow *ui;
+    Ui::ServerWindow* ui;
     QLabel* m_serverStateLabel;
     QLabel* m_renderStateLabel;
     const char* fromServerStateEnumToString(ServerState::E);
@@ -67,8 +66,8 @@ private:
     // SERVER
     ServerState::E m_serverState;
     RenderServerState::E m_renderState;
-    QTcpSocket *m_clientSocket;
-    QTcpServer *m_server;
+    QTcpSocket* m_clientSocket;
+    QTcpServer* m_server;
     void setServerState(ServerState::E state);
     ushort m_serverPort;
     ComputeDevice* m_computeDevice;
@@ -84,7 +83,6 @@ private:
     void onStateReadyForRenderingEnter();
     void onStateReadyForRenderingExit();
     void resetProcess();
-
 };
 
 #endif // MAINWINDOW_H

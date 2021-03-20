@@ -2,19 +2,22 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #include "StandaloneApplication.h"
 #include "ComputeDevice.h"
 #include <QApplication>
 #include <QThread>
 
-StandaloneApplication::StandaloneApplication(QApplication & qApplication, const ComputeDevice & device)
-    : Application(qApplication),
-      m_renderManager(qApplication, *this, device)
+StandaloneApplication::StandaloneApplication(QApplication& qApplication, const ComputeDevice& device)
+    : Application(qApplication)
+    , m_renderManager(qApplication, *this, device)
 {
-    connect(&m_renderManager, SIGNAL(newFrameReadyForDisplay(const float*, unsigned long long)),
-            this, SIGNAL(newFrameReadyForDisplay(const float*, unsigned long long)));
+    connect(
+        &m_renderManager,
+        SIGNAL(newFrameReadyForDisplay(const float*, unsigned long long)),
+        this,
+        SIGNAL(newFrameReadyForDisplay(const float*, unsigned long long)));
 
     // Run render manager in thread
 
@@ -24,14 +27,16 @@ StandaloneApplication::StandaloneApplication(QApplication & qApplication, const 
     m_thread->start();
 
     // Pass on render manager errors as application errors
-    connect(&m_renderManager, SIGNAL(renderManagerError(QString)),
-        this, SIGNAL(applicationError(QString)),
+    connect(
+        &m_renderManager,
+        SIGNAL(renderManagerError(QString)),
+        this,
+        SIGNAL(applicationError(QString)),
         Qt::QueuedConnection);
 }
 
 StandaloneApplication::~StandaloneApplication(void)
 {
-
 }
 
 void StandaloneApplication::wait()

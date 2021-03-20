@@ -2,7 +2,7 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #pragma once
 #include "RandomState.h"
@@ -28,9 +28,9 @@ struct RadiancePRD
     float lastTHit;
 };
 
-#define PRD_HIT_EMITTER (1<<31u)
-#define PRD_ERROR (1<<30u)
-#define PRD_MISS (1<<29u)
-#define PRD_HIT_SPECULAR (1<<28u)
-#define PRD_HIT_NON_SPECULAR (1<<27u)
-#define PRD_PATH_TRACING (1<<26u)
+#define PRD_HIT_EMITTER (1 << 31u)
+#define PRD_ERROR (1 << 30u)
+#define PRD_MISS (1 << 29u)
+#define PRD_HIT_SPECULAR (1 << 28u)
+#define PRD_HIT_NON_SPECULAR (1 << 27u)
+#define PRD_PATH_TRACING (1 << 26u)

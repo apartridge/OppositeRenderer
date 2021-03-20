@@ -2,32 +2,32 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #include "ServerWindow.hxx"
-#include "ui/ui_ServerWindow.h"
-#include <QTcpServer>
-#include <QTcpSocket>
-#include <QMessageBox>
-#include <QLabel>
+#include "../server/RenderServer.hxx"
+#include "AboutWindow.hxx"
+#include "ComputeDevice.h"
 #include "ComputeDeviceInformationWidget.hxx"
 #include "ComputeDeviceRepository.h"
-#include "ComputeDevice.h"
-#include "AboutWindow.hxx"
+#include "ReadyForRenderingWidget.hxx"
 #include "SetServerSettingsWidget.hxx"
 #include "WaitingForConnectionWidget.hxx"
-#include "ReadyForRenderingWidget.hxx"
-#include "../server/RenderServer.hxx"
+#include "ui/ui_ServerWindow.h"
+#include <QLabel>
+#include <QMessageBox>
+#include <QTcpServer>
+#include <QTcpSocket>
 #include <QTimer>
 
-ServerWindow::ServerWindow(QWidget *parent, RenderServer & serverApplication) :
-    QMainWindow(parent),
-    ui(new Ui::ServerWindow),
-    m_clientSocket(NULL),
-    m_server(NULL),
-    m_computeDevice(NULL),
-    m_serverState(ServerState::SET_COMPUTE_DEVICE),
-    m_renderServer(serverApplication)
+ServerWindow::ServerWindow(QWidget* parent, RenderServer& serverApplication)
+    : QMainWindow(parent)
+    , ui(new Ui::ServerWindow)
+    , m_clientSocket(NULL)
+    , m_server(NULL)
+    , m_computeDevice(NULL)
+    , m_serverState(ServerState::SET_COMPUTE_DEVICE)
+    , m_renderServer(serverApplication)
 {
     // UI STUFF
     ui->setupUi(this);
@@ -37,8 +37,12 @@ ServerWindow::ServerWindow(QWidget *parent, RenderServer & serverApplication) :
     ui->statusbar->addPermanentWidget(this->m_renderStateLabel, 3);
     QFrame* frame = new QFrame(this->centralWidget());
     m_setComputeDeviceWidget = new ComputeDeviceInformationWidget(frame, m_computeDeviceRepository);
-    connect(m_setComputeDeviceWidget, SIGNAL(hasSelectedComputeDevice(ComputeDevice*)), this, SLOT(onHasSelectedComputeDevice(ComputeDevice*)));
-    frame->setGeometry(0,0,540,370);
+    connect(
+        m_setComputeDeviceWidget,
+        SIGNAL(hasSelectedComputeDevice(ComputeDevice*)),
+        this,
+        SLOT(onHasSelectedComputeDevice(ComputeDevice*)));
+    frame->setGeometry(0, 0, 540, 370);
     m_setComputeDeviceWidget->hide();
     this->setWindowTitle("RenderServer");
 
@@ -53,7 +57,11 @@ ServerWindow::ServerWindow(QWidget *parent, RenderServer & serverApplication) :
 
     // SERVER STUFF
     connect(this, SIGNAL(newServerState(ServerState::E)), this, SLOT(onNewServerState(ServerState::E)));
-    connect(&m_renderServer, SIGNAL(renderStateUpdated(RenderServerState::E)), this, SLOT(onNewRenderState(RenderServerState::E)));
+    connect(
+        &m_renderServer,
+        SIGNAL(renderStateUpdated(RenderServerState::E)),
+        this,
+        SLOT(onNewRenderState(RenderServerState::E)));
     connect(&m_renderServer, SIGNAL(logStringAppended(QString)), this, SLOT(onNewServerApplicationLogString(QString)));
 
     QTimer* timer = new QTimer(this);
@@ -68,7 +76,7 @@ ServerWindow::~ServerWindow()
 {
     delete ui;
 
-    if(m_clientSocket)
+    if (m_clientSocket)
     {
         delete m_clientSocket;
         m_clientSocket = NULL;
@@ -82,12 +90,12 @@ ServerWindow::~ServerWindow()
 
 void ServerWindow::resetProcess()
 {
-    if(m_clientSocket != NULL)
+    if (m_clientSocket != NULL)
     {
-        if(m_clientSocket->state() == QAbstractSocket::ConnectedState)
+        if (m_clientSocket->state() == QAbstractSocket::ConnectedState)
         {
             m_clientSocket->disconnectFromHost();
-            if(m_clientSocket->state() == QAbstractSocket::ConnectedState)
+            if (m_clientSocket->state() == QAbstractSocket::ConnectedState)
             {
                 m_clientSocket->waitForDisconnected();
             }
@@ -95,12 +103,12 @@ void ServerWindow::resetProcess()
         m_clientSocket = NULL;
     }
 
-    if(m_server != NULL && m_server->isListening())
+    if (m_server != NULL && m_server->isListening())
     {
         m_server->close();
     }
 
-    if(m_computeDevice != NULL)
+    if (m_computeDevice != NULL)
     {
         delete m_computeDevice;
         m_computeDevice = NULL;
@@ -123,7 +131,7 @@ void ServerWindow::onStateSetComputeDeviceExit()
     m_setComputeDeviceWidget->hide();
 }
 
-void ServerWindow::onHasSelectedComputeDevice( ComputeDevice* device )
+void ServerWindow::onHasSelectedComputeDevice(ComputeDevice* device)
 {
     m_computeDevice = device;
     m_renderServer.initializeDevice(*m_computeDevice);
@@ -134,10 +142,10 @@ void ServerWindow::onHasSelectedComputeDevice( ComputeDevice* device )
 // Configure server port
 */
 
-void ServerWindow::onStateSetServerSettingsEnter( )
+void ServerWindow::onStateSetServerSettingsEnter()
 {
-    this->setWindowTitle(QString("RenderServer [#%1 - %2]").arg(m_computeDevice->getDeviceId())
-                                                        .arg(m_computeDevice->getName()));
+    this->setWindowTitle(
+        QString("RenderServer [#%1 - %2]").arg(m_computeDevice->getDeviceId()).arg(m_computeDevice->getName()));
     m_serverSettingsWidget->show();
     connect(m_serverSettingsWidget, SIGNAL(startServerFormSubmitted()), this, SLOT(onStartServerFormSubmitted()));
 }
@@ -146,7 +154,7 @@ void ServerWindow::onStartServerFormSubmitted()
 {
     m_serverPort = m_serverSettingsWidget->getPortNumber();
 
-    if(m_server == NULL)
+    if (m_server == NULL)
     {
         m_server = new QTcpServer(this);
         connect(m_server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
@@ -158,9 +166,10 @@ void ServerWindow::onStartServerFormSubmitted()
 
     if (!m_server->listen(QHostAddress::Any, m_serverPort))
     {
-        QMessageBox::critical(this, "Server",
-            QString("Unable to start the server on port %1: %2.")
-            .arg(m_server->errorString()).arg(m_serverPort));
+        QMessageBox::critical(
+            this,
+            "Server",
+            QString("Unable to start the server on port %1: %2.").arg(m_server->errorString()).arg(m_serverPort));
     }
     else
     {
@@ -168,7 +177,7 @@ void ServerWindow::onStartServerFormSubmitted()
     }
 }
 
-void ServerWindow::onStateSetServerSettingsExit( )
+void ServerWindow::onStateSetServerSettingsExit()
 {
     m_serverSettingsWidget->hide();
 }
@@ -192,12 +201,12 @@ void ServerWindow::onStateWaitForConnectionExit()
 
 void ServerWindow::onNewConnection()
 {
-    if(m_serverState == ServerState::WAIT_FOR_CLIENT_CONNECTION)
+    if (m_serverState == ServerState::WAIT_FOR_CLIENT_CONNECTION)
     {
         m_clientSocket = m_server->nextPendingConnection();
 
         QString computeDeviceName = QString("RSHELLO\n");
-        QDataStream stream (m_clientSocket);
+        QDataStream stream(m_clientSocket);
         stream << computeDeviceName;
 
         connect(m_clientSocket, SIGNAL(disconnected()), this, SLOT(onClientConnectionDisconnected()));
@@ -229,11 +238,13 @@ void ServerWindow::onStateReadyForRenderingEnter()
     QHostAddress clientAddress = m_clientSocket->peerAddress();
     quint16 clientPort = m_clientSocket->peerPort();
     m_readyForRenderingWidget->setComputeDevice(*m_computeDevice);
-    m_readyForRenderingWidget->setClientName(QString("%1:%2").arg(clientAddress.toString(), QString::number(clientPort)));
+    m_readyForRenderingWidget->setClientName(
+        QString("%1:%2").arg(clientAddress.toString(), QString::number(clientPort)));
 
     QHostAddress serverAddress = m_server->serverAddress();
     quint16 serverPort = m_server->serverPort();
-    m_readyForRenderingWidget->setServerName(QString("%1:%2").arg(serverAddress.toString(), QString::number(serverPort)));
+    m_readyForRenderingWidget->setServerName(
+        QString("%1:%2").arg(serverAddress.toString(), QString::number(serverPort)));
     m_readyForRenderingWidget->show();
 
     // Initialize Render Manager with selected compute device and socket
@@ -248,22 +259,38 @@ void ServerWindow::onStateReadyForRenderingExit()
 
 void ServerWindow::setServerState(ServerState::E state)
 {
-    switch(m_serverState)
+    switch (m_serverState)
     {
-    case ServerState::WAIT_FOR_CLIENT_CONNECTION: onStateWaitForConnectionExit(); break;
-    case ServerState::SET_COMPUTE_DEVICE: onStateSetComputeDeviceExit(); break;
-    case ServerState::SET_SERVER_SETTINGS: onStateSetServerSettingsExit(); break;
-    case ServerState::READY_FOR_RENDERING: onStateReadyForRenderingExit(); break;
+    case ServerState::WAIT_FOR_CLIENT_CONNECTION:
+        onStateWaitForConnectionExit();
+        break;
+    case ServerState::SET_COMPUTE_DEVICE:
+        onStateSetComputeDeviceExit();
+        break;
+    case ServerState::SET_SERVER_SETTINGS:
+        onStateSetServerSettingsExit();
+        break;
+    case ServerState::READY_FOR_RENDERING:
+        onStateReadyForRenderingExit();
+        break;
     }
 
     m_serverState = state;
 
-    switch(m_serverState)
+    switch (m_serverState)
     {
-    case ServerState::WAIT_FOR_CLIENT_CONNECTION: onStateWaitForConnectionEnter(); break;
-    case ServerState::SET_COMPUTE_DEVICE: onStateSetComputeDeviceEnter(); break;
-    case ServerState::SET_SERVER_SETTINGS: onStateSetServerSettingsEnter(); break;
-    case ServerState::READY_FOR_RENDERING: onStateReadyForRenderingEnter(); break;
+    case ServerState::WAIT_FOR_CLIENT_CONNECTION:
+        onStateWaitForConnectionEnter();
+        break;
+    case ServerState::SET_COMPUTE_DEVICE:
+        onStateSetComputeDeviceEnter();
+        break;
+    case ServerState::SET_SERVER_SETTINGS:
+        onStateSetServerSettingsEnter();
+        break;
+    case ServerState::READY_FOR_RENDERING:
+        onStateReadyForRenderingEnter();
+        break;
     }
 
     emit newServerState(state);
@@ -301,7 +328,8 @@ void ServerWindow::onNewServerApplicationLogString(QString string)
 
 void ServerWindow::onTimeout()
 {
-    m_readyForRenderingWidget->setRenderTime(m_renderServer.getRenderTimeSeconds(), m_renderServer.getTotalTimeSeconds());
-    m_readyForRenderingWidget->setPendingRenderCommandsAndIterations(m_renderServer.getNumPendingRenderIterations(),
-                                                                     m_renderServer.getNumPendingRenderCommands());
+    m_readyForRenderingWidget->setRenderTime(
+        m_renderServer.getRenderTimeSeconds(), m_renderServer.getTotalTimeSeconds());
+    m_readyForRenderingWidget->setPendingRenderCommandsAndIterations(
+        m_renderServer.getNumPendingRenderIterations(), m_renderServer.getNumPendingRenderCommands());
 }

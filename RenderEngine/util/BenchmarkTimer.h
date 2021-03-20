@@ -2,7 +2,7 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #pragma once
 
@@ -19,13 +19,14 @@ public:
     RENDER_ENGINE_EXPORT_API void pause();
     RENDER_ENGINE_EXPORT_API void resume();
     RENDER_ENGINE_EXPORT_API double elapsedSeconds();
+
 private:
     enum BenchmarkTimerState
     {
-        RUNNING, NOT_RUNNING
+        RUNNING,
+        NOT_RUNNING
     };
     QTime m_time;
     double m_accumSeconds;
     BenchmarkTimerState m_state;
 };
-

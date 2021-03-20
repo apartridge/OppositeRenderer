@@ -5,8 +5,8 @@
  */
 
 #pragma once
-#include "Material.h"
 #include "../math/Vector3.h"
+#include "Material.h"
 
 class Glass : public Material
 {
@@ -15,8 +15,9 @@ private:
     Vector3 Ks;
     static bool m_optixMaterialIsCreated;
     static optix::Material m_optixMaterial;
+
 public:
-    Glass(float indexOfRefraction, const Vector3 & Ks);
-    virtual optix::Material getOptixMaterial(optix::Context & context);
-    virtual void registerGeometryInstanceValues(optix::GeometryInstance & instance);
+    Glass(float indexOfRefraction, const Vector3& Ks);
+    virtual optix::Material getOptixMaterial(optix::Context& context);
+    virtual void registerGeometryInstanceValues(optix::GeometryInstance& instance);
 };

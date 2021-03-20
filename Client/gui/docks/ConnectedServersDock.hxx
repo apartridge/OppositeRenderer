@@ -1,6 +1,6 @@
 #pragma once
-#include <QDockWidget>
 #include "../../gui_models/ConnectedServersTableModel.hxx"
+#include <QDockWidget>
 
 namespace Ui
 {
@@ -14,10 +14,10 @@ class ConnectedServersDock : public QDockWidget
     Q_OBJECT
 
 public:
-    explicit ConnectedServersDock(QWidget *parent, const RenderServerConnections & serverConnections );
+    explicit ConnectedServersDock(QWidget* parent, const RenderServerConnections& serverConnections);
     ~ConnectedServersDock();
 
 private:
-    Ui::ConnectedServersDock *ui;
+    Ui::ConnectedServersDock* ui;
     ConnectedServersTableModel m_model;
 };

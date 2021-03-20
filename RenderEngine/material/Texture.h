@@ -11,17 +11,17 @@ class Image;
 class Texture : public Material
 {
 public:
-    Texture(const QString & textureAbsoluteFilePath);
-    Texture(const QString & textureAbsoluteFilePath, const QString & normalMapAbsoluteFilePath);
+    Texture(const QString& textureAbsoluteFilePath);
+    Texture(const QString& textureAbsoluteFilePath, const QString& normalMapAbsoluteFilePath);
     virtual ~Texture();
-    virtual optix::Material getOptixMaterial(optix::Context & context);
-    virtual void registerGeometryInstanceValues(optix::GeometryInstance & instance);
+    virtual optix::Material getOptixMaterial(optix::Context& context);
+    virtual void registerGeometryInstanceValues(optix::GeometryInstance& instance);
 
 private:
-    void loadDiffuseImage( const QString & textureAbsoluteFilePath );
-    void loadNormalMapImage( const QString & normalsAbsoluteFilePath );
-    optix::TextureSampler createTextureSamplerFromBuffer(optix::Context & context, optix::Buffer buffer);
-    optix::Buffer createBufferFromImage(optix::Context & context, const Image & image);
+    void loadDiffuseImage(const QString& textureAbsoluteFilePath);
+    void loadNormalMapImage(const QString& normalsAbsoluteFilePath);
+    optix::TextureSampler createTextureSamplerFromBuffer(optix::Context& context, optix::Buffer buffer);
+    optix::Buffer createBufferFromImage(optix::Context& context, const Image& image);
 
     static bool m_optixMaterialIsCreated;
     static optix::Material m_optixMaterial;

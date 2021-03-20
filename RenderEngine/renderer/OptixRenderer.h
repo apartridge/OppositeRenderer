@@ -2,12 +2,12 @@
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #pragma once
 
-#include "../render_engine_export_api.h"
 #include "../math/AAB.h"
+#include "../render_engine_export_api.h"
 
 #include <optixu/optixpp_namespace.h>
 #include <optixu/optixu_aabb_namespace.h>
@@ -19,17 +19,20 @@ class IScene;
 class OptixRenderer
 {
 public:
-
     RENDER_ENGINE_EXPORT_API OptixRenderer();
     RENDER_ENGINE_EXPORT_API ~OptixRenderer();
 
-    RENDER_ENGINE_EXPORT_API void initScene(IScene & scene);
-    RENDER_ENGINE_EXPORT_API void initialize(const ComputeDevice & device);
+    RENDER_ENGINE_EXPORT_API void initScene(IScene& scene);
+    RENDER_ENGINE_EXPORT_API void initialize(const ComputeDevice& device);
 
     void createGpuDebugBuffers();
 
-    RENDER_ENGINE_EXPORT_API void renderNextIteration(unsigned long long iterationNumber, unsigned long long localIterationNumber,
-        float PPMRadius, bool createOutput, const RenderServerRenderRequestDetails & details);
+    RENDER_ENGINE_EXPORT_API void renderNextIteration(
+        unsigned long long iterationNumber,
+        unsigned long long localIterationNumber,
+        float PPMRadius,
+        bool createOutput,
+        const RenderServerRenderRequestDetails& details);
     RENDER_ENGINE_EXPORT_API void getOutputBuffer(void* data);
     RENDER_ENGINE_EXPORT_API unsigned int getWidth() const;
     RENDER_ENGINE_EXPORT_API unsigned int getHeight() const;
@@ -41,14 +44,13 @@ public:
     RENDER_ENGINE_EXPORT_API const static unsigned int EMITTED_PHOTONS_PER_ITERATION;
 
 private:
-    void initDevice(const ComputeDevice & device);
+    void initDevice(const ComputeDevice& device);
     void compile();
-    void loadObjGeometry( const std::string& filename, optix::Aabb& bbox );
+    void loadObjGeometry(const std::string& filename, optix::Aabb& bbox);
     void initializeRandomStates();
     void createUniformGridPhotonMap(float ppmRadius);
     void initializeStochasticHashPhotonMap(float ppmRadius);
     void createPhotonKdTreeOnCPU();
-
 
     optix::Buffer m_outputBuffer;
     optix::Buffer m_photons;

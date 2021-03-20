@@ -5,8 +5,8 @@
  */
 
 #pragma once
-#include "Material.h"
 #include "../math/Vector3.h"
+#include "Material.h"
 
 class DiffuseEmitter : public Material
 {
@@ -16,10 +16,11 @@ private:
     static bool m_optixMaterialIsCreated;
     static optix::Material m_optixMaterial;
     float m_inverseArea;
+
 public:
-    DiffuseEmitter(const Vector3 & power, const Vector3 & Kd);
-    virtual optix::Material getOptixMaterial(optix::Context & context);
-    virtual void registerGeometryInstanceValues(optix::GeometryInstance & instance);
+    DiffuseEmitter(const Vector3& power, const Vector3& Kd);
+    virtual optix::Material getOptixMaterial(optix::Context& context);
+    virtual void registerGeometryInstanceValues(optix::GeometryInstance& instance);
     Vector3 getPower() const;
     void setInverseArea(float inverseArea);
 };

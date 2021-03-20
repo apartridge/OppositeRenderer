@@ -1,8 +1,8 @@
-/* 
+/*
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
 #include "Transform.h"
 
@@ -26,21 +26,21 @@ Transform::Transform()
     this->arr[15] = 1;
 }
 
-optix::Transform Transform::getOptixTransform( optix::Context& context )
+optix::Transform Transform::getOptixTransform(optix::Context& context)
 {
     optix::Transform t = context->createTransform();
     t->setMatrix(false, this->arr, NULL);
     return t;
 }
 
-void Transform::translate( float x, float y, float z )
+void Transform::translate(float x, float y, float z)
 {
     this->arr[3] += x;
     this->arr[7] += y;
     this->arr[11] += z;
 }
 
-void Transform::scale( float scale )
+void Transform::scale(float scale)
 {
     this->arr[0] *= scale;
     this->arr[5] *= scale;

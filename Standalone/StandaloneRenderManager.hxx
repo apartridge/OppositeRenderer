@@ -1,16 +1,16 @@
-/* 
+/*
  * Copyright (c) 2013 Opposite Renderer
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
-*/
+ */
 
+#include "RunningStatus.h"
+#include "renderer/Camera.h"
+#include "renderer/OptixRenderer.h"
+#include <QMutex>
 #include <QObject>
 #include <QTime>
-#include <QMutex>
-#include "RunningStatus.h"
 #include <optixu/optixpp_namespace.h>
-#include "renderer/OptixRenderer.h"
-#include "renderer/Camera.h"
 
 class IScene;
 class Application;
@@ -20,8 +20,9 @@ class ComputeDevice;
 class StandaloneRenderManager : public QObject
 {
     Q_OBJECT;
+
 public:
-    StandaloneRenderManager(QApplication & qApplication, Application & application, const ComputeDevice& device);
+    StandaloneRenderManager(QApplication& qApplication, Application& application, const ComputeDevice& device);
     virtual ~StandaloneRenderManager();
     void renderNextIteration();
     void wait();
@@ -45,7 +46,7 @@ private:
     void fillRenderStatistics();
     void continueRayTracingIfRunningAsync();
 
-    Application & m_application;
+    Application& m_application;
     unsigned long long m_nextIterationNumber;
 
     OptixRenderer m_renderer;
@@ -53,7 +54,7 @@ private:
     QTime renderTime;
     float* m_outputBuffer;
     IScene* m_currentScene;
-    const ComputeDevice & m_device;
+    const ComputeDevice& m_device;
     double m_PPMRadius;
     bool m_compileScene;
     bool m_noEmittedSignals;
