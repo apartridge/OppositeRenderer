@@ -1,23 +1,2 @@
-# git ignore file
-*.lib
-*.cache
-*.tlog
-*.manifest
-*.lastbuildstate
-*.pdb
-*.deps
-*.exe
-*.ilk
-*.log
-*.sdf
-*.dll
-*.opensdf
-*.rc
-*.res
-*.ipch
-moc_*.cpp
-ui_*.h
-*.obj
-*.ptx
-*.mtl
-*.idb
+build/
+.idea/
