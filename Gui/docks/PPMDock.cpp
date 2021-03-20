@@ -4,9 +4,9 @@
  * file that was distributed with this source code.
  */
 
-#include "PPMDock.hxx"
-#include "../Application.hxx"
-#include "../models/PPMSettingsModel.hxx"
+#include "PPMDock.h"
+#include "../Application.h"
+#include "../models/PPMSettingsModel.h"
 #include "ui/ui_PPMDock.h"
 
 #include <QMessageBox>

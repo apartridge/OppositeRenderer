@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "../DistributedApplication.hxx"
+#include "../DistributedApplication.h"
 #include "RenderServerState.h"
 #include "clientserver/RenderResultPacket.h"
 

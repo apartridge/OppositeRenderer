@@ -4,7 +4,7 @@
  * file that was distributed with this source code.
  */
 
-#include "ReadyForRenderingWidget.hxx"
+#include "ReadyForRenderingWidget.h"
 #include "ComputeDevice.h"
 #include "ui/ui_ReadyForRenderingWidget.h"
 

@@ -4,7 +4,7 @@
  * file that was distributed with this source code.
  */
 
-#include "Application.hxx"
+#include "Application.h"
 #include "RunningStatus.h"
 #include <QApplication>
 #include <QDebug>
@@ -221,14 +221,14 @@ void Application::onNewFrameReadyForDisplay(const float*, unsigned long long)
     m_renderStatisticsModel.incrementNumPreviewedIterations();
 }
 
-RendererStatus::E Application::getRendererStatus() const
+RendererStatus Application::getRendererStatus() const
 {
     return m_rendererStatus;
 }
 
-void Application::setRendererStatus(RendererStatus::E val)
+void Application::setRendererStatus(RendererStatus val)
 {
-    bool shouldEmit = m_rendererStatus != val;
+    const bool shouldEmit = m_rendererStatus != val;
     m_rendererStatus = val;
     if (shouldEmit)
     {

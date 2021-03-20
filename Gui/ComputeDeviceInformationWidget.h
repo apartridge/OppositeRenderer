@@ -7,7 +7,7 @@
 #ifndef GPU_DEVICE_INFORMATION_DIALOG_H
 #define GPU_DEVICE_INFORMATION_DIALOG_H
 
-#include "ComputeDeviceInformationWidgetTabPage.hxx"
+#include "ComputeDeviceInformationWidgetTabPage.h"
 #include "gui_export_api.h"
 #include "ui/ui_ComputeDeviceInformationWidget.h"
 

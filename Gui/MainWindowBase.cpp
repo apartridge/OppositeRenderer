@@ -4,18 +4,18 @@
  * file that was distributed with this source code.
  */
 
-#include "MainWindowBase.hxx"
-#include "AboutWindow.hxx"
-#include "Application.hxx"
-#include "ComputeDeviceInformationWidget.hxx"
+#include "MainWindowBase.h"
+#include "AboutWindow.h"
+#include "Application.h"
+#include "ComputeDeviceInformationWidget.h"
 #include "ComputeDeviceRepository.h"
-#include "RenderWidget.hxx"
+#include "RenderWidget.h"
 #include "config.h"
-#include "docks/CameraDock.hxx"
-#include "docks/OutputDock.hxx"
-#include "docks/PPMDock.hxx"
-#include "docks/RenderInformationDock.hxx"
-#include "docks/SceneDock.hxx"
+#include "docks/CameraDock.h"
+#include "docks/OutputDock.h"
+#include "docks/PPMDock.h"
+#include "docks/RenderInformationDock.h"
+#include "docks/SceneDock.h"
 #include "renderer/OptixRenderer.h"
 #include "scene/SceneFactory.h"
 
@@ -115,7 +115,7 @@ void MainWindowBase::onActionAbout()
 {
     AboutWindow* aboutWindow = new AboutWindow(this);
     aboutWindow->show();
-    connect(aboutWindow, SIGNAL(finished()), aboutWindow, SLOT(deleteLater()));
+    connect(aboutWindow, &QDialog::finished, aboutWindow, &QObject::deleteLater);
 }
 
 void MainWindowBase::onRenderStatusToggle()

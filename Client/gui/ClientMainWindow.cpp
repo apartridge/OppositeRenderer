@@ -4,11 +4,11 @@
  * file that was distributed with this source code.
  */
 
-#include "ClientMainWindow.hxx"
-#include "../DistributedApplication.hxx"
-#include "dialogs/AddNewServerConnectionDialog.hxx"
-#include "docks/ConnectedServersDock.hxx"
-#include "docks/RenderServersSummaryDock.hxx"
+#include "ClientMainWindow.h"
+#include "../DistributedApplication.h"
+#include "dialogs/AddNewServerConnectionDialog.h"
+#include "docks/ConnectedServersDock.h"
+#include "docks/RenderServersSummaryDock.h"
 
 #include <QAction>
 

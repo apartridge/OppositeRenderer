@@ -4,9 +4,9 @@
  * file that was distributed with this source code.
  */
 
-#include "RenderResultPacketReceiver.hxx"
-#include "../DistributedApplication.hxx"
-#include "RenderServerConnection.hxx"
+#include "RenderResultPacketReceiver.h"
+#include "../DistributedApplication.h"
+#include "RenderServerConnection.h"
 #include "renderer/OptixRenderer.h"
 
 #include <QtAlgorithms>
@@ -19,19 +19,18 @@ RenderResultPacketReceiver::RenderResultPacketReceiver(const DistributedApplicat
     , m_lastSequenceNumber(0)
     , m_peakBackBufferSizeBytes(0)
 {
-    m_frontBuffer = new float[2000 * 2000 * 3];
+    m_frontBuffer = std::make_unique<float[]>(2000 * 2000 * 3);
 }
 
-RenderResultPacketReceiver::~RenderResultPacketReceiver(void)
-{
-    delete[] m_frontBuffer;
-}
 
 // Take ownership of the RenderResultPacket object and merge in the result into
 // output buffers
 
-void RenderResultPacketReceiver::onRenderResultPacketReceived(RenderResultPacket* result)
+void RenderResultPacketReceiver::onRenderResultPacketReceived(RenderResultPacket* resultPtr)
 {
+    // We take ownership of the result and make sure to delete it
+    auto result = std::unique_ptr<RenderResultPacket>(resultPtr);
+
     // Merge the results if the sequence number of RenderResultPacket matches the current sequence number
 
     if (result->getSequenceNumber() == m_application.getSequenceNumber())
@@ -45,18 +44,15 @@ void RenderResultPacketReceiver::onRenderResultPacketReceived(RenderResultPacket
         if (m_application.getRenderMethod() == RenderMethod::PROGRESSIVE_PHOTON_MAPPING)
         {
 
-            mergeRenderResultPacketPhotonMapping(result);
+            mergeRenderResultPacketPhotonMapping(result.get());
         }
         else
         {
-            mergeRenderResultPathTracing(result);
+            mergeRenderResultPathTracing(result.get());
         }
 
-        emit newFrameReadyForDisplay(m_frontBuffer, m_iterationNumber);
+        emit newFrameReadyForDisplay(m_frontBuffer.get(), m_iterationNumber);
     }
-
-    // We take ownership of the result and make sure to delete it
-    delete result;
 }
 
 void RenderResultPacketReceiver::onThreadStarted()
@@ -121,7 +117,7 @@ void RenderResultPacketReceiver::mergeRenderResultPacketPhotonMapping(const Rend
         mergeBufferRunningAverage(
             (const float*)backBuffer.getOutput().constData(),
             backBuffer.getNumIterationsInPacket(),
-            m_frontBuffer,
+            m_frontBuffer.get(),
             m_PPMNextExpectedIteration,
             numPixels);
         m_PPMNextExpectedIteration = backBuffer.getLastIterationNumber() + 1;
@@ -159,7 +155,7 @@ void RenderResultPacketReceiver::mergeRenderResultPathTracing(const RenderResult
     float* packetDataFloat = (float*)packetOutput.data();
     unsigned int numElements = packetOutput.size() / sizeof(float);
     mergeBufferRunningAverage(
-        packetDataFloat, result->getNumIterationsInPacket(), m_frontBuffer, m_iterationNumber, numElements);
+        packetDataFloat, result->getNumIterationsInPacket(), m_frontBuffer.get(), m_iterationNumber, numElements);
     m_iterationNumber += result->getNumIterationsInPacket();
 }
 

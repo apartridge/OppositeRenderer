@@ -13,8 +13,7 @@ class OutputSettingsModel : public QObject
     Q_OBJECT;
 
 public:
-    GUI_EXPORT_API OutputSettingsModel(void);
-    GUI_EXPORT_API ~OutputSettingsModel(void);
+    GUI_EXPORT_API OutputSettingsModel();
     GUI_EXPORT_API void setWidth(unsigned int width);
     GUI_EXPORT_API void setHeight(unsigned int height);
     GUI_EXPORT_API unsigned int getWidth() const;

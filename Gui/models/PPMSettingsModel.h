@@ -13,8 +13,7 @@ class PPMSettingsModel : public QObject
     Q_OBJECT;
 
 public:
-    GUI_EXPORT_API PPMSettingsModel(void);
-    GUI_EXPORT_API ~PPMSettingsModel(void);
+    GUI_EXPORT_API PPMSettingsModel();
     GUI_EXPORT_API double getPPMInitialRadius() const;
     GUI_EXPORT_API void setPPMInitialRadius(double PPMInitialRadius);
 

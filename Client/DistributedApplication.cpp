@@ -4,11 +4,11 @@
  * file that was distributed with this source code.
  */
 
-#include "DistributedApplication.hxx"
-#include "Application.hxx"
+#include "DistributedApplication.h"
+#include "Application.h"
 #include "ComputeDevice.h"
-#include "client/RenderServerConnection.hxx"
-#include "client/RenderServerConnections.hxx"
+#include "client/RenderServerConnection.h"
+#include "client/RenderServerConnections.h"
 #include "clientserver/RenderServerRenderRequest.h"
 #include "renderer/Camera.h"
 #include "renderer/OptixRenderer.h"
@@ -135,20 +135,21 @@ RenderServerRenderRequest DistributedApplication::getNextRenderServerRenderReque
 void DistributedApplication::onNewFrameReadyForDisplay(const float*, unsigned long long iterationNumber)
 {
     m_numPreviewedIterations++;
-    getRenderStatisticsModel().setNumIterations(iterationNumber + 1);
-    getRenderStatisticsModel().setCurrentPPMRadius(m_PPMRadius);
-    getRenderStatisticsModel().setNumPreviewedIterations(m_numPreviewedIterations);
+    auto &statsModel = getRenderStatisticsModel();
+    statsModel.setNumIterations(iterationNumber + 1);
+    statsModel.setCurrentPPMRadius(m_PPMRadius);
+    statsModel.setNumPreviewedIterations(m_numPreviewedIterations);
 
     if (getRenderMethod() == RenderMethod::PROGRESSIVE_PHOTON_MAPPING)
     {
-        getRenderStatisticsModel().setNumEmittedPhotonsPerIteration(OptixRenderer::EMITTED_PHOTONS_PER_ITERATION);
-        getRenderStatisticsModel().setNumEmittedPhotons(
+        statsModel.setNumEmittedPhotonsPerIteration(OptixRenderer::EMITTED_PHOTONS_PER_ITERATION);
+        statsModel.setNumEmittedPhotons(
             OptixRenderer::EMITTED_PHOTONS_PER_ITERATION * (iterationNumber + 1));
     }
     else
     {
-        getRenderStatisticsModel().setNumEmittedPhotonsPerIteration(0);
-        getRenderStatisticsModel().setNumEmittedPhotons(0);
+        statsModel.setNumEmittedPhotonsPerIteration(0);
+        statsModel.setNumEmittedPhotons(0);
     }
 }
 

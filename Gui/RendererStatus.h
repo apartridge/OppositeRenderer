@@ -5,13 +5,10 @@
  */
 
 #pragma once
-namespace RendererStatus
-{
-enum E
+enum class RendererStatus
 {
     NOT_INITIALIZED,
     INITIALIZING_ENGINE,
     INITIALIZING_SCENE,
     RENDERING
 };
-}

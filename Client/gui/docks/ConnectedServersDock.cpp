@@ -1,4 +1,4 @@
-#include "ConnectedServersDock.hxx"
+#include "ConnectedServersDock.h"
 #include "ui/ui_ConnectedServersDock.h"
 
 ConnectedServersDock::ConnectedServersDock(QWidget* parent, const RenderServerConnections& serverConnections)

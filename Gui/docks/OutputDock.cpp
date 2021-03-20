@@ -4,8 +4,8 @@
  * file that was distributed with this source code.
  */
 
-#include "OutputDock.hxx"
-#include "../models/OutputSettingsModel.hxx"
+#include "OutputDock.h"
+#include "../models/OutputSettingsModel.h"
 #include "ui/ui_OutputDock.h"
 #include <QMessageBox>
 

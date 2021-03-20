@@ -4,9 +4,10 @@
  * file that was distributed with this source code.
  */
 
-#include "RenderServer.hxx"
+#include "RenderServer.h"
 #include "ComputeDevice.h"
 #include "clientserver/RenderServerRenderRequest.h"
+
 #include <QTcpSocket>
 #include <QThread>
 
@@ -14,35 +15,28 @@ RenderServer::RenderServer()
     : m_renderState(RenderServerState::NOT_VALID_RENDER_STATE)
     , m_clientSocket(NULL)
     , m_renderServerRenderer(*this)
-    , m_clientSocketDataStream(NULL)
     , m_clientExpectingBytes(0)
 {
-    m_renderServerRendererThread = new QThread();
-    m_renderServerRenderer.moveToThread(m_renderServerRendererThread);
+    m_renderServerRendererThread = std::make_unique<QThread>();
+    m_renderServerRenderer.moveToThread(m_renderServerRendererThread.get());
     m_renderServerRendererThread->start();
 
-    // connect(this, SIGNAL(aboutToQuit()), m_renderServerRendererThread, SLOT(quit()));
-
-    connect(m_renderServerRendererThread, SIGNAL(started()), &m_renderServerRenderer, SLOT(onThreadStarted()));
+    connect(m_renderServerRendererThread.get(), &QThread::started, &m_renderServerRenderer, &RenderServerRenderer::onThreadStarted);
     connect(
-        &m_renderServerRenderer, SIGNAL(newLogString(QString)), this, SLOT(appendToLog(QString)), Qt::QueuedConnection);
+        &m_renderServerRenderer, &RenderServerRenderer::newLogString, this, &RenderServer::appendToLog, Qt::QueuedConnection);
     connect(
         &m_renderServerRenderer,
-        SIGNAL(newRenderResultPacket(RenderResultPacket)),
+        &RenderServerRenderer::newRenderResultPacket,
         this,
-        SLOT(onNewRenderResultPacket(RenderResultPacket)),
+        &RenderServer::onNewRenderResultPacket,
         Qt::QueuedConnection);
 }
 
-RenderServer::~RenderServer()
-{
-    delete m_renderServerRendererThread;
-    delete m_clientSocketDataStream;
-}
+RenderServer::~RenderServer() = default;
 
 void RenderServer::wait()
 {
-    QMetaObject::invokeMethod(&m_renderServerRenderer, "onAboutToQuit", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(&m_renderServerRenderer, &RenderServerRenderer::onAboutToQuit, Qt::QueuedConnection);
     m_renderServerRenderer.wait();
     m_renderServerRendererThread->exit();
     m_renderServerRendererThread->wait();
@@ -57,8 +51,7 @@ void RenderServer::initializeClient(QTcpSocket& clientSocket)
 {
     m_clientSocket = &clientSocket;
     // Delete old client data stream so that we can initialize multiple times
-    delete m_clientSocketDataStream;
-    m_clientSocketDataStream = new QDataStream(m_clientSocket);
+    m_clientSocketDataStream = std::make_unique<QDataStream>(m_clientSocket);
     m_clientSocketDataStream->setFloatingPointPrecision(QDataStream::SinglePrecision);
     connect(m_clientSocket, SIGNAL(readyRead()), this, SLOT(onDataFromClient()));
     connect(m_clientSocket, SIGNAL(disconnected()), &m_renderServerRenderer, SLOT(onClientDisconnected()));
@@ -108,8 +101,6 @@ void RenderServer::onDataFromClient()
                 m_clientExpectingBytes = 0;
                 RenderServerRenderRequest renderRequest = getRenderServerRenderRequestFromClient();
                 m_renderServerRenderer.pushCommandToQueue(renderRequest);
-
-                // emit newRenderCommand(renderRequest);
             }
         }
     }
@@ -117,8 +108,6 @@ void RenderServer::onDataFromClient()
 
 RenderServerRenderRequest RenderServer::getRenderServerRenderRequestFromClient()
 {
-    // m_pendingRenderCommands++;
-
     RenderServerRenderRequest renderRequest;
     QDataStream datastream(m_clientSocket);
     datastream >> renderRequest;
@@ -131,11 +120,6 @@ void RenderServer::appendToLog(QString log)
     emit logStringAppended(log);
 }
 
-void RenderServer::sendConfirmationToClient()
-{
-    m_clientSocket->write("OK\n");
-}
-
 void RenderServer::onNewRenderResultPacket(RenderResultPacket result)
 {
     m_iterationsRendered++;
@@ -144,9 +128,6 @@ void RenderServer::onNewRenderResultPacket(RenderResultPacket result)
     // object so that the client can see performance measure
     result.setRenderTimeSeconds(getRenderTimeSeconds());
     result.setTotalTimeSeconds(getTotalTimeSeconds());
-
-    // printf("Sending result it %d size %d to client. Pending: %d\n", result.getIterationNumber(),
-    // result.getDirectRadiance().size(), m_pendingRenderCommands);
 
     *m_clientSocketDataStream << result;
     m_clientSocket->flush();

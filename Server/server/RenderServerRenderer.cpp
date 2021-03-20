@@ -4,8 +4,8 @@
  * file that was distributed with this source code.
  */
 
-#include "RenderServerRenderer.hxx"
-#include "RenderServer.hxx"
+#include "RenderServerRenderer.h"
+#include "RenderServer.h"
 #include "clientserver/RenderResultPacket.h"
 #include "clientserver/RenderServerRenderRequest.h"
 #include "scene/Cornell.h"

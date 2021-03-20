@@ -4,8 +4,8 @@
  * file that was distributed with this source code.
  */
 
-#include "RenderServerConnections.hxx"
-#include "RenderServerConnection.hxx"
+#include "RenderServerConnections.h"
+#include "RenderServerConnection.h"
 #include <QThread>
 
 RenderServerConnections::RenderServerConnections()
@@ -14,14 +14,14 @@ RenderServerConnections::RenderServerConnections()
 
 RenderServerConnections::~RenderServerConnections()
 {
-    for (int i = 0; i < m_serverConnections.size(); i++)
+    for (std::size_t i = 0; i < m_serverConnections.size(); i++)
     {
         QMetaObject::invokeMethod(m_serverConnections.at(i), "onAboutToQuit", Qt::QueuedConnection);
         QMetaObject::invokeMethod(m_serverConnectionThreads[i], "quit", Qt::QueuedConnection);
         m_serverConnectionThreads[i]->quit();
     }
 
-    for (int i = 0; i < m_serverConnections.size(); i++)
+    for (std::size_t i = 0; i < m_serverConnections.size(); i++)
     {
         m_serverConnectionThreads[i]->wait();
     }

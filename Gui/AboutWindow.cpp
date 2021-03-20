@@ -4,7 +4,7 @@
  * file that was distributed with this source code.
  */
 
-#include "AboutWindow.hxx"
+#include "AboutWindow.h"
 #include "ui/ui_AboutWindow.h"
 #include <stdio.h>
 

@@ -9,12 +9,12 @@
 #include "RendererStatus.h"
 #include "RunningStatus.h"
 #include "gui_export_api.h"
-#include "models/OutputSettingsModel.hxx"
-#include "models/PPMSettingsModel.hxx"
-#include "models/RenderStatisticsModel.hxx"
+#include "models/OutputSettingsModel.h"
+#include "models/PPMSettingsModel.h"
+#include "models/RenderStatisticsModel.h"
 #include "renderer/Camera.h"
 #include "renderer/RenderMethod.h"
-#include "scene/SceneManager.hxx"
+#include "scene/SceneManager.h"
 
 #include <QObject>
 
@@ -52,8 +52,8 @@ public:
     RunningStatus getRunningStatus() const;
     void setRunningStatus(RunningStatus val);
 
-    RendererStatus::E getRendererStatus() const;
-    void setRendererStatus(RendererStatus::E val);
+    RendererStatus getRendererStatus() const;
+    void setRendererStatus(RendererStatus val);
 
     unsigned long long getSequenceNumber() const;
     float getRenderTimeSeconds() const;
@@ -85,7 +85,7 @@ signals:
 private:
     QThread* m_sceneManagerThread;
     RunningStatus m_runningStatus;
-    RendererStatus::E m_rendererStatus;
+    RendererStatus m_rendererStatus;
     RenderMethod m_renderMethod;
     OutputSettingsModel m_outputSettingsModel;
     PPMSettingsModel m_PPMSettingsModel;

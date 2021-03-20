@@ -4,22 +4,18 @@
  * file that was distributed with this source code.
  */
 
-#include "OutputSettingsModel.hxx"
+#include "OutputSettingsModel.h"
 
-OutputSettingsModel::OutputSettingsModel(void)
+OutputSettingsModel::OutputSettingsModel()
     : m_width(0)
     , m_height(0)
     , m_gamma(2.2)
 {
 }
 
-OutputSettingsModel::~OutputSettingsModel(void)
-{
-}
-
 void OutputSettingsModel::setWidth(unsigned int width)
 {
-    bool shouldEmit = (m_width != width);
+    const bool shouldEmit = (m_width != width);
     m_width = width;
     if (shouldEmit)
     {
@@ -29,7 +25,7 @@ void OutputSettingsModel::setWidth(unsigned int width)
 
 void OutputSettingsModel::setHeight(unsigned int height)
 {
-    bool shouldEmit = (m_height != height);
+    const bool shouldEmit = (m_height != height);
     m_height = height;
     if (shouldEmit)
     {
@@ -54,7 +50,7 @@ float OutputSettingsModel::getGamma() const
 
 void OutputSettingsModel::setGamma(float gamma)
 {
-    bool shouldEmit = (m_gamma != gamma);
+    const bool shouldEmit = (m_gamma != gamma);
     m_gamma = gamma;
     if (shouldEmit)
     {

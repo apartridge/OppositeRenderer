@@ -4,7 +4,7 @@
  * file that was distributed with this source code.
  */
 
-#include "RenderServerConnection.hxx"
+#include "RenderServerConnection.h"
 #include "commands/GetServerDetailsCommand.h"
 #include "commands/ServerCommand.h"
 #include <QTimer>
@@ -94,15 +94,6 @@ void RenderServerConnection::onThreadStarted()
 {
 }
 
-static int min(int a, int b)
-{
-    return a < b ? a : b;
-}
-
-static int max(int a, int b)
-{
-    return a > b ? a : b;
-}
 void RenderServerConnection::onTimeout()
 {
     if (getRenderServerState() == RenderServerState::NO_DEVICE_INFORMATION)
@@ -128,7 +119,7 @@ void RenderServerConnection::onTimeout()
                 resetInternalStatistics();
             }
 
-            unsigned int numIterationsInRequest = (unsigned int)max(1, m_maxIterationsPerPacket);
+            unsigned int numIterationsInRequest = (unsigned int)std::max(1U, m_maxIterationsPerPacket);
             RenderServerRenderRequest request = m_application.getNextRenderServerRenderRequest(numIterationsInRequest);
 
             if (request.getIterationNumbers().size() > 0)

@@ -1,4 +1,4 @@
-#include "AddNewServerConnectionDialog.hxx"
+#include "AddNewServerConnectionDialog.h"
 #include "ui/ui_AddNewServerConnectionDialog.h"
 #include <QMessageBox>
 #include <QTimer>

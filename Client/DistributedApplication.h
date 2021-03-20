@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include "Application.hxx"
+#include "Application.h"
 #include "RunningStatus.h"
-#include "client/RenderResultPacketReceiver.hxx"
-#include "client/RenderServerConnections.hxx"
+#include "client/RenderResultPacketReceiver.h"
+#include "client/RenderServerConnections.h"
 #include "clientserver/RenderServerRenderRequest.h"
 #include <QMutex>
 #include <QObject>

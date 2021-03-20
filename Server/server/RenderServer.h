@@ -11,14 +11,17 @@ This class deals with network communication between client and server.
 */
 
 #pragma once
-#include "RenderServerRenderer.hxx"
+#include "RenderServerRenderer.h"
 #include "RenderServerState.h"
 #include "clientserver/RenderResultPacket.h"
 #include "clientserver/RenderServerRenderRequest.h"
+
 #include <QDataStream>
 #include <QObject>
 #include <QString>
 #include <QTime>
+
+#include <memory>
 
 class ComputeDevice;
 class QByteArray;
@@ -42,14 +45,12 @@ public:
 
 public slots:
     void onDataFromClient();
-    void sendConfirmationToClient();
     void appendToLog(QString);
     void onNewRenderResultPacket(RenderResultPacket);
 
 signals:
     void renderStateUpdated(RenderServerState);
     void logStringAppended(QString);
-    void renderTimeUpdated();
 
 private:
     RenderResultPacket getRenderFrameResult(const RenderServerRenderRequest& renderRequest);
@@ -58,10 +59,10 @@ private:
     RenderServerState m_renderState;
 
     QTcpSocket* m_clientSocket;
-    QDataStream* m_clientSocketDataStream;
+    std::unique_ptr<QDataStream> m_clientSocketDataStream;
     int m_clientExpectingBytes;
 
     RenderServerRenderer m_renderServerRenderer;
-    QThread* m_renderServerRendererThread;
+    std::unique_ptr<QThread> m_renderServerRendererThread;
     unsigned long long m_iterationsRendered;
 };

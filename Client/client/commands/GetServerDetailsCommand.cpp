@@ -5,15 +5,11 @@
  */
 
 #include "GetServerDetailsCommand.h"
-#include "../RenderServerConnection.hxx"
+#include "../RenderServerConnection.h"
 
 #include <QTcpSocket>
 
 GetServerDetailsCommand::GetServerDetailsCommand()
-{
-}
-
-GetServerDetailsCommand::~GetServerDetailsCommand(void)
 {
 }
 

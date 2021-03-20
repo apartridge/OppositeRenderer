@@ -4,15 +4,15 @@
  * file that was distributed with this source code.
  */
 
-#include "ServerWindow.hxx"
-#include "../server/RenderServer.hxx"
-#include "AboutWindow.hxx"
+#include "ServerWindow.h"
+#include "../server/RenderServer.h"
+#include "AboutWindow.h"
 #include "ComputeDevice.h"
-#include "ComputeDeviceInformationWidget.hxx"
+#include "ComputeDeviceInformationWidget.h"
 #include "ComputeDeviceRepository.h"
-#include "ReadyForRenderingWidget.hxx"
-#include "SetServerSettingsWidget.hxx"
-#include "WaitingForConnectionWidget.hxx"
+#include "ReadyForRenderingWidget.h"
+#include "SetServerSettingsWidget.h"
+#include "WaitingForConnectionWidget.h"
 #include "ui/ui_ServerWindow.h"
 
 #include <QLabel>
@@ -24,7 +24,6 @@
 ServerWindow::ServerWindow(QWidget* parent, RenderServer& serverApplication)
     : QMainWindow(parent)
     , ui(new Ui::ServerWindow)
-    , m_clientSocket(NULL)
     , m_server(NULL)
     , m_computeDevice(NULL)
     , m_serverState(ServerState::SET_COMPUTE_DEVICE)
@@ -77,12 +76,6 @@ ServerWindow::~ServerWindow()
 {
     delete ui;
 
-    if (m_clientSocket)
-    {
-        delete m_clientSocket;
-        m_clientSocket = NULL;
-    }
-
     // m_computeDevice is handled by the ComputeDeviceRepository
     // m_server is a child of this and handled by Qt
 }
@@ -91,7 +84,7 @@ ServerWindow::~ServerWindow()
 
 void ServerWindow::resetProcess()
 {
-    if (m_clientSocket != NULL)
+    if (m_clientSocket)
     {
         if (m_clientSocket->state() == QAbstractSocket::ConnectedState)
         {
@@ -101,7 +94,7 @@ void ServerWindow::resetProcess()
                 m_clientSocket->waitForDisconnected();
             }
         }
-        m_clientSocket = NULL;
+        m_clientSocket.reset();
     }
 
     if (m_server != NULL && m_server->isListening())
@@ -204,13 +197,13 @@ void ServerWindow::onNewConnection()
 {
     if (m_serverState == ServerState::WAIT_FOR_CLIENT_CONNECTION)
     {
-        m_clientSocket = m_server->nextPendingConnection();
+        m_clientSocket = std::unique_ptr<QTcpSocket>(m_server->nextPendingConnection());
 
         QString computeDeviceName = QString("RSHELLO\n");
-        QDataStream stream(m_clientSocket);
+        QDataStream stream(m_clientSocket.get());
         stream << computeDeviceName;
 
-        connect(m_clientSocket, SIGNAL(disconnected()), this, SLOT(onClientConnectionDisconnected()));
+        connect(m_clientSocket.get(), SIGNAL(disconnected()), this, SLOT(onClientConnectionDisconnected()));
         setServerState(ServerState::READY_FOR_RENDERING);
     }
     else
@@ -225,7 +218,7 @@ void ServerWindow::onNewConnection()
 
 void ServerWindow::onClientConnectionDisconnected()
 {
-    m_clientSocket = NULL;
+    m_clientSocket.reset();
     setServerState(ServerState::WAIT_FOR_CLIENT_CONNECTION);
 }
 

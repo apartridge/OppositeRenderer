@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../client/RenderServerConnection.hxx"
+#include "../../client/RenderServerConnection.h"
 
 #include <QDialog>
 #include <QHostAddress>

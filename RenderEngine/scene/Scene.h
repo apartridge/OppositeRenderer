@@ -51,6 +51,7 @@ private:
     bool colorHasAnyComponent(const aiColor3D& color);
     void loadSceneMaterials();
     void loadLightSources();
+
     QVector<std::shared_ptr<Material>> m_materials;
     QVector<Light> m_lights;
     QByteArray m_sceneName;

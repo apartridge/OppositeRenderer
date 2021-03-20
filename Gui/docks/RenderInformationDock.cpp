@@ -4,10 +4,10 @@
  * file that was distributed with this source code.
  */
 
-#include "RenderInformationDock.hxx"
-#include "../Application.hxx"
-#include "../MainWindowBase.hxx"
-#include "../models/RenderStatisticsModel.hxx"
+#include "RenderInformationDock.h"
+#include "../Application.h"
+#include "../MainWindowBase.h"
+#include "../models/RenderStatisticsModel.h"
 #include "ui/ui_RenderInformationDock.h"
 
 #include <QTimer>

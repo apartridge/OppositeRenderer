@@ -1,6 +1,6 @@
-#include "RenderServersSummaryDock.hxx"
-#include "../../DistributedApplication.hxx"
-#include "../../client/RenderServerConnections.hxx"
+#include "RenderServersSummaryDock.h"
+#include "../../DistributedApplication.h"
+#include "../../client/RenderServerConnections.h"
 #include "ui/ui_RenderServersSummaryDock.h"
 
 RenderServersSummaryDock::RenderServersSummaryDock(QWidget* parent, DistributedApplication& application)

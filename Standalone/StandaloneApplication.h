@@ -8,7 +8,7 @@
 
 #include <memory>
 
-#include "Application.hxx"
+#include "Application.h"
 #include "StandaloneRenderManager.h"
 
 class QApplication;

@@ -4,7 +4,7 @@
  * file that was distributed with this source code.
  */
 
-#include "SetServerSettingsWidget.hxx"
+#include "SetServerSettingsWidget.h"
 #include "ui/ui_SetServerSettingsWidget.h"
 #include <QMessageBox>
 

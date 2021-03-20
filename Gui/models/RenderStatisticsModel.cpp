@@ -4,18 +4,14 @@
  * file that was distributed with this source code.
  */
 
-#include "RenderStatisticsModel.hxx"
+#include "RenderStatisticsModel.h"
 
-RenderStatisticsModel::RenderStatisticsModel(void)
+RenderStatisticsModel::RenderStatisticsModel()
     : m_currentPPMRadius(0.0f)
     , m_numIterations(0)
     , m_numPreviewedIterations(0)
     , m_numEmittedPhotons(0)
     , m_numEmittedPhotonsPerIteration(0)
-{
-}
-
-RenderStatisticsModel::~RenderStatisticsModel(void)
 {
 }
 

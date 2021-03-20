@@ -4,9 +4,9 @@
  * file that was distributed with this source code.
  */
 
-#include "ConnectedServersTableModel.hxx"
-#include "../client/RenderServerConnection.hxx"
-#include "../client/RenderServerConnections.hxx"
+#include "ConnectedServersTableModel.h"
+#include "../client/RenderServerConnection.h"
+#include "../client/RenderServerConnections.h"
 
 ConnectedServersTableModel::ConnectedServersTableModel(
     QObject* parent, const RenderServerConnections& serverConnections)

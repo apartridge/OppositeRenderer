@@ -4,7 +4,7 @@
  * file that was distributed with this source code.
  */
 
-#include "WaitingForConnectionWidget.hxx"
+#include "WaitingForConnectionWidget.h"
 #include "ui/ui_WaitingForConnectionWidget.h"
 
 WaitingForConnectionWidget::WaitingForConnectionWidget(QWidget* parent)

@@ -4,8 +4,8 @@
  * file that was distributed with this source code.
  */
 
-#include "SceneDock.hxx"
-#include "../scene/SceneManager.hxx"
+#include "SceneDock.h"
+#include "../scene/SceneManager.h"
 #include "ui/ui_SceneDock.h"
 
 #include <QMessageBox>

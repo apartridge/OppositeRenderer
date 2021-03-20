@@ -4,14 +4,10 @@
  * file that was distributed with this source code.
  */
 
-#include "PPMSettingsModel.hxx"
+#include "PPMSettingsModel.h"
 
 PPMSettingsModel::PPMSettingsModel(void)
     : m_PPMInitialRadius(0.0f)
-{
-}
-
-PPMSettingsModel::~PPMSettingsModel(void)
 {
 }
 

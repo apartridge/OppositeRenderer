@@ -4,9 +4,9 @@
  * file that was distributed with this source code.
  */
 
-#include "CameraDock.hxx"
-#include "../models/OutputSettingsModel.hxx"
-#include "../models/PPMSettingsModel.hxx"
+#include "CameraDock.h"
+#include "../models/OutputSettingsModel.h"
+#include "../models/PPMSettingsModel.h"
 #include "renderer/Camera.h"
 #include "ui/ui_CameraDock.h"
 

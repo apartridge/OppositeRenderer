@@ -14,8 +14,9 @@
 #include <QPair>
 #include <QTime>
 
+#include <memory>
+
 class OptixRenderer;
-class RenderWindow;
 class QThread;
 class ComputeDevice;
 class OutputSettingsModel;
@@ -31,7 +32,6 @@ class RenderWidget : public QOpenGLWidget, protected QOpenGLExtraFunctions
 
 public:
     RenderWidget(QWidget* parent, Camera& camera, const OutputSettingsModel& model);
-    ~RenderWidget();
     size_t getDisplayBufferSizeBytes();
 
 signals:
@@ -51,7 +51,7 @@ protected:
 
 private:
     void initializeOpenGLShaders();
-    float* m_displayBufferCpu;
+    std::unique_ptr<float[]> m_displayBufferCpu;
     Camera& m_camera;
     const OutputSettingsModel& m_outputSettingsModel;
     bool m_hasLoadedGLShaders;

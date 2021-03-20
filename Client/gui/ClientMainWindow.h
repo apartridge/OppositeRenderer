@@ -5,8 +5,8 @@
  */
 
 #pragma once
-#include "../client/RenderServerConnection.hxx"
-#include "MainWindowBase.hxx"
+#include "../client/RenderServerConnection.h"
+#include "MainWindowBase.h"
 
 #include <QObject>
 

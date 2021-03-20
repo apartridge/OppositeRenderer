@@ -10,7 +10,9 @@
 #include "../server/RenderServerState.h"
 #include "../server/ServerState.h"
 #include "ComputeDeviceRepository.h"
+
 #include <QMainWindow>
+#include <memory>
 
 class QTcpSocket;
 class QTcpServer;
@@ -66,7 +68,7 @@ private:
     // SERVER
     ServerState m_serverState;
     RenderServerState m_renderState;
-    QTcpSocket* m_clientSocket;
+    std::unique_ptr<QTcpSocket> m_clientSocket;
     QTcpServer* m_server;
     void setServerState(ServerState state);
     ushort m_serverPort;

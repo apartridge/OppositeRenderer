@@ -9,6 +9,8 @@
 #include <QObject>
 #include <QVector>
 
+#include <memory>
+
 /*
 This class will receive signals from RenderServerConnections each time the render server has produced a render (given as
 a RenderResultPacket. This class will do the necessary average/merging of the different subcomputations into the final
@@ -24,7 +26,6 @@ class RenderResultPacketReceiver : public QObject
 
 public:
     RenderResultPacketReceiver(const DistributedApplication& renderManager);
-    ~RenderResultPacketReceiver(void);
     unsigned long long getIterationNumber() const;
     bool backBufferIsNotFilled();
     unsigned int getBackBufferNumIterations();
@@ -45,14 +46,7 @@ private:
     unsigned long long m_lastSequenceNumber;
     unsigned long long m_PPMNextExpectedIteration;
     unsigned int m_peakBackBufferSizeBytes;
-    float* m_frontBuffer;
     void resetInternals();
-    // float* m_backBuffer;
-    // float* m_indirectPowerPerAreaBackBuffer;
-    // QVector<unsigned long long> m_backBufferIterationNumbers;
-    QMutex m_backBufferMutex;
-    QVector<RenderResultPacket> m_backBuffer;
-
     void mergeRenderResultPathTracing(const RenderResultPacket* result);
     void mergeRenderResultPacketPhotonMapping(const RenderResultPacket* result);
     void mergeBufferRunningAverage(
@@ -62,4 +56,8 @@ private:
         unsigned int outputBufferNumIterations,
         unsigned int numPixels);
     bool iterationNumbersAreSequential(const QVector<unsigned long long> iterationsInPacketSorted);
+
+    std::unique_ptr<float[]> m_frontBuffer;
+    QMutex m_backBufferMutex;
+    QVector<RenderResultPacket> m_backBuffer;
 };

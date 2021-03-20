@@ -89,7 +89,6 @@ OptixRenderer::OptixRenderer()
 
 OptixRenderer::~OptixRenderer()
 {
-    printf("Context Destroy\n");
     m_context->destroy();
     cudaDeviceReset();
 }
@@ -614,11 +613,6 @@ void OptixRenderer::renderNextIteration(
         QString error = QString("An OptiX error occurred: %1").arg(e.getErrorString().c_str());
         throw std::runtime_error(error.toStdString());
     }
-}
-
-static inline unsigned int max(unsigned int a, unsigned int b)
-{
-    return a > b ? a : b;
 }
 
 void OptixRenderer::resizeBuffers(unsigned int width, unsigned int height)

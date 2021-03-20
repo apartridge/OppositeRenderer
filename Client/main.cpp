@@ -4,10 +4,10 @@
  * file that was distributed with this source code.
  */
 
-#include "DistributedApplication.hxx"
-#include "MainWindowBase.hxx"
+#include "DistributedApplication.h"
+#include "MainWindowBase.h"
 #include "client/RenderServerState.h"
-#include "gui/ClientMainWindow.hxx"
+#include "gui/ClientMainWindow.h"
 
 #include <QApplication>
 #include <QThread>

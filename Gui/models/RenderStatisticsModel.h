@@ -14,8 +14,7 @@ class RenderStatisticsModel : public QObject
     Q_OBJECT;
 
 public:
-    GUI_EXPORT_API RenderStatisticsModel(void);
-    GUI_EXPORT_API ~RenderStatisticsModel(void);
+    GUI_EXPORT_API RenderStatisticsModel();
     GUI_EXPORT_API unsigned long long getNumIterations() const;
     GUI_EXPORT_API void setNumIterations(unsigned long long numIterations);
 

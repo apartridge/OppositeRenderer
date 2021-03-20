@@ -5,7 +5,7 @@
  */
 
 #include "StandaloneRenderManager.h"
-#include "Application.hxx"
+#include "Application.h"
 #include "clientserver/RenderServerRenderRequest.h"
 #include "renderer/Camera.h"
 #include "renderer/OptixRenderer.h"

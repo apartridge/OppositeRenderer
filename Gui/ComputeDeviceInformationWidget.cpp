@@ -4,9 +4,9 @@
  * file that was distributed with this source code.
  */
 
-#include "ComputeDeviceInformationWidget.hxx"
+#include "ComputeDeviceInformationWidget.h"
 #include "ComputeDevice.h"
-#include "ComputeDeviceInformationWidgetTabPage.hxx"
+#include "ComputeDeviceInformationWidgetTabPage.h"
 #include "ComputeDeviceRepository.h"
 
 ComputeDeviceInformationWidget::ComputeDeviceInformationWidget(

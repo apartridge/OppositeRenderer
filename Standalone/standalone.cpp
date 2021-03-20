@@ -5,7 +5,7 @@
  */
 
 #include "ComputeDeviceRepository.h"
-#include "MainWindowBase.hxx"
+#include "MainWindowBase.h"
 #include "StandaloneApplication.h"
 
 #include <QApplication>

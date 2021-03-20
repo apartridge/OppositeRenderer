@@ -4,7 +4,7 @@
  * file that was distributed with this source code.
  */
 
-#include "SceneManager.hxx"
+#include "SceneManager.h"
 
 #include <QMetaObject>
 #include <QString>

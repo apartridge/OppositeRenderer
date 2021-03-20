@@ -4,7 +4,7 @@
  * file that was distributed with this source code.
  */
 
-#include "ComputeDeviceInformationWidgetTabPage.hxx"
+#include "ComputeDeviceInformationWidgetTabPage.h"
 #include "ComputeDevice.h"
 #include <QDebug>
 

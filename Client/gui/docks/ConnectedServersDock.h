@@ -1,5 +1,5 @@
 #pragma once
-#include "../../gui_models/ConnectedServersTableModel.hxx"
+#include "../../gui_models/ConnectedServersTableModel.h"
 #include <QDockWidget>
 
 namespace Ui

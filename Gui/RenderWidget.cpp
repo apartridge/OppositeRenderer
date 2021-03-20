@@ -10,15 +10,14 @@ Handles outputting the image to the screen including gamma correction using a Op
 Takes mouse events and delegate them to the Mouse class
 */
 
-#include "RenderWidget.hxx"
-#include "models/OutputSettingsModel.hxx"
+#include "RenderWidget.h"
+#include "models/OutputSettingsModel.h"
 #include "renderer/Camera.h"
 
 #include <QLabel>
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QThread>
-#include <QTimer>
 
 RenderWidget::RenderWidget(QWidget* parent, Camera& camera, const OutputSettingsModel& outputSettings)
     : QOpenGLWidget(parent)
@@ -31,18 +30,13 @@ RenderWidget::RenderWidget(QWidget* parent, Camera& camera, const OutputSettings
 {
     resize(outputSettings.getWidth(), outputSettings.getHeight());
     setMouseTracking(false);
-    m_displayBufferCpu = new float[2000 * 2000 * 3];
+
+    m_displayBufferCpu = std::make_unique<float[]>(2000 * 2000 * 3);
 
     m_iterationNumberLabel = new QLabel(this);
     m_iterationNumberLabel->setStyleSheet("background:rgb(51,51,51); font-size:20pt; color:rgb(170,170,170);");
     m_iterationNumberLabel->setAlignment(Qt::AlignRight);
     m_iterationNumberLabel->hide();
-}
-
-RenderWidget::~RenderWidget()
-{
-    delete m_displayBufferCpu;
-    m_displayBufferCpu = NULL;
 }
 
 void RenderWidget::initializeGL()
@@ -66,7 +60,7 @@ void RenderWidget::initializeGL()
 void RenderWidget::onNewFrameReadyForDisplay(const float* cpuBuffer, unsigned long long iterationNumber)
 {
     assert(cpuBuffer);
-    memcpy(m_displayBufferCpu, cpuBuffer, getDisplayBufferSizeBytes());
+    memcpy(m_displayBufferCpu.get(), cpuBuffer, getDisplayBufferSizeBytes());
     m_currentIterationNumber = iterationNumber;
     update();
 }
@@ -83,8 +77,6 @@ void RenderWidget::paintGL()
         return;
     }
     glClear(GL_COLOR_BUFFER_BIT);
-
-    // Draw the resulting image
 
     int offsetX = ((int)size().width() - (int)m_outputSettingsModel.getWidth()) / 2;
     int offsetY = ((int)size().height() - (int)m_outputSettingsModel.getHeight()) / 2;
@@ -113,7 +105,7 @@ void RenderWidget::paintGL()
         0,
         GL_RGB,
         GL_FLOAT,
-        (GLvoid*)m_displayBufferCpu);
+        (GLvoid*)m_displayBufferCpu.get());
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -176,8 +168,6 @@ void RenderWidget::initializeOpenGLShaders()
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
     glShaderSource(fragmentShader, 1, &shaderSource, NULL);
-
-    // Compile The Shader
 
     glCompileShader(fragmentShader);
 

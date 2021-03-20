@@ -9,8 +9,8 @@
  * and will perform rendering per request
  */
 
-#include "gui/ServerWindow.hxx"
-#include "server/RenderServer.hxx"
+#include "gui/ServerWindow.h"
+#include "server/RenderServer.h"
 
 #include <QApplication>
 #include <QObject>
