@@ -5,12 +5,10 @@
  */
 
 #pragma once
-namespace RunningStatus
-{
-enum E
+
+enum class RunningStatus
 {
     STOPPED,
     RUNNING,
     PAUSE
 };
-}

@@ -103,7 +103,7 @@ void OptixRenderer::initialize(const ComputeDevice& device)
 
     initDevice(device);
 
-    m_context->setRayTypeCount(RayType::NUM_RAY_TYPES);
+    m_context->setRayTypeCount(static_cast<int>(RayType::NUM_RAY_TYPES));
     m_context->setEntryPointCount(OptixEntryPoint::NUM_PASSES);
     m_context->setStackSize(ENABLE_PARTICIPATING_MEDIA ? 3000 : 1596);
 
@@ -149,8 +149,8 @@ void OptixRenderer::initialize(const ComputeDevice& device)
 
         m_context->setRayGenerationProgram(OptixEntryPoint::PPM_RAYTRACE_PASS, generatorProgram);
         m_context->setExceptionProgram(OptixEntryPoint::PPM_RAYTRACE_PASS, exceptionProgram);
-        m_context->setMissProgram(RayType::RADIANCE, missProgram);
-        m_context->setMissProgram(RayType::RADIANCE_IN_PARTICIPATING_MEDIUM, missProgram);
+        m_context->setMissProgram(static_cast<int>(RayType::RADIANCE), missProgram);
+        m_context->setMissProgram(static_cast<int>(RayType::RADIANCE_IN_PARTICIPATING_MEDIUM), missProgram);
     }
 
     // Path Tracing ray generation
@@ -464,7 +464,7 @@ void OptixRenderer::renderNextIteration(
         }
 
         const Camera& camera = details.getCamera();
-        const RenderMethod::E renderMethod = details.getRenderMethod();
+        const RenderMethod renderMethod = details.getRenderMethod();
 
         double traceStartTime = currentTime();
 

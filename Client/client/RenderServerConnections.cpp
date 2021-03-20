@@ -42,7 +42,7 @@ void RenderServerConnections::push_back(RenderServerConnection* connection)
 
     connect(
         m_serverConnections.back(),
-        SIGNAL(newRenderServerState(RenderServerState::E)),
+        SIGNAL(newRenderServerState(RenderServerState)),
         this,
         SIGNAL(serversStateUpdated()),
         Qt::QueuedConnection);

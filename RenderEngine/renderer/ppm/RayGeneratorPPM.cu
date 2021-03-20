@@ -48,7 +48,7 @@ RT_PROGRAM void generateRay()
 
     modifyRayForDepthOfField(camera, rayOrigin, rayDirection, radiancePrd.randomState);
 
-    Ray ray(rayOrigin, rayDirection, RayType::RADIANCE, 0.001f);
+    Ray ray(rayOrigin, rayDirection, static_cast<int>(RayType::RADIANCE), 0.001f);
     rtTrace(sceneRootObject, ray, radiancePrd);
 
     // Store as a PPM Hitpoint

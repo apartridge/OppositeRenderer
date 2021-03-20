@@ -55,7 +55,7 @@ optix::float3 __inline __device__ getLightContribution(
     {
         ShadowPRD shadowPrd;
         shadowPrd.attenuation = 1.0f;
-        optix::Ray shadow_ray(rec_position, towardsLight, RayType::SHADOW, 0.0001, lightDistance - 0.0001);
+        optix::Ray shadow_ray(rec_position, towardsLight, static_cast<int>(RayType::SHADOW), 0.0001, lightDistance - 0.0001);
         rtTrace(rootObject, shadow_ray, shadowPrd);
         lightFactor *= shadowPrd.attenuation;
 

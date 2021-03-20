@@ -47,15 +47,15 @@ public slots:
     void onNewRenderResultPacket(RenderResultPacket);
 
 signals:
-    void renderStateUpdated(RenderServerState::E);
+    void renderStateUpdated(RenderServerState);
     void logStringAppended(QString);
     void renderTimeUpdated();
 
 private:
     RenderResultPacket getRenderFrameResult(const RenderServerRenderRequest& renderRequest);
-    void setRenderState(RenderServerState::E renderState);
+    void setRenderState(RenderServerState renderState);
     RenderServerRenderRequest getRenderServerRenderRequestFromClient();
-    RenderServerState::E m_renderState;
+    RenderServerState m_renderState;
 
     QTcpSocket* m_clientSocket;
     QDataStream* m_clientSocketDataStream;

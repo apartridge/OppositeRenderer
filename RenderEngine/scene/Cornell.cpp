@@ -6,20 +6,15 @@
 
 #include "Cornell.h"
 #include "../geometry_instance/AABInstance.h"
-#include "../geometry_instance/SphereInstance.h"
-#include "../geometry_instance/Transform.h"
 #include "../material/Diffuse.h"
 #include "../material/DiffuseEmitter.h"
 #include "../material/Glass.h"
 #include "../material/Mirror.h"
-#include "../material/ParticipatingMedium.h"
-#include "../math/Sphere.h"
-#include "../renderer/RayType.h"
 #include "../util/ptxhelper.h"
 
 #include <optixu/optixpp_namespace.h>
 
-Cornell::Cornell(void)
+Cornell::Cornell()
 {
     optix::float3 anchor = optix::make_float3(343.0f, 548.7999f, 227.0f);
     optix::float3 v1 = optix::make_float3(0.0f, 0.0f, 105.0f);

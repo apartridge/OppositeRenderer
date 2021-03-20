@@ -7,8 +7,6 @@
 #include "DistributedApplication.hxx"
 #include "Application.hxx"
 #include "ComputeDevice.h"
-#include "RunningStatus.h"
-#include "client/RenderResultPacketReceiver.hxx"
 #include "client/RenderServerConnection.hxx"
 #include "client/RenderServerConnections.hxx"
 #include "clientserver/RenderServerRenderRequest.h"
@@ -59,10 +57,6 @@ DistributedApplication::DistributedApplication(QApplication& qApplication)
         SLOT(onPacketReceived(unsigned long long, unsigned int)));
 
     setRendererStatus(RendererStatus::RENDERING);
-}
-
-DistributedApplication::~DistributedApplication(void)
-{
 }
 
 void DistributedApplication::onAboutToQuit()

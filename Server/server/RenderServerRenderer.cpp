@@ -19,7 +19,6 @@ RenderServerRenderer::RenderServerRenderer(const RenderServer& renderServer)
     : m_renderServer(renderServer)
     , m_renderer(OptixRenderer())
     , m_computeDevice(NULL)
-    , m_scene(NULL)
     , m_quit(false)
     , m_currentSequenceNumber(0)
 {
@@ -27,11 +26,7 @@ RenderServerRenderer::RenderServerRenderer(const RenderServer& renderServer)
     qRegisterMetaType<RenderServerRenderRequest>("RenderServerRenderRequest");
 }
 
-RenderServerRenderer::~RenderServerRenderer(void)
-{
-    delete m_scene;
-    m_scene = NULL;
-}
+RenderServerRenderer::~RenderServerRenderer() = default;
 
 void RenderServerRenderer::onAboutToQuit()
 {
@@ -211,9 +206,6 @@ void RenderServerRenderer::loadNewScene(const QByteArray& sceneNameB)
     try
     {
         emit newLogString(QString("INITIALIZING scene %1. Please wait...").arg(QString(sceneNameB)));
-
-        delete m_scene;
-        m_scene = NULL;
 
         SceneFactory factory;
         const char* sceneName = sceneNameB.constData();

@@ -24,25 +24,11 @@
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 
-Scene::Scene(void)
-    : m_scene(NULL)
-    , m_importer(new Assimp::Importer())
+Scene::Scene()
+    : m_scene(nullptr)
+    , m_importer(std::make_unique<Assimp::Importer>())
     , m_numTriangles(0)
-    , m_sceneFile(NULL)
 {
-}
-
-Scene::~Scene(void)
-{
-    printf("Delete scene\n");
-    // deleting m_importer also deletes the scene
-    delete m_importer;
-    for (int i = 0; i < m_materials.size(); i++)
-    {
-        delete m_materials.at(i);
-    }
-    m_materials.clear();
-    delete m_sceneFile;
 }
 
 static optix::float3 toFloat3(aiVector3D vector)
@@ -69,7 +55,7 @@ static void maxCoordinates(Vector3& max, const aiVector3D& vector)
     max.z = optix::fmaxf(max.z, vector.z);
 }
 
-IScene* Scene::createFromFile(const char* filename)
+std::unique_ptr<IScene> Scene::createFromFile(const char* filename)
 {
     if (!QFile::exists(filename))
     {
@@ -77,8 +63,8 @@ IScene* Scene::createFromFile(const char* filename)
         throw std::runtime_error(error.toStdString());
     }
 
-    QScopedPointer<Scene> scenePtr(new Scene);
-    scenePtr->m_sceneFile = new QFileInfo(filename);
+    auto scenePtr = std::make_unique<Scene>();
+    scenePtr->m_sceneFile = QFileInfo(filename);
 
     // Remove point and lines from the model
     scenePtr->m_importer->SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE, aiPrimitiveType_POINT | aiPrimitiveType_LINE);
@@ -118,8 +104,8 @@ IScene* Scene::createFromFile(const char* filename)
 
         // Check if this is a diffuse emitter
         unsigned int materialIndex = mesh->mMaterialIndex;
-        Material* geometryMaterial = scenePtr->m_materials.at(materialIndex);
-        if (dynamic_cast<DiffuseEmitter*>(geometryMaterial) != NULL)
+        Material* geometryMaterial = scenePtr->m_materials.at(materialIndex).get();
+        if (dynamic_cast<DiffuseEmitter*>(geometryMaterial) != nullptr)
         {
             DiffuseEmitter* emitterMaterial = (DiffuseEmitter*)(geometryMaterial);
             scenePtr->loadMeshLightSource(mesh, emitterMaterial);
@@ -152,8 +138,8 @@ IScene* Scene::createFromFile(const char* filename)
         scenePtr->loadDefaultSceneCamera();
     }
 
-    scenePtr->m_sceneName = QByteArray(scenePtr->m_sceneFile->absoluteFilePath().toLatin1().constData());
-    return scenePtr.take();
+    scenePtr->m_sceneName = QByteArray(scenePtr->m_sceneFile.absoluteFilePath().toLatin1().constData());
+    return std::move(scenePtr);
 }
 
 void Scene::loadSceneMaterials()
@@ -177,8 +163,8 @@ void Scene::loadSceneMaterials()
                 diffuseColor.g = 1;
                 diffuseColor.b = 1;
             }
-            Material* material = new DiffuseEmitter(toFloat3(emissivePower), toFloat3(diffuseColor));
-            m_materials.push_back(material);
+            auto material = std::make_shared<DiffuseEmitter>(toFloat3(emissivePower), toFloat3(diffuseColor));
+            m_materials.push_back(std::move(material));
             continue;
         }
 
@@ -187,24 +173,25 @@ void Scene::loadSceneMaterials()
         if (material->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), textureName) == AI_SUCCESS)
         {
             QString textureAbsoluteFilePath
-                = QString("%1/%2").arg(m_sceneFile->absoluteDir().absolutePath(), textureName.C_Str());
+                = QString("%1/%2").arg(m_sceneFile.absoluteDir().absolutePath(), textureName.C_Str());
 
             // Use the displacement map as a normal map (in the crytek sponza test scene)
             aiString normalsName;
-            Material* matl;
+            std::shared_ptr<Material> matl;
+
             if (material->Get(AI_MATKEY_TEXTURE(aiTextureType_NORMALS, 0), normalsName) == AI_SUCCESS)
             {
                 printf("Found normal map %s!\n", normalsName.C_Str());
                 QString normalsAbsoluteFilePath
-                    = QString("%1/%2").arg(m_sceneFile->absoluteDir().absolutePath(), normalsName.C_Str());
-                matl = new Texture(textureAbsoluteFilePath, normalsAbsoluteFilePath);
+                    = QString("%1/%2").arg(m_sceneFile.absoluteDir().absolutePath(), normalsName.C_Str());
+                matl = std::make_shared<Texture>(textureAbsoluteFilePath, normalsAbsoluteFilePath);
             }
             else
             {
-                matl = new Texture(textureAbsoluteFilePath);
+                matl = std::make_shared<Texture>(textureAbsoluteFilePath);
             }
 
-            m_materials.push_back(matl);
+            m_materials.push_back(std::move(matl));
             continue;
         }
 
@@ -214,8 +201,8 @@ void Scene::loadSceneMaterials()
         if (material->Get(AI_MATKEY_REFRACTI, indexOfRefraction) == AI_SUCCESS && indexOfRefraction > 1.0f)
         {
             // printf("\tGlass: IOR: %g\n", indexOfRefraction);
-            Material* material = new Glass(indexOfRefraction, optix::make_float3(1, 1, 1));
-            m_materials.push_back(material);
+            auto material = std::make_shared<Glass>(indexOfRefraction, optix::make_float3(1, 1, 1));
+            m_materials.push_back(std::move(material));
             continue;
         }
 
@@ -225,8 +212,8 @@ void Scene::loadSceneMaterials()
             && colorHasAnyComponent(reflectiveColor))
         {
             // printf("\tReflective color: %.2f %.2f %.2f\n", reflectiveColor.r, reflectiveColor.g, reflectiveColor.b);
-            Material* material = new Mirror(toFloat3(reflectiveColor));
-            m_materials.push_back(material);
+            auto material = std::make_shared<Mirror>(toFloat3(reflectiveColor));
+            m_materials.push_back(std::move(material));
             continue;
         }
 
@@ -236,15 +223,15 @@ void Scene::loadSceneMaterials()
         if (material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor) == AI_SUCCESS)
         {
             // printf("\tDiffuse %.2f %.2f %.2f\n", diffuseColor.r, diffuseColor.g, diffuseColor.b);
-            Material* material = new Diffuse(toFloat3(diffuseColor));
-            m_materials.push_back(material);
+            auto material = std::make_shared<Diffuse>(toFloat3(diffuseColor));
+            m_materials.push_back(std::move(material));
             continue;
         }
 
         // Fall back to a red diffuse material
 
         printf("\tError: Found no material instance to create for material index: %d\n", i);
-        m_materials.push_back(new Diffuse(optix::make_float3(1, 0, 0)));
+        m_materials.push_back(std::make_unique<Diffuse>(optix::make_float3(1, 0, 0)));
     }
 }
 
@@ -448,14 +435,12 @@ optix::Geometry Scene::createGeometryFromMesh(aiMesh* mesh, optix::Context& cont
     }
 
     indexBuffer->unmap();
-
     return geometry;
 }
 
 void Scene::loadDefaultSceneCamera()
 {
-    aiNode* cameraNode = m_scene->mRootNode->FindNode(m_scene->mCameras[0]->mName);
-    aiCamera* camera = m_scene->mCameras[0];
+    auto camera = m_scene->mCameras[0];
 
     aiVector3D eye = camera->mPosition;
     aiVector3D lookAt = eye + camera->mLookAt;
@@ -472,7 +457,7 @@ void Scene::loadDefaultSceneCamera()
 }
 
 optix::Group Scene::getGroupFromNode(
-    optix::Context& context, aiNode* node, QVector<optix::Geometry>& geometries, QVector<Material*>& materials)
+    optix::Context& context, aiNode* node, QVector<optix::Geometry>& geometries, QVector<std::shared_ptr<Material>>& materials)
 {
     if (node->mNumMeshes > 0)
     {
@@ -485,7 +470,7 @@ optix::Group Scene::getGroupFromNode(
             unsigned int meshIndex = node->mMeshes[i];
             aiMesh* mesh = m_scene->mMeshes[meshIndex];
             unsigned int materialIndex = mesh->mMaterialIndex;
-            Material* geometryMaterial = materials.at(materialIndex);
+            Material* geometryMaterial = materials.at(materialIndex).get();
             optix::GeometryInstance instance = getGeometryInstance(context, geometries[meshIndex], geometryMaterial);
             geometryGroup->setChild(i, instance);
 

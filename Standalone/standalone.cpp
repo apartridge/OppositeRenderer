@@ -7,11 +7,11 @@
 #include "ComputeDeviceRepository.h"
 #include "MainWindowBase.hxx"
 #include "StandaloneApplication.h"
+
 #include <QApplication>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QTextStream>
-#include <QThread>
 #include <exception>
 #include <iostream>
 

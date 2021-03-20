@@ -9,29 +9,25 @@
 #include "../gui_export_api.h"
 #include "SceneFactory.h"
 #include "scene/IScene.h"
+
 #include <QObject>
 
-namespace SceneManagerStatus
-{
-enum E
+enum class SceneManagerStatus
 {
     NO_SCENE,
     IMPORTING,
     HAS_SCENE
 };
 
-}
-
 class SceneManager : public QObject
 {
     Q_OBJECT;
 
 public:
-    SceneManager(void);
-    ~SceneManager(void);
+    SceneManager();
     GUI_EXPORT_API_QT IScene* getScene() const;
     GUI_EXPORT_API_QT void setScene(const char* sceneName);
-    SceneManagerStatus::E getStatus() const;
+    SceneManagerStatus getStatus() const;
 signals:
     void sceneLoadingNew();
     void sceneUpdated();
@@ -41,6 +37,6 @@ private slots:
 
 private:
     SceneFactory m_factory;
-    SceneManagerStatus::E m_status;
-    IScene* m_scene;
+    SceneManagerStatus m_status;
+    std::unique_ptr<IScene> m_scene;
 };

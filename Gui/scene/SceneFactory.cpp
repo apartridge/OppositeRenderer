@@ -8,19 +8,11 @@
 #include "scene/Cornell.h"
 #include "scene/IScene.h"
 
-SceneFactory::SceneFactory(void)
-{
-}
-
-SceneFactory::~SceneFactory(void)
-{
-}
-
-IScene* SceneFactory::getSceneByName(const char* name)
+std::unique_ptr<IScene> SceneFactory::getSceneByName(const char* name)
 {
     if (strcmp(name, "Cornell") == 0)
     {
-        return new Cornell();
+        return std::make_unique<Cornell>();
     }
     else
     {

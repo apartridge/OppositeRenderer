@@ -13,6 +13,9 @@
 
 #include <QByteArray>
 #include <QVector>
+#include <QFileInfo>
+
+#include <memory>
 
 struct aiScene;
 struct aiMesh;
@@ -20,7 +23,6 @@ class Material;
 struct aiNode;
 class DiffuseEmitter;
 struct aiColor3D;
-class QFileInfo;
 
 namespace Assimp
 {
@@ -30,9 +32,8 @@ class Importer;
 class Scene : public IScene
 {
 public:
-    Scene(void);
-    RENDER_ENGINE_EXPORT_API virtual ~Scene(void);
-    RENDER_ENGINE_EXPORT_API static IScene* createFromFile(const char* file);
+    Scene();
+    RENDER_ENGINE_EXPORT_API static std::unique_ptr<IScene> createFromFile(const char* file);
     virtual optix::Group getSceneRootGroup(optix::Context& context);
     void loadDefaultSceneCamera();
     virtual const QVector<Light>& getSceneLights() const;
@@ -45,16 +46,16 @@ private:
     optix::Geometry createGeometryFromMesh(aiMesh* mesh, optix::Context& context);
     void loadMeshLightSource(aiMesh* mesh, DiffuseEmitter* diffuseEmitter);
     optix::Group getGroupFromNode(
-        optix::Context& context, aiNode* node, QVector<optix::Geometry>& geometries, QVector<Material*>& materials);
+        optix::Context& context, aiNode* node, QVector<optix::Geometry>& geometries, QVector<std::shared_ptr<Material>>& materials);
     optix::GeometryInstance getGeometryInstance(optix::Context& context, optix::Geometry& geometry, Material* material);
     bool colorHasAnyComponent(const aiColor3D& color);
     void loadSceneMaterials();
     void loadLightSources();
-    QVector<Material*> m_materials;
+    QVector<std::shared_ptr<Material>> m_materials;
     QVector<Light> m_lights;
     QByteArray m_sceneName;
-    QFileInfo* m_sceneFile;
-    Assimp::Importer* m_importer;
+    QFileInfo m_sceneFile;
+    std::unique_ptr<Assimp::Importer> m_importer;
     const aiScene* m_scene;
     optix::Program m_intersectionProgram;
     optix::Program m_boundingBoxProgram;

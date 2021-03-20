@@ -46,7 +46,7 @@ ServerCommandResult GetServerDetailsCommand::onResponseReady(RenderServerConnect
     return ServerCommandResult(true, RenderServerState::RENDERING);
 }
 
-RenderServerState::E GetServerDetailsCommand::getInitialRenderServerState() const
+RenderServerState GetServerDetailsCommand::getInitialRenderServerState() const
 {
     return RenderServerState::WAITING_FOR_DEVICE_INFORMATION;
 }

@@ -7,10 +7,14 @@
 #include "RunningStatus.h"
 #include "renderer/Camera.h"
 #include "renderer/OptixRenderer.h"
+
+#include <optixu/optixpp_namespace.h>
+
 #include <QMutex>
 #include <QObject>
 #include <QTime>
-#include <optixu/optixpp_namespace.h>
+
+#include <memory>
 
 class IScene;
 class Application;
@@ -23,9 +27,7 @@ class StandaloneRenderManager : public QObject
 
 public:
     StandaloneRenderManager(QApplication& qApplication, Application& application, const ComputeDevice& device);
-    virtual ~StandaloneRenderManager();
     void renderNextIteration();
-    void wait();
 
 public slots:
     void start();
@@ -51,8 +53,7 @@ private:
 
     OptixRenderer m_renderer;
     Camera m_camera;
-    QTime renderTime;
-    float* m_outputBuffer;
+    std::unique_ptr<float[]> m_outputBuffer;
     IScene* m_currentScene;
     const ComputeDevice& m_device;
     double m_PPMRadius;

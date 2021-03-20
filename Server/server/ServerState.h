@@ -5,14 +5,12 @@
  */
 
 #pragma once
-namespace ServerState
-{
-enum E
+enum class ServerState
 {
     SET_COMPUTE_DEVICE,
     SET_SERVER_SETTINGS,
     WAIT_FOR_CLIENT_CONNECTION,
     READY_FOR_RENDERING
 };
-}
-const char* serverStateEnumToString(ServerState::E state);
+
+const char* serverStateEnumToString(ServerState state);

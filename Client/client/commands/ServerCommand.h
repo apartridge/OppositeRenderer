@@ -20,5 +20,5 @@ public:
     */
     virtual void executeCommand(QTcpSocket& m_socket) = 0;
     virtual ServerCommandResult onResponseReady(RenderServerConnection& connection, QTcpSocket& socket) = 0;
-    virtual RenderServerState::E getInitialRenderServerState() const = 0;
+    virtual RenderServerState getInitialRenderServerState() const = 0;
 };

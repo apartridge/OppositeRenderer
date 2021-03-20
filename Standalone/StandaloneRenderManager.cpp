@@ -4,13 +4,13 @@
  * file that was distributed with this source code.
  */
 
-#include "StandaloneRenderManager.hxx"
+#include "StandaloneRenderManager.h"
 #include "Application.hxx"
 #include "clientserver/RenderServerRenderRequest.h"
 #include "renderer/Camera.h"
 #include "renderer/OptixRenderer.h"
-#include "scene/Cornell.h"
 #include "scene/Scene.h"
+
 #include <QApplication>
 #include <QCoreApplication>
 #include <QThread>
@@ -19,31 +19,31 @@
 StandaloneRenderManager::StandaloneRenderManager(
     QApplication& qApplication, Application& application, const ComputeDevice& device)
     : m_device(device)
-    , m_renderer(OptixRenderer())
     , m_nextIterationNumber(0)
-    , m_outputBuffer(NULL)
-    , m_currentScene(NULL)
+    , m_currentScene(nullptr)
     , m_compileScene(false)
     , m_application(application)
     , m_noEmittedSignals(true)
 {
-    connect(&application, SIGNAL(sequenceNumberIncremented()), this, SLOT(onSequenceNumberIncremented()));
-    connect(&application, SIGNAL(runningStatusChanged()), this, SLOT(onRunningStatusChanged()));
-    connect(&application.getSceneManager(), SIGNAL(sceneLoadingNew()), this, SLOT(onSceneLoadingNew()));
-    connect(&application.getSceneManager(), SIGNAL(sceneUpdated()), this, SLOT(onSceneUpdated()));
+    connect(&application,
+            &Application::sequenceNumberIncremented,
+            this,
+            &StandaloneRenderManager::onSequenceNumberIncremented);
+
+    connect(&application, &Application::runningStatusChanged, this, &StandaloneRenderManager::onRunningStatusChanged);
+
+    connect(&application.getSceneManager(),
+            &SceneManager::sceneLoadingNew,
+            this,
+            &StandaloneRenderManager::onSceneLoadingNew);
+
+    connect(&application.getSceneManager(), &SceneManager::sceneUpdated,
+            this,
+            &StandaloneRenderManager::onSceneUpdated);
 
     onSceneUpdated();
 
-    connect(this, SIGNAL(continueRayTracing()), this, SLOT(onContinueRayTracing()), Qt::QueuedConnection);
-}
-
-StandaloneRenderManager::~StandaloneRenderManager()
-{
-    if (m_outputBuffer != NULL)
-    {
-        delete[] m_outputBuffer;
-        m_outputBuffer = NULL;
-    }
+    connect(this, &StandaloneRenderManager::continueRayTracing, this, &StandaloneRenderManager::onContinueRayTracing, Qt::QueuedConnection);
 }
 
 void StandaloneRenderManager::start()
@@ -74,7 +74,7 @@ void StandaloneRenderManager::renderNextIteration()
                 m_application.setRendererStatus(RendererStatus::RENDERING);
             }
 
-            // We only diplay one every X frames on screen (to make fair comparison with distributed renderer)
+            // We only display one every X frames on screen (to make fair comparison with distributed renderer)
             bool shouldOutputIteration = m_nextIterationNumber % 5 == 0;
 
             const double PPMAlpha = 2.0 / 3.0;
@@ -107,12 +107,12 @@ void StandaloneRenderManager::renderNextIteration()
 
             if (shouldOutputIteration)
             {
-                if (m_outputBuffer == NULL)
+                if (!m_outputBuffer)
                 {
-                    m_outputBuffer = new float[2000 * 2000 * 3];
+                    m_outputBuffer = std::make_unique<float[]>(2000 * 2000 * 3);
                 }
-                m_renderer.getOutputBuffer(m_outputBuffer);
-                emit newFrameReadyForDisplay(m_outputBuffer, m_nextIterationNumber);
+                m_renderer.getOutputBuffer(m_outputBuffer.get());
+                emit newFrameReadyForDisplay(m_outputBuffer.get(), m_nextIterationNumber);
             }
 
             fillRenderStatistics();
@@ -126,12 +126,6 @@ void StandaloneRenderManager::renderNextIteration()
         emit renderManagerError(error);
     }
 }
-
-/*
-unsigned long long StandaloneRenderManager::getIterationNumber() const
-{
-    return m_nextIterationNumber-1;
-}*/
 
 void StandaloneRenderManager::fillRenderStatistics()
 {
@@ -163,7 +157,6 @@ void StandaloneRenderManager::onSequenceNumberIncremented()
 
 void StandaloneRenderManager::onSceneLoadingNew()
 {
-    // m_currentScene = NULL;
 }
 
 void StandaloneRenderManager::onSceneUpdated()
@@ -174,13 +167,6 @@ void StandaloneRenderManager::onSceneUpdated()
         m_compileScene = true;
         m_currentScene = scene;
     }
-}
-
-void StandaloneRenderManager::wait()
-{
-    printf("StandaloneRenderManager::wait\n");
-    /*m_thread->exit();
-    m_thread->wait();*/
 }
 
 void StandaloneRenderManager::continueRayTracingIfRunningAsync()

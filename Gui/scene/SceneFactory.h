@@ -6,11 +6,12 @@
 
 #pragma once
 #include "../gui_export_api.h"
+
+#include <memory>
+
 class IScene;
 class SceneFactory
 {
 public:
-    GUI_EXPORT_API SceneFactory(void);
-    GUI_EXPORT_API ~SceneFactory(void);
-    GUI_EXPORT_API IScene* getSceneByName(const char* name);
+    GUI_EXPORT_API std::unique_ptr<IScene> getSceneByName(const char* name);
 };

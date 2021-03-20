@@ -25,7 +25,6 @@ class DistributedApplication : public Application
 
 public:
     DistributedApplication(QApplication& qApplication);
-    ~DistributedApplication(void);
     const RenderServerConnections& getServerConnections() const;
     void wait();
     RenderServerRenderRequest getNextRenderServerRenderRequest(unsigned int numIterations);

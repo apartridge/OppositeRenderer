@@ -14,5 +14,5 @@ public:
     virtual ~GetServerDetailsCommand(void);
     virtual void executeCommand(QTcpSocket& socket);
     virtual ServerCommandResult onResponseReady(RenderServerConnection&, QTcpSocket& socket);
-    virtual RenderServerState::E getInitialRenderServerState() const;
+    virtual RenderServerState getInitialRenderServerState() const;
 };

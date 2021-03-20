@@ -25,10 +25,10 @@ optix::Material Diffuse::getOptixMaterial(optix::Context& context)
             = context->createProgramFromPTXFile(getPtxFile("material/Diffuse.ptx"), "closestHitRadiance");
         optix::Program photonProgram
             = context->createProgramFromPTXFile(getPtxFile("material/Diffuse.ptx"), "closestHitPhoton");
-        m_optixMaterial->setClosestHitProgram(RayType::RADIANCE, radianceProgram);
-        m_optixMaterial->setClosestHitProgram(RayType::RADIANCE_IN_PARTICIPATING_MEDIUM, radianceProgram);
-        m_optixMaterial->setClosestHitProgram(RayType::PHOTON, photonProgram);
-        m_optixMaterial->setClosestHitProgram(RayType::PHOTON_IN_PARTICIPATING_MEDIUM, photonProgram);
+        m_optixMaterial->setClosestHitProgram(static_cast<int>(RayType::RADIANCE), radianceProgram);
+        m_optixMaterial->setClosestHitProgram(static_cast<int>(RayType::RADIANCE_IN_PARTICIPATING_MEDIUM), radianceProgram);
+        m_optixMaterial->setClosestHitProgram(static_cast<int>(RayType::PHOTON), photonProgram);
+        m_optixMaterial->setClosestHitProgram(static_cast<int>(RayType::PHOTON_IN_PARTICIPATING_MEDIUM), photonProgram);
         m_optixMaterial->validate();
 
         this->registerMaterialWithShadowProgram(context, m_optixMaterial);

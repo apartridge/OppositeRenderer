@@ -5,7 +5,8 @@
  */
 
 #include "ServerState.h"
-const char* serverStateEnumToString(ServerState::E state)
+
+const char* serverStateEnumToString(ServerState state)
 {
     switch (state)
     {

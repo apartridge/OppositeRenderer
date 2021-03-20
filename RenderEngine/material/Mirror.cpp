@@ -25,10 +25,10 @@ optix::Material Mirror::getOptixMaterial(optix::Context& context)
         optix::Program radianceProgram
             = context->createProgramFromPTXFile(getPtxFile("material/Mirror.ptx"), "closestHitRadiance");
         m_optixMaterial = context->createMaterial();
-        m_optixMaterial->setClosestHitProgram(RayType::RADIANCE, radianceProgram);
-        m_optixMaterial->setClosestHitProgram(RayType::RADIANCE_IN_PARTICIPATING_MEDIUM, radianceProgram);
-        m_optixMaterial->setClosestHitProgram(RayType::PHOTON, photonProgram);
-        m_optixMaterial->setClosestHitProgram(RayType::PHOTON_IN_PARTICIPATING_MEDIUM, photonProgram);
+        m_optixMaterial->setClosestHitProgram(static_cast<int>(RayType::RADIANCE), radianceProgram);
+        m_optixMaterial->setClosestHitProgram(static_cast<int>(RayType::RADIANCE_IN_PARTICIPATING_MEDIUM), radianceProgram);
+        m_optixMaterial->setClosestHitProgram(static_cast<int>(RayType::PHOTON), photonProgram);
+        m_optixMaterial->setClosestHitProgram(static_cast<int>(RayType::PHOTON_IN_PARTICIPATING_MEDIUM), photonProgram);
         this->registerMaterialWithShadowProgram(context, m_optixMaterial);
         m_optixMaterialIsCreated = true;
     }

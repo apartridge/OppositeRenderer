@@ -23,5 +23,5 @@ void Material::registerMaterialWithShadowProgram(optix::Context& context, optix:
             getPtxFile("renderer/ppm/DirectRadianceEstimation.ptx"), "gatherAnyHitOnNonEmitter");
         m_hasLoadedOptixAnyHitProgram = true;
     }
-    material->setAnyHitProgram(RayType::SHADOW, m_optixAnyHitProgram);
+    material->setAnyHitProgram(static_cast<int>(RayType::SHADOW), m_optixAnyHitProgram);
 }

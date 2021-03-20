@@ -19,7 +19,7 @@ public:
     RENDER_ENGINE_EXPORT_API RenderServerRenderRequestDetails(
         const Camera& camera,
         QByteArray sceneName,
-        RenderMethod::E renderMethod,
+        RenderMethod renderMethod,
         unsigned int width,
         unsigned int height,
         double ppmAlpha);
@@ -28,11 +28,11 @@ public:
     RENDER_ENGINE_EXPORT_API double getPPMAlpha() const;
     RENDER_ENGINE_EXPORT_API const Camera& getCamera() const;
     RENDER_ENGINE_EXPORT_API const QByteArray& getSceneName() const;
-    RENDER_ENGINE_EXPORT_API const RenderMethod::E getRenderMethod() const;
+    RENDER_ENGINE_EXPORT_API const RenderMethod getRenderMethod() const;
 
 private:
     Camera m_camera;
-    RenderMethod::E m_renderMethod;
+    RenderMethod m_renderMethod;
     unsigned int m_width;
     unsigned int m_height;
     double m_ppmAlpha;

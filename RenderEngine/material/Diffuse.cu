@@ -110,6 +110,6 @@ RT_PROGRAM void closestHitPhoton()
 #endif
 
     newPhotonDirection = sampleUnitHemisphereCos(worldShadingNormal, getRandomUniformFloat2(&photonPrd.randomState));
-    optix::Ray newRay(hitPoint, newPhotonDirection, RayType::PHOTON, 0.0001);
+    optix::Ray newRay(hitPoint, newPhotonDirection, static_cast<int>(RayType::PHOTON), 0.0001);
     rtTrace(sceneRootObject, newRay, photonPrd);
 }

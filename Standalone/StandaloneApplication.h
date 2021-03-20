@@ -6,20 +6,22 @@
 
 #pragma once
 
+#include <memory>
+
 #include "Application.hxx"
-#include "StandaloneRenderManager.hxx"
+#include "StandaloneRenderManager.h"
 
 class QApplication;
 class ComputeDevice;
 class QThread;
+
 class StandaloneApplication : public Application
 {
 public:
     StandaloneApplication(QApplication& qApplication, const ComputeDevice& device);
-    ~StandaloneApplication(void);
     void wait();
 
 private:
     StandaloneRenderManager m_renderManager;
-    QThread* m_thread;
+    std::unique_ptr<QThread> m_thread;
 };

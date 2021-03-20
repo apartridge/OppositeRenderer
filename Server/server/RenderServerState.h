@@ -8,9 +8,7 @@
 Note that there are two RenderServerState enums, one for Server and one for Client
 */
 #pragma once
-namespace RenderServerState
-{
-enum E
+enum class RenderServerState
 {
     NOT_VALID_RENDER_STATE,
     WAITING_FOR_INTRODUCTION_REQUEST,
@@ -18,5 +16,4 @@ enum E
     RENDERING,
     ERROR_UNKNOWN
 };
-}
-const char* renderStateEnumToText(RenderServerState::E state);
+const char* renderStateEnumToText(RenderServerState state);

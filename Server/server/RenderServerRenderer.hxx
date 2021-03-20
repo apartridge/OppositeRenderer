@@ -25,7 +25,7 @@ class RenderServerRenderer : public QObject
 
 public:
     RenderServerRenderer(const RenderServer& renderServer);
-    ~RenderServerRenderer(void);
+    ~RenderServerRenderer();
     void initialize(const ComputeDevice* computeDevice);
     void initializeNewClient();
     const ComputeDevice& getComputeDevice() const;
@@ -62,7 +62,7 @@ private:
     OptixRenderer m_renderer;
     const ComputeDevice* m_computeDevice;
     QString m_sceneName;
-    IScene* m_scene;
+    std::unique_ptr<IScene> m_scene;
 
     BenchmarkTimer m_totalTime;
     BenchmarkTimer m_renderTime;

@@ -18,7 +18,7 @@ Application::Application(QApplication& qApplication)
     , m_renderMethod(RenderMethod::PROGRESSIVE_PHOTON_MAPPING)
     , m_rendererStatus(RendererStatus::NOT_INITIALIZED)
 {
-    qRegisterMetaType<RunningStatus::E>("RunningStatus::E");
+    qRegisterMetaType<RunningStatus>("RunningStatus");
 
     // Move scene manager to a thread
     m_sceneManagerThread = new QThread(&qApplication);
@@ -78,12 +78,12 @@ const SceneManager& Application::getSceneManager() const
     return m_sceneManager;
 }
 
-RenderMethod::E Application::getRenderMethod() const
+RenderMethod Application::getRenderMethod() const
 {
     return m_renderMethod;
 }
 
-void Application::setRenderMethod(RenderMethod::E method)
+void Application::setRenderMethod(RenderMethod method)
 {
     incrementSequenceNumber();
     m_renderMethod = method;
@@ -236,12 +236,12 @@ void Application::setRendererStatus(RendererStatus::E val)
     }
 }
 
-RunningStatus::E Application::getRunningStatus() const
+RunningStatus Application::getRunningStatus() const
 {
     return m_runningStatus;
 }
 
-void Application::setRunningStatus(RunningStatus::E val)
+void Application::setRunningStatus(RunningStatus val)
 {
     bool shouldEmit = m_runningStatus != val;
     m_runningStatus = val;

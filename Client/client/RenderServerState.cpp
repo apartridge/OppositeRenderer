@@ -1,6 +1,6 @@
 #include "RenderServerState.h"
 
-const char* renderServerStateEnumToString(RenderServerState::E state)
+const char* renderServerStateEnumToString(RenderServerState state)
 {
     switch (state)
     {

@@ -47,10 +47,10 @@ public:
     void setCameraToSceneDefault();
     SceneManager& getSceneManager();
     const SceneManager& getSceneManager() const;
-    void setRenderMethod(RenderMethod::E method);
-    RenderMethod::E getRenderMethod() const;
-    RunningStatus::E getRunningStatus() const;
-    void setRunningStatus(RunningStatus::E val);
+    void setRenderMethod(RenderMethod method);
+    RenderMethod getRenderMethod() const;
+    RunningStatus getRunningStatus() const;
+    void setRunningStatus(RunningStatus val);
 
     RendererStatus::E getRendererStatus() const;
     void setRendererStatus(RendererStatus::E val);
@@ -84,9 +84,9 @@ signals:
 
 private:
     QThread* m_sceneManagerThread;
-    RunningStatus::E m_runningStatus;
+    RunningStatus m_runningStatus;
     RendererStatus::E m_rendererStatus;
-    RenderMethod::E m_renderMethod;
+    RenderMethod m_renderMethod;
     OutputSettingsModel m_outputSettingsModel;
     PPMSettingsModel m_PPMSettingsModel;
     RenderStatisticsModel m_renderStatisticsModel;

@@ -38,18 +38,18 @@ public:
 public slots:
     void onNewConnection();
     void onActionSetComputeDevice();
-    void onNewServerState(ServerState::E);
+    void onNewServerState(ServerState);
     void onNewServerApplicationLogString(QString);
 
 signals:
-    void newServerState(ServerState::E);
+    void newServerState(ServerState);
 
 private slots:
     void onClientConnectionDisconnected();
     void onStartServerFormSubmitted();
     void onHasSelectedComputeDevice(ComputeDevice*);
     void onActionAbout();
-    void onNewRenderState(RenderServerState::E);
+    void onNewRenderState(RenderServerState);
     void onTimeout();
 
 private:
@@ -57,18 +57,18 @@ private:
     Ui::ServerWindow* ui;
     QLabel* m_serverStateLabel;
     QLabel* m_renderStateLabel;
-    const char* fromServerStateEnumToString(ServerState::E);
+    const char* fromServerStateEnumToString(ServerState);
     ComputeDeviceInformationWidget* m_setComputeDeviceWidget;
     SetServerSettingsWidget* m_serverSettingsWidget;
     WaitingForConnectionWidget* m_waitingForConnectionWidget;
     ReadyForRenderingWidget* m_readyForRenderingWidget;
 
     // SERVER
-    ServerState::E m_serverState;
-    RenderServerState::E m_renderState;
+    ServerState m_serverState;
+    RenderServerState m_renderState;
     QTcpSocket* m_clientSocket;
     QTcpServer* m_server;
-    void setServerState(ServerState::E state);
+    void setServerState(ServerState state);
     ushort m_serverPort;
     ComputeDevice* m_computeDevice;
     RenderServer& m_renderServer;

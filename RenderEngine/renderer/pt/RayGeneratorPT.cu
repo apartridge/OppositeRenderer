@@ -60,7 +60,7 @@ RT_PROGRAM void generateRay()
 
     modifyRayForDepthOfField(camera, rayOrigin, rayDirection, radiancePrd.randomState);
 
-    Ray ray = Ray(rayOrigin, rayDirection, RayType::RADIANCE, 0.001);
+    Ray ray = Ray(rayOrigin, rayDirection, static_cast<int>(RayType::RADIANCE), 0.001);
 
     float3 finalRadiance = make_float3(0);
 

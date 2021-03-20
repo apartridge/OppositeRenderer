@@ -6,28 +6,24 @@
 
 #include "ServerCommandResult.h"
 
-ServerCommandResult::ServerCommandResult(void)
+ServerCommandResult::ServerCommandResult()
     : m_success(false)
     , m_newRenderServerState(RenderServerState::ERROR_UNKNOWN)
 {
 }
 
-ServerCommandResult::ServerCommandResult(bool success, RenderServerState::E state)
+ServerCommandResult::ServerCommandResult(bool success, RenderServerState state)
     : m_success(success)
     , m_newRenderServerState(state)
 {
 }
 
-ServerCommandResult::~ServerCommandResult(void)
-{
-}
-
-RenderServerState::E ServerCommandResult::getNewRenderServerState() const
+RenderServerState ServerCommandResult::getNewRenderServerState() const
 {
     return m_newRenderServerState;
 }
 
-void ServerCommandResult::setNewRenderServerState(RenderServerState::E val)
+void ServerCommandResult::setNewRenderServerState(RenderServerState val)
 {
     m_newRenderServerState = val;
 }

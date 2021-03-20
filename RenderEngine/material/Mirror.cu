@@ -35,7 +35,7 @@ RT_PROGRAM void closestHitRadiance()
     {
         radiancePrd.attenuation *= Kr;
         float3 newRayDirection = reflect(ray.direction, worldShadingNormal);
-        Ray newRay(hitPoint, newRayDirection, RayType::RADIANCE, 0.0001, RT_DEFAULT_MAX);
+        Ray newRay(hitPoint, newRayDirection, static_cast<int>(RayType::RADIANCE), 0.0001, RT_DEFAULT_MAX);
         rtTrace(sceneRootObject, newRay, radiancePrd);
     }
     radiancePrd.lastTHit = tHit;
@@ -50,7 +50,7 @@ RT_PROGRAM void closestHitPhoton()
     {
         photonPrd.power *= Kr;
         float3 newPhotonDirection = reflect(ray.direction, worldShadingNormal);
-        Ray newPhoton(hitPoint, newPhotonDirection, RayType::PHOTON, 0.0001);
+        Ray newPhoton(hitPoint, newPhotonDirection, static_cast<int>(RayType::PHOTON), 0.0001);
         rtTrace(sceneRootObject, newPhoton, photonPrd);
     }
 }

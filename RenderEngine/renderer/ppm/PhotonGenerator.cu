@@ -112,7 +112,7 @@ RT_PROGRAM void generator()
         light, photonPrd.randomState, sceneBoundingSphere, rayOrigin, rayDirection, photonPowerFactor);
     photonPrd.power *= photonPowerFactor;
 
-    Ray photon = Ray(rayOrigin, rayDirection, RayType::PHOTON, 0.0001, RT_DEFAULT_MAX);
+    Ray photon = Ray(rayOrigin, rayDirection, static_cast<int>(RayType::PHOTON), 0.0001, RT_DEFAULT_MAX);
 
 #if ACCELERATION_STRUCTURE == ACCELERATION_STRUCTURE_KD_TREE_CPU                                                       \
     || ACCELERATION_STRUCTURE == ACCELERATION_STRUCTURE_UNIFORM_GRID

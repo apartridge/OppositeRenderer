@@ -10,9 +10,7 @@
 Note that there are two RenderServerState enums, one for Server and one for Client
 */
 
-namespace RenderServerState
-{
-enum E
+enum class RenderServerState
 {
     NO_DEVICE_INFORMATION,
     WAITING_FOR_DEVICE_INFORMATION,
@@ -24,6 +22,5 @@ enum E
     ERROR_COMMAND_TIMEOUT,
     ERROR_UNKNOWN
 };
-}
 
-const char* renderServerStateEnumToString(RenderServerState::E state);
+const char* renderServerStateEnumToString(RenderServerState state);

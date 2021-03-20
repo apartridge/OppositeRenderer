@@ -145,7 +145,7 @@ void RenderServerConnection::onTimeout()
     }
 }
 
-void RenderServerConnection::setRenderServerState(RenderServerState::E renderServerState)
+void RenderServerConnection::setRenderServerState(RenderServerState renderServerState)
 {
     q_renderServerStateMutex.lock();
     m_renderServerState = renderServerState;
@@ -336,7 +336,7 @@ const QString RenderServerConnection::getConnectionState() const
     return m_serverPort;
 }
 
-RenderServerState::E RenderServerConnection::getRenderServerState() const
+RenderServerState RenderServerConnection::getRenderServerState() const
 {
     return m_renderServerState;
 }

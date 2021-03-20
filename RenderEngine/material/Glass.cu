@@ -117,7 +117,7 @@ RT_PROGRAM void closestHitRadiance()
     // intersecting the participating media
 
     bool travellingInside = willTravelInsideGlass(isHitFromOutside, isReflected);
-    RayType::E rayType = travellingInside ? RayType::RADIANCE_IN_PARTICIPATING_MEDIUM : RayType::RADIANCE;
+    const auto rayType = travellingInside ? RayType::RADIANCE_IN_PARTICIPATING_MEDIUM : RayType::RADIANCE;
     Ray newRay = Ray(hitPoint, newRayDirection, rayType, 0.0001, RT_DEFAULT_MAX);
 
     if (radiancePrd.depth <= MAX_RADIANCE_TRACE_DEPTH)
@@ -193,7 +193,7 @@ RT_PROGRAM void closestHitPhoton()
     {
         // If we are going to travel inside the glass object, set ray type to RayType::PHOTON_IN_PARTICIPATING_MEDIUM to
         // prevent interaction with any partcipating medium
-        RayType::E rayType = willTravelInsideGlass(isHitFromOutside, isReflected)
+        const auto rayType = willTravelInsideGlass(isHitFromOutside, isReflected)
             ? RayType::PHOTON_IN_PARTICIPATING_MEDIUM
             : RayType::PHOTON;
         Ray newRay(hitPoint, newRayDirection, rayType, 0.0001);

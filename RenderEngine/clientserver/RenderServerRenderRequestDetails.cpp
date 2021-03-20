@@ -14,7 +14,7 @@ RenderServerRenderRequestDetails::RenderServerRenderRequestDetails()
 RenderServerRenderRequestDetails::RenderServerRenderRequestDetails(
     const Camera& camera,
     QByteArray sceneName,
-    RenderMethod::E renderMethod,
+    RenderMethod renderMethod,
     unsigned int width,
     unsigned int height,
     double ppmAlpha)
@@ -37,7 +37,7 @@ const Camera& RenderServerRenderRequestDetails::getCamera() const
     return m_camera;
 }
 
-const RenderMethod::E RenderServerRenderRequestDetails::getRenderMethod() const
+const RenderMethod RenderServerRenderRequestDetails::getRenderMethod() const
 {
     return m_renderMethod;
 }
@@ -83,7 +83,7 @@ QDataStream& operator>>(QDataStream& in, RenderServerRenderRequestDetails& detai
     arrayStream >> camera >> sceneName >> renderMethod >> width >> height >> ppmAlpha;
 
     details
-        = RenderServerRenderRequestDetails(camera, sceneName, (RenderMethod::E)renderMethod, width, height, ppmAlpha);
+        = RenderServerRenderRequestDetails(camera, sceneName, (RenderMethod)renderMethod, width, height, ppmAlpha);
 
     if (in.status() != QDataStream::Ok)
     {

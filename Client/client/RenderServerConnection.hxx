@@ -49,7 +49,7 @@ public:
 
     // Send a command and pass ownership of the command object
     void pushCommandAsync(ServerCommand* command);
-    RenderServerState::E getRenderServerState() const;
+    RenderServerState getRenderServerState() const;
     void moveSocketToThread(QThread* thread);
 
 public slots:
@@ -58,7 +58,7 @@ public slots:
     void onNewServerCommand(ServerCommand*);
 
 signals:
-    void newRenderServerState(RenderServerState::E);
+    void newRenderServerState(RenderServerState);
     void renderResultPacketReceived(RenderResultPacket*);
     void newServerCommand(ServerCommand*);
     void stateUpdated();
@@ -76,7 +76,7 @@ private:
     QTime m_totalTime;
     DistributedApplication& m_application;
     RenderResultPacket* getArrivedRenderCommandResult();
-    void setRenderServerState(RenderServerState::E);
+    void setRenderServerState(RenderServerState);
     ServerCommand* m_currentCommand;
     QMap<unsigned long long, float> m_pendingIterationSendTimes;
     QTcpSocket* m_socket;
@@ -84,7 +84,7 @@ private:
     QMutex q_renderServerStateMutex;
     QString m_serverIp;
     QString m_serverPort;
-    RenderServerState::E m_renderServerState;
+    RenderServerState m_renderServerState;
     RenderServerConnection(const RenderServerConnection&);
     RenderServerConnection& operator=(const RenderServerConnection&);
     void handleCommandResponse();

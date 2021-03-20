@@ -14,6 +14,7 @@
 #include "SetServerSettingsWidget.hxx"
 #include "WaitingForConnectionWidget.hxx"
 #include "ui/ui_ServerWindow.h"
+
 #include <QLabel>
 #include <QMessageBox>
 #include <QTcpServer>
@@ -56,12 +57,12 @@ ServerWindow::ServerWindow(QWidget* parent, RenderServer& serverApplication)
     m_readyForRenderingWidget->hide();
 
     // SERVER STUFF
-    connect(this, SIGNAL(newServerState(ServerState::E)), this, SLOT(onNewServerState(ServerState::E)));
+    connect(this, SIGNAL(newServerState(ServerState)), this, SLOT(onNewServerState(ServerState)));
     connect(
         &m_renderServer,
-        SIGNAL(renderStateUpdated(RenderServerState::E)),
+        SIGNAL(renderStateUpdated(RenderServerState)),
         this,
-        SLOT(onNewRenderState(RenderServerState::E)));
+        SLOT(onNewRenderState(RenderServerState)));
     connect(&m_renderServer, SIGNAL(logStringAppended(QString)), this, SLOT(onNewServerApplicationLogString(QString)));
 
     QTimer* timer = new QTimer(this);
@@ -257,7 +258,7 @@ void ServerWindow::onStateReadyForRenderingExit()
     m_readyForRenderingWidget->hide();
 }
 
-void ServerWindow::setServerState(ServerState::E state)
+void ServerWindow::setServerState(ServerState state)
 {
     switch (m_serverState)
     {
@@ -300,7 +301,7 @@ void ServerWindow::setServerState(ServerState::E state)
 UI RELATED
 */
 
-void ServerWindow::onNewServerState(ServerState::E serverState)
+void ServerWindow::onNewServerState(ServerState serverState)
 {
     this->m_serverStateLabel->setText(QString(serverStateEnumToString(serverState)));
 }
@@ -316,7 +317,7 @@ void ServerWindow::onActionSetComputeDevice()
     resetProcess();
 }
 
-void ServerWindow::onNewRenderState(RenderServerState::E renderState)
+void ServerWindow::onNewRenderState(RenderServerState renderState)
 {
     this->m_renderStateLabel->setText(QString(renderStateEnumToText(renderState)));
 }

@@ -68,7 +68,7 @@ void RenderServer::initializeClient(QTcpSocket& clientSocket)
     m_renderServerRenderer.initializeNewClient();
 }
 
-void RenderServer::setRenderState(RenderServerState::E renderState)
+void RenderServer::setRenderState(RenderServerState renderState)
 {
     m_renderState = renderState;
     emit renderStateUpdated(renderState);

@@ -31,14 +31,14 @@ optix::Material Glass::getOptixMaterial(optix::Context& context)
         optix::Program photonAnyHitProgram
             = context->createProgramFromPTXFile(getPtxFile("material/Glass.ptx"), "anyHitPhoton");
 
-        m_optixMaterial->setClosestHitProgram(RayType::RADIANCE, radianceClosestProgram);
+        m_optixMaterial->setClosestHitProgram(static_cast<int>(RayType::RADIANCE), radianceClosestProgram);
         // m_optixMaterial->setAnyHitProgram(RayType::RADIANCE, radianceAnyHitProgram );
-        m_optixMaterial->setClosestHitProgram(RayType::RADIANCE_IN_PARTICIPATING_MEDIUM, radianceClosestProgram);
+        m_optixMaterial->setClosestHitProgram(static_cast<int>(RayType::RADIANCE_IN_PARTICIPATING_MEDIUM), radianceClosestProgram);
         // m_optixMaterial->setAnyHitProgram(RayType::RADIANCE_IN_PARTICIPATING_MEDIUM, radianceAnyHitProgram);
 
-        m_optixMaterial->setClosestHitProgram(RayType::PHOTON, photonClosestProgram);
+        m_optixMaterial->setClosestHitProgram(static_cast<int>(RayType::PHOTON), photonClosestProgram);
         // m_optixMaterial->setAnyHitProgram(RayType::PHOTON, photonAnyHitProgram);
-        m_optixMaterial->setClosestHitProgram(RayType::PHOTON_IN_PARTICIPATING_MEDIUM, photonClosestProgram);
+        m_optixMaterial->setClosestHitProgram(static_cast<int>(RayType::PHOTON_IN_PARTICIPATING_MEDIUM), photonClosestProgram);
         // m_optixMaterial->setAnyHitProgram(RayType::PHOTON_IN_PARTICIPATING_MEDIUM, photonAnyHitProgram);
 
         this->registerMaterialWithShadowProgram(context, m_optixMaterial);

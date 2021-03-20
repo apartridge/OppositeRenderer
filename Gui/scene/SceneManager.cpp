@@ -5,23 +5,18 @@
  */
 
 #include "SceneManager.hxx"
+
 #include <QMetaObject>
 #include <QString>
 
-SceneManager::SceneManager(void)
-    : m_scene(NULL)
-    , m_status(SceneManagerStatus::NO_SCENE)
+SceneManager::SceneManager()
+    : m_status(SceneManagerStatus::NO_SCENE)
 {
-}
-
-SceneManager::~SceneManager(void)
-{
-    delete m_scene;
 }
 
 IScene* SceneManager::getScene() const
 {
-    return m_scene;
+    return m_scene.get();
 }
 
 // Asynchronously load the new scene given by sceneName
@@ -33,14 +28,13 @@ void SceneManager::setScene(const char* sceneName)
 void SceneManager::onLoadNewScene(QString sceneName)
 {
     emit sceneLoadingNew();
-    SceneManagerStatus::E oldStatus = m_status;
+    SceneManagerStatus oldStatus = m_status;
     m_status = SceneManagerStatus::IMPORTING;
     try
     {
-        IScene* oldScene = m_scene;
+        auto oldScene = std::move(m_scene);
         m_scene = m_factory.getSceneByName(sceneName.toLatin1().constData());
         emit sceneUpdated();
-        delete oldScene;
         m_status = SceneManagerStatus::HAS_SCENE;
     }
     catch (const std::exception& E)
@@ -50,7 +44,7 @@ void SceneManager::onLoadNewScene(QString sceneName)
     }
 }
 
-SceneManagerStatus::E SceneManager::getStatus() const
+SceneManagerStatus SceneManager::getStatus() const
 {
     return m_status;
 }

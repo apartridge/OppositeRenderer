@@ -14,7 +14,7 @@
 
 int main(int argc, char** argv)
 {
-    qRegisterMetaType<RenderServerState::E>("RenderServerState::E");
+    qRegisterMetaType<RenderServerState>("RenderServerState");
     qRegisterMetaType<QAbstractSocket::SocketError>("QAbstractSocket::SocketError");
 
     QApplication qApplication(argc, argv);

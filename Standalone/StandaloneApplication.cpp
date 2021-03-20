@@ -6,6 +6,7 @@
 
 #include "StandaloneApplication.h"
 #include "ComputeDevice.h"
+
 #include <QApplication>
 #include <QThread>
 
@@ -15,28 +16,23 @@ StandaloneApplication::StandaloneApplication(QApplication& qApplication, const C
 {
     connect(
         &m_renderManager,
-        SIGNAL(newFrameReadyForDisplay(const float*, unsigned long long)),
+        &StandaloneRenderManager::newFrameReadyForDisplay,
         this,
-        SIGNAL(newFrameReadyForDisplay(const float*, unsigned long long)));
+        &StandaloneApplication::newFrameReadyForDisplay);
 
     // Run render manager in thread
-
-    m_thread = new QThread(&qApplication);
-    m_renderManager.moveToThread(m_thread);
-    QObject::connect(m_thread, SIGNAL(started()), &m_renderManager, SLOT(start()));
+    m_thread = std::make_unique<QThread>(&qApplication);
+    m_renderManager.moveToThread(m_thread.get());
+    QObject::connect(m_thread.get(), &QThread::started, &m_renderManager, &StandaloneRenderManager::start);
     m_thread->start();
 
     // Pass on render manager errors as application errors
     connect(
         &m_renderManager,
-        SIGNAL(renderManagerError(QString)),
+        &StandaloneRenderManager::renderManagerError,
         this,
-        SIGNAL(applicationError(QString)),
+        &Application::applicationError,
         Qt::QueuedConnection);
-}
-
-StandaloneApplication::~StandaloneApplication(void)
-{
 }
 
 void StandaloneApplication::wait()

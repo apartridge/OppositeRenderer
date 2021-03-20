@@ -17,10 +17,7 @@ class Material;
 class Cornell : public IScene
 {
 public:
-    RENDER_ENGINE_EXPORT_API Cornell(void);
-    RENDER_ENGINE_EXPORT_API virtual ~Cornell(void)
-    {
-    }
+    RENDER_ENGINE_EXPORT_API Cornell();
     RENDER_ENGINE_EXPORT_API virtual optix::Group getSceneRootGroup(optix::Context& context);
     RENDER_ENGINE_EXPORT_API virtual const QVector<Light>& getSceneLights() const;
     RENDER_ENGINE_EXPORT_API virtual Camera getDefaultCamera(void) const;

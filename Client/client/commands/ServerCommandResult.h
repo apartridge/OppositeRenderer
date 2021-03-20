@@ -10,15 +10,14 @@
 class ServerCommandResult
 {
 public:
-    ServerCommandResult(void);
-    ServerCommandResult(bool success, RenderServerState::E state = RenderServerState::ERROR_UNKNOWN);
-    ~ServerCommandResult(void);
-    RenderServerState::E getNewRenderServerState() const;
-    void setNewRenderServerState(RenderServerState::E val);
+    ServerCommandResult();
+    ServerCommandResult(bool success, RenderServerState state = RenderServerState::ERROR_UNKNOWN);
+    RenderServerState getNewRenderServerState() const;
+    void setNewRenderServerState(RenderServerState val);
     bool getSuccess() const;
     void setSuccess(bool val);
 
 private:
     bool m_success;
-    RenderServerState::E m_newRenderServerState;
+    RenderServerState m_newRenderServerState;
 };

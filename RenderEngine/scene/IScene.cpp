@@ -5,8 +5,6 @@
  */
 
 #include "Scene.h"
-#include <cstdio>
-#include <exception>
 
 IScene::IScene()
 {

@@ -5,12 +5,8 @@
  */
 
 #pragma once
-namespace RenderMethod
-{
-enum E
-{
+enum class RenderMethod {
     PATH_TRACING,
     PROGRESSIVE_PHOTON_MAPPING,
     NONE
 };
-}
